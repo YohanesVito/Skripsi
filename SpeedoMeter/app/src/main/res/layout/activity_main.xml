@@ -7,23 +7,50 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <TextView
-        android:text="Data from Client"
-        android:layout_marginTop="40dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:textSize="20sp"
-        android:textStyle="bold"
+<!--    <TextView-->
+<!--        android:text="Data from Client"-->
+<!--        android:layout_marginTop="40dp"-->
+<!--        android:layout_marginStart="20dp"-->
+<!--        android:layout_marginEnd="20dp"-->
+<!--        android:textSize="20sp"-->
+<!--        android:textStyle="bold"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"/>-->
+<!--    <TextView-->
+<!--        android:id="@+id/tv_data"-->
+<!--        tools:text="DATA"-->
+<!--        android:layout_marginStart="20dp"-->
+<!--        android:layout_marginEnd="20dp"-->
+<!--        android:textSize="40sp"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"/>-->
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-    <TextView
-        android:id="@+id/tv_data"
-        tools:text="DATA"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:textSize="40sp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:orientation="horizontal"
+        android:layout_height="wrap_content">
+        <EditText
+            android:id="@+id/et_speed"
+            tools:text="Speed"
+            android:layout_marginTop="20dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:textSize="30sp"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <Button
+            android:layout_marginTop="20dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_weight="1"
+            android:id="@+id/bt_update"
+            android:layout_width="wrap_content"
+            android:text="Update"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+
+
 
     <me.ibrahimsn.lib.Speedometer
         android:id="@+id/speedometer"
@@ -57,12 +84,20 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
+<!--    <Button-->
+<!--        android:layout_marginTop="20dp"-->
+<!--        android:layout_gravity="center"-->
+<!--        android:id="@+id/bt_send"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:text="Kirim Data"-->
+<!--        android:layout_height="wrap_content"/>-->
+
     <Button
         android:layout_marginTop="20dp"
         android:layout_gravity="center"
-        android:id="@+id/bt_send"
+        android:id="@+id/bt_refresh"
         android:layout_width="wrap_content"
-        android:text="Kirim Data"
+        android:text="Refresh Location"
         android:layout_height="wrap_content"/>
 
 </LinearLayout>

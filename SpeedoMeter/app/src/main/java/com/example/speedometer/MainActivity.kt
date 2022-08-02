@@ -47,11 +47,22 @@ class MainActivity : AppCompatActivity(), LocationListener{
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        getSpeed(speed, duration)
+
+
         getLocation()
 
-        binding.btSend.setOnClickListener {
-            startActivity(Intent(this,SendDataActivity::class.java))
+//        binding.btSend.setOnClickListener {
+//            startActivity(Intent(this,SendDataActivity::class.java))
+//        }
+
+        binding.btRefresh.setOnClickListener {
+            finish()
+            startActivity(intent)
+        }
+
+        binding.btUpdate.setOnClickListener {
+            val speed = binding.etSpeed.text.toString()
+            getSpeed(speed.toInt(), duration)
         }
 //        try {
 //            SERVER_IP = getLocalIpAddress();
