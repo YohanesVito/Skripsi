@@ -7,22 +7,14 @@ import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
-import android.net.wifi.WifiInfo
-import android.net.wifi.WifiManager
 import android.os.Bundle
-import android.widget.EditText
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.ViewModelProvider
 import com.example.speedometer.databinding.ActivityMainBinding
-import java.net.InetAddress
 import java.net.ServerSocket
-import java.net.UnknownHostException
-import java.nio.ByteBuffer
-import java.nio.ByteOrder
-import java.util.*
 
 
 class MainActivity : AppCompatActivity(), LocationListener{
@@ -32,6 +24,7 @@ class MainActivity : AppCompatActivity(), LocationListener{
     private lateinit var serverSocket: ServerSocket
     private lateinit var thread: Thread
 
+    lateinit var viewModel: MainViewModel
 
     companion object{
         var duration = 1000L
@@ -47,46 +40,37 @@ class MainActivity : AppCompatActivity(), LocationListener{
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        viewModel = ViewModelProvider(this)[MainViewModel::class.java]
 
+        viewModel.currentRandom.observe(this, androidx.lifecycle.Observer{
+            getSpeed(it, duration)
+        })
 
+        viewModel.latitude.observe(this, androidx.lifecycle.Observer {
+            binding.tvLat.text = it.toString()
+        })
+
+        viewModel.longitude.observe(this, androidx.lifecycle.Observer {
+            binding.tvLon.text = it.toString()
+        })
+
+        binding.btSend.setOnClickListener {
+            startActivity(Intent(this,SecondActivity::class.java))
+        }
+
+        randomSpeed()
         getLocation()
-
-//        binding.btSend.setOnClickListener {
-//            startActivity(Intent(this,SendDataActivity::class.java))
-//        }
-
-        binding.btRefresh.setOnClickListener {
-            finish()
-            startActivity(intent)
-        }
-
-        binding.btUpdate.setOnClickListener {
-            val speed = binding.etSpeed.text.toString()
-            getSpeed(speed.toInt(), duration)
-        }
-//        try {
-//            SERVER_IP = getLocalIpAddress();
-//        } catch (e: UnknownHostException) {
-//            e.printStackTrace();
-//        }
-//        thread = Thread()
-//        thread.start()
     }
-//    private fun getLocalIpAddress():String  {
-//        var wifiManager = WifiManager
-//        wifiManager = getApplicationContext().getSystemService(WIFI_SERVICE)
-//
-//        val wifiInfo = wifiManager.getConnectionInfo();
-//        val ipInt = wifiInfo.getIpAddress();
-//        return InetAddress.getByAddress(ByteBuffer.allocate(4).order(ByteOrder.LITTLE_ENDIAN).putInt(ipInt).array()).getHostAddress();
-//    }
+
+    private fun randomSpeed(){
+        binding.btRandom.setOnClickListener {
+            viewModel.currentRandom.value = (0..100).random()
+        }
+    }
     private fun getSpeed(s:Int, d:Long){
+        binding.tvSpeed.text = s.toString()
         val speedometer = binding.speedometer
         speedometer.setSpeed(s,d)
-    }
-
-    private fun receiveData(){
-
     }
 
     private fun getLocation() {
@@ -97,8 +81,8 @@ class MainActivity : AppCompatActivity(), LocationListener{
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 5f, this)
     }
     override fun onLocationChanged(location: Location) {
-        val tvGpsLocation = binding.tvGPS
-        tvGpsLocation.text = "Latitude: " + location.latitude + " , Longitude: " + location.longitude
+        viewModel.latitude.value = location.latitude
+        viewModel.longitude.value = location.longitude
     }
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
