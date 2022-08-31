@@ -53,4 +53,6 @@ dependencies {
 
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.0'
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.4.0'
+
+    implementation 'org.jetbrains.anko:anko-common:0.8.3'
 }
