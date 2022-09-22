@@ -1,6 +1,5 @@
 package com.example.monitoringwheelchair.gyroscope
 
-import android.app.Activity
 import android.content.Context
 import android.content.Context.SENSOR_SERVICE
 import android.graphics.Color
@@ -8,16 +7,13 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat.getSystemService
-import androidx.lifecycle.ViewModelProvider
 import com.example.monitoringwheelchair.MainViewModel
 
 class Gyroscope(private val context: Context, private val viewModel: MainViewModel): SensorEventListener {
 
     fun setUpGyroSensor(){
 //        private lateinit var sensorManager: SensorManager
-        var sensorManager: SensorManager = context.getSystemService(SENSOR_SERVICE) as SensorManager
+        val sensorManager: SensorManager = context.getSystemService(SENSOR_SERVICE) as SensorManager
 
         sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)?.also {
             sensorManager.registerListener(this,it,

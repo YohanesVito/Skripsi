@@ -12,4 +12,15 @@
     <color name="c2">#94B3FD</color>
     <color name="c3">#94DAFF</color>
     <color name="c4">#99FEFF</color>
+
+    <color name="n1">#E7B2A5</color>
+    <color name="n2">#F1935C</color>
+    <color name="n3">#BA6B57</color>
+    <color name="n4">#30475E</color>
+
+    <color name="p1">#FFDF6B</color>
+    <color name="p2">#FF79CD</color>
+    <color name="p3">#AA2EE6</color>
+    <color name="p4">#23049D</color>
+
 </resources>

@@ -1,64 +1,311 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/p4"
     android:orientation="vertical"
     tools:context=".MonitorActivity">
 
+
     <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="20dp"
         android:text="Speed"
-        android:layout_marginTop="20dp"
+        android:textColor="@color/p2"
         android:textSize="20sp"
         android:textStyle="bold"
-        android:layout_gravity="center"
+        app:layout_constraintBottom_toTopOf="@+id/speedometer"
+        app:layout_constraintEnd_toEndOf="@+id/speedometer"
+        app:layout_constraintStart_toStartOf="@+id/speedometer" />
+
+
+    <TextView
+        android:id="@+id/tv_timer"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:text="00:00:00"
+        android:textColor="@color/p1"
+        android:textSize="45sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/tv_timer2"
+        app:layout_constraintTop_toBottomOf="@+id/tv_timer2" />
+
+    <TextView
+        android:id="@+id/tv_timer4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="092122"
+        android:textColor="@color/p1"
+        android:textSize="45sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/tv_timer3"
+        app:layout_constraintTop_toBottomOf="@+id/tv_timer3" />
+
+    <TextView
+        android:id="@+id/tv_timer2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Time Elapsed"
+        android:textColor="@color/p2"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/rpm"
+        app:layout_constraintTop_toBottomOf="@+id/rpm" />
+
+    <TextView
+        android:id="@+id/tv_timer3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hardware ID"
+        android:textColor="@color/p2"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/speedometer"
+        app:layout_constraintTop_toBottomOf="@+id/speedometer" />
 
     <me.ibrahimsn.lib.Speedometer
         android:id="@+id/speedometer"
-        android:layout_margin="20dp"
-        android:layout_gravity="center"
         android:layout_width="220dp"
         android:layout_height="wrap_content"
-        app:maxSpeed="70"
+        android:layout_gravity="center"
+        android:layout_marginStart="25dp"
+        app:borderColor="@color/p3"
         app:borderSize="5dp"
-        app:textGap="10dp"
-        app:metricText="km/h"
-        app:borderColor="#402c47"
-        app:fillColor="#d83a78"
-        app:textColor="@color/white"
+        app:fillColor="@color/p1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintVertical_bias="0.375"
+        app:maxSpeed="70"
+        app:metricText="km/h"
+        app:textColor="@color/white"
+        app:textGap="10dp" />
 
-    <TextView
-        android:id="@+id/tv_speed"
-        android:text="50km/h"
-        android:textSize="20sp"
-        android:textStyle="bold"
+    <me.ibrahimsn.lib.Speedometer
+        android:id="@+id/rpm"
+        android:layout_width="170dp"
+        android:layout_height="0dp"
         android:layout_gravity="center"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_marginStart="40dp"
+        app:borderColor="@color/p3"
+        app:borderSize="2dp"
+        app:fillColor="@color/p1"
+        app:layout_constraintBottom_toBottomOf="@+id/speedometer"
+        app:layout_constraintStart_toEndOf="@+id/speedometer"
+        app:maxSpeed="10"
+        app:metricText="rad/s"
+        app:textColor="@color/white"
+        app:textGap="10dp" />
+
+    <!--    <TextView-->
+    <!--        android:id="@+id/tv_speed"-->
+    <!--        android:layout_width="0dp"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:textColor="@color/p2"-->
+    <!--        android:textSize="20sp"-->
+    <!--        android:textStyle="bold"-->
+    <!--        app:layout_constraintEnd_toEndOf="@+id/speedometer"-->
+    <!--        app:layout_constraintStart_toStartOf="@+id/speedometer"-->
+    <!--        app:layout_constraintTop_toBottomOf="@+id/speedometer"-->
+    <!--        tools:text="50km/h" />-->
+
+    <!--    <TextView-->
+    <!--        android:id="@+id/tv_speed3"-->
+    <!--        android:layout_width="0dp"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:textColor="@color/p2"-->
+    <!--        android:textSize="20sp"-->
+    <!--        android:textStyle="bold"-->
+    <!--        app:layout_constraintEnd_toEndOf="@+id/rpm"-->
+    <!--        app:layout_constraintStart_toStartOf="@+id/rpm"-->
+    <!--        app:layout_constraintTop_toBottomOf="@+id/rpm"-->
+    <!--        tools:text="190" />-->
 
     <TextView
-        tools:text="Gyroscope"
-        android:layout_marginTop="20dp"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:layout_gravity="center"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
-
-    <TextView
-        android:id="@+id/tv_gyrovalue"
-        tools:text="Gyroscope"
-        android:gravity="center"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginBottom="20dp"
-        android:background="@color/c1"
-        android:padding="20dp"
+        android:text="RPM"
+        android:textColor="@color/p2"
         android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/rpm"
+        app:layout_constraintEnd_toEndOf="@+id/rpm"
+        app:layout_constraintStart_toStartOf="@+id/rpm" />
+
+    <TextView
+        android:id="@+id/tv_lat"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Lat: "
+        android:textColor="@color/p3"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/textView"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/textView"
+        app:layout_constraintTop_toBottomOf="@+id/textView"
+        tools:text="Lat: " />
+
+    <TextView
+        android:id="@+id/tv_latVal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:textColor="@color/p1"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_lat"
+        app:layout_constraintStart_toEndOf="@+id/tv_lat"
+        app:layout_constraintTop_toTopOf="@+id/tv_lat"
+        app:layout_constraintVertical_bias="0.0"
+        tools:text="value " />
+
+    <TextView
+        android:id="@+id/tv_lon"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="Lon: "
+        android:textColor="@color/p3"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/tv_lat"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/tv_lat"
+        app:layout_constraintTop_toBottomOf="@+id/tv_lat"
+        tools:text="Lon: " />
+
+    <TextView
+        android:id="@+id/tv_lonVal"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:textColor="@color/p1"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_lon"
+        app:layout_constraintStart_toEndOf="@+id/tv_lon"
+        app:layout_constraintTop_toTopOf="@+id/tv_lon"
+        app:layout_constraintVertical_bias="0.0"
+        tools:text="value " />
+
+    <ImageView
+        android:id="@+id/iv_compass"
         android:layout_width="100dp"
-        android:layout_height="100dp"/>
-</LinearLayout>
+        android:layout_height="100dp"
+        android:layout_gravity="center"
+        android:layout_marginStart="44dp"
+        android:rotation="-90"
+        android:src="@drawable/compass"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/rpm"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.211" />
+
+    <ImageView
+        android:id="@+id/iv_compass2"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center"
+        android:layout_marginStart="28dp"
+        android:src="@drawable/batt3"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_compass"
+        app:layout_constraintStart_toEndOf="@+id/iv_compass"
+        app:layout_constraintTop_toTopOf="@+id/iv_compass"
+        app:layout_constraintVertical_bias="0.0" />
+
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="229dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Location"
+        android:textColor="@color/p2"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/tv_compassVal"
+        app:layout_constraintTop_toBottomOf="@+id/tv_compassVal" />
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="20dp"
+        android:text="Compass"
+        android:textColor="@color/p2"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/iv_compass"
+        app:layout_constraintEnd_toEndOf="@+id/iv_compass"
+        app:layout_constraintHorizontal_bias="0.533"
+        app:layout_constraintStart_toStartOf="@+id/iv_compass" />
+
+    <TextView
+        android:id="@+id/textView7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="20dp"
+        android:text="Battery"
+        android:textColor="@color/p2"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/iv_compass2"
+        app:layout_constraintEnd_toEndOf="@+id/iv_compass2"
+        app:layout_constraintStart_toStartOf="@+id/iv_compass2" />
+
+    <TextView
+        android:id="@+id/textView8"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:textColor="@color/p1"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/iv_compass2"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/iv_compass2"
+        app:layout_constraintTop_toBottomOf="@+id/iv_compass2"
+        tools:text="78%" />
+
+    <TextView
+        android:id="@+id/tv_compassVal"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:textColor="@color/p1"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/iv_compass"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/iv_compass"
+        app:layout_constraintTop_toBottomOf="@+id/iv_compass"
+        tools:text="110°" />
+
+    <Button
+        android:id="@+id/bt_disconnect"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="40dp"
+        android:layout_marginBottom="40dp"
+        android:backgroundTint="@color/p3"
+        android:text="Disconnect"
+        android:textColor="@color/p1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

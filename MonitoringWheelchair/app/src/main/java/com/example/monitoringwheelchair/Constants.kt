@@ -17,8 +17,17 @@ interface Constants {
 
         //permission
         const val REQUEST_ENABLE_BLUETOOTH = 1
+        const val locationPermissionCode = 2
 
         //uuid
         var mUUID: UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB")
+
+        //timer
+        const val TIMER_UPDATED = "timerUpdated"
+        const val TIME_EXTRA = "timeExtra"
+
+        const val PREFERENCES = "prefs"
+        const val START_TIME_KEY = "startKey"
+        const val STOP_TIME_KEY = "stopKey"
     }
 }

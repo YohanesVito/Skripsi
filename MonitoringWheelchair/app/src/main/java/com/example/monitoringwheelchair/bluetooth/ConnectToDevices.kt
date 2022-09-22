@@ -40,7 +40,7 @@ class ConnectToDevice(c: Context, m_address: String, mHandler: Handler): AsyncTa
     @Deprecated("Deprecated in Java")
     override fun onPreExecute() {
         super.onPreExecute()
-        m_progress = ProgressDialog.show(context,"connecting...","please wait")
+        m_progress = ProgressDialog.show(context,"Connecting...","Please Wait")
     }
 
     @RequiresApi(Build.VERSION_CODES.S)
@@ -79,6 +79,7 @@ class ConnectToDevice(c: Context, m_address: String, mHandler: Handler): AsyncTa
             m_isConnected = true
         }
         m_progress.dismiss()
+
     }
 
     fun disconnect(){
@@ -93,7 +94,7 @@ class ConnectToDevice(c: Context, m_address: String, mHandler: Handler): AsyncTa
         }
     }
 
-    private inner class ConnectedThread(private val mmSocket: BluetoothSocket) : Thread() {
+    private inner class ConnectedThread(mmSocket: BluetoothSocket) : Thread() {
 
         private val mmInStream: InputStream = mmSocket.inputStream
         private val mmBuffer: ByteArray = ByteArray(1024) // mmBuffer store for the stream
@@ -114,13 +115,5 @@ class ConnectToDevice(c: Context, m_address: String, mHandler: Handler): AsyncTa
             }
         }
 
-        // Call this method from the main activity to shut down the connection.
-        fun cancel() {
-            try {
-                mmSocket.close()
-            } catch (e: IOException) {
-                Log.e("read", "Could not close the connect socket", e)
-            }
-        }
     }
 }

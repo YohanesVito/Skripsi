@@ -16,17 +16,15 @@
     <style name="TextItem">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginStart">10dp</item>
+<!--        <item name="android:layout_marginStart">5dp</item>-->
         <item name="android:layout_marginTop">16dp</item>
-        <item name="android:layout_marginEnd">8dp</item>
-        <item name="android:textStyle">italic</item>
-        <item name="android:textColor">@color/black</item>
-        <item name="android:textSize">13sp</item>
+<!--        <item name="android:layout_marginEnd">8dp</item>-->
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">20sp</item>
     </style>
     <style name="TextItem.Name">
-        <item name="android:textStyle">bold</item>
-        <item name="android:textColor">@color/black</item>
+        <item name="android:textStyle">italic</item>
         <item name="android:layout_marginTop">8dp</item>
-        <item name="android:textSize">11sp</item>
+        <item name="android:textSize">12sp</item>
     </style>
 </resources>

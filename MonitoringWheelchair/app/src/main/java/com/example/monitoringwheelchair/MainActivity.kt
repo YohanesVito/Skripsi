@@ -13,7 +13,7 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.monitoringwheelchair.bluetooth.PairedBluetoothAdapter
 import com.example.monitoringwheelchair.databinding.ActivityMainBinding
 
@@ -31,6 +31,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        supportActionBar?.hide()
 
         bluetoothManager= getSystemService(BluetoothManager::class.java)
         bluetoothAdapter= bluetoothManager.adapter
@@ -75,20 +76,21 @@ class MainActivity : AppCompatActivity() {
         showRecylerList(list)
 
     }
-    private fun showDetailGithubUser(data: BluetoothDevice) {
+    private fun showMonitoring(data: BluetoothDevice) {
         val intent = Intent(this,MonitorActivity::class.java)
         intent.putExtra(EXTRA_ADDRESS, data.address)
         startActivity(intent)
     }
+
     private fun showRecylerList(list: ArrayList<BluetoothDevice>) {
-        binding.rvBt.layoutManager = GridLayoutManager(this, 2)
+        binding.rvBt.layoutManager = LinearLayoutManager(this)
 
         val listPairedDevices = PairedBluetoothAdapter(this,list)
         binding.rvBt.adapter = listPairedDevices
 
         listPairedDevices.setOnItemClickCallback(object : PairedBluetoothAdapter.OnItemClickCallback {
             override fun onItemClicked(data: BluetoothDevice) {
-                showDetailGithubUser(data)
+                showMonitoring(data)
             }
         })
     }

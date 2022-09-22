@@ -6,19 +6,24 @@ import com.example.monitoringwheelchair.gyroscope.GyroscopeData
 
 class MainViewModel:ViewModel() {
 
-    val latitude: MutableLiveData<Double> by lazy {
-        MutableLiveData<Double>()
+    val dataLocation: MutableLiveData<Array<Double>> by lazy {
+        MutableLiveData<Array<Double>>()
     }
 
-    val longitude: MutableLiveData<Double> by lazy {
-        MutableLiveData<Double>()
-    }
-
-    val currentRandom: MutableLiveData<Int> by lazy {
+    val dataSpeed: MutableLiveData<Int> by lazy {
         MutableLiveData<Int>()
     }
 
     val dataGyroscope: MutableLiveData<GyroscopeData> by lazy {
         MutableLiveData<GyroscopeData>()
     }
+
+    val dataCompass: MutableLiveData<Int> by lazy{
+        MutableLiveData<Int>()
+    }
+
+    val dataDummy: MutableLiveData<Map<String,Int>> by lazy{
+        MutableLiveData<Map<String,Int>>()
+    }
+
 }

@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/p4"
     tools:context=".MainActivity">
 
     <TextView
@@ -13,6 +14,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="30dp"
+        android:textColor="@color/p2"
         android:text="List Paired Devices"
         android:textSize="20sp"
         android:textStyle="bold"
@@ -26,6 +28,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="20dp"
+        android:textColor="@color/p1"
+        android:backgroundTint="@color/p3"
         android:text="Refresh"
         app:layout_constraintEnd_toEndOf="@+id/name_bt"
         app:layout_constraintStart_toStartOf="@+id/name_bt"
@@ -37,9 +41,12 @@
 <!--        android:id="@+id/list_bt" />-->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_bt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="@+id/bt_refresh"
-        app:layout_constraintStart_toStartOf="@+id/bt_refresh"
-        app:layout_constraintTop_toBottomOf="@+id/bt_refresh" />
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="140dp"
+        android:padding="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
