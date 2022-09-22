@@ -50,9 +50,9 @@ class ConnectToDevice(c: Context, m_address: String, mHandler: Handler): AsyncTa
             if (m_bluetoothSocket==null || !m_isConnected){
                 m_bluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
                 val device: BluetoothDevice = m_bluetoothAdapter.getRemoteDevice(m_address)
-                if ((ContextCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED)) {
+                if ((ContextCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED)) {
                     ActivityCompat.requestPermissions(
-                        context as Activity, arrayOf(Manifest.permission.BLUETOOTH_CONNECT),
+                        context as Activity, arrayOf(Manifest.permission.BLUETOOTH_SCAN),
                         Constants.REQUEST_ENABLE_BLUETOOTH
                     )
                 }

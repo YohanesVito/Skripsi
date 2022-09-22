@@ -15,23 +15,23 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/p1"
+        android:background="@color/purple_neon"
         android:padding="6dp">
 
         <TextView
             android:id="@+id/tv_device"
             style="@style/TextItem"
-            android:textColor="@color/p2"
             android:gravity="center"
+            android:textColor="@color/white"
             card_view:layout_constraintEnd_toEndOf="parent"
             card_view:layout_constraintStart_toStartOf="parent"
             card_view:layout_constraintTop_toTopOf="parent"
             tools:text="Devices Name" />
 
         <TextView
-            style="@style/TextItem.Name"
             android:id="@+id/tv_mac"
-            android:textColor="@color/black"
+            style="@style/TextItem.Name"
+            android:textColor="@color/white"
             card_view:layout_constraintEnd_toEndOf="@+id/tv_device"
             card_view:layout_constraintStart_toStartOf="@+id/tv_device"
             card_view:layout_constraintTop_toBottomOf="@+id/tv_device"

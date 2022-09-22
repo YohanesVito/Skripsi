@@ -18,9 +18,20 @@
     <color name="n3">#BA6B57</color>
     <color name="n4">#30475E</color>
 
+
     <color name="p1">#FFDF6B</color>
     <color name="p2">#FF79CD</color>
     <color name="p3">#AA2EE6</color>
     <color name="p4">#23049D</color>
+
+    <color name="dark_primary">#7B1FA2</color>
+    <color name="light_primary">#E1BEE7</color>
+    <color name="primary_color">#9C27B0</color>
+    <color name="text_icon">#FFFFFF</color>
+    <color name="accent">#FF4081</color>
+    <color name="primary_text">#212121</color>
+    <color name="purple_neon">#DF00FE</color>
+    <color name="secondary_text">#757575</color>
+    <color name="divider">#BDBDBD</color>
 
 </resources>

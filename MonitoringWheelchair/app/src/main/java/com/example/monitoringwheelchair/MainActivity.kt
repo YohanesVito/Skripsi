@@ -51,8 +51,6 @@ class MainActivity : AppCompatActivity() {
         pairedDeviceList()
 
         binding.btRefresh.setOnClickListener {
-//            Log.d("clik","tenan")
-            Toast.makeText(this,"tol", Toast.LENGTH_SHORT).show()
             pairedDeviceList()
         }
     }
