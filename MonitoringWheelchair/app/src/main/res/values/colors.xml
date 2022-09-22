@@ -8,17 +8,6 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-    <color name="c1">#B983FF</color>
-    <color name="c2">#94B3FD</color>
-    <color name="c3">#94DAFF</color>
-    <color name="c4">#99FEFF</color>
-
-    <color name="n1">#E7B2A5</color>
-    <color name="n2">#F1935C</color>
-    <color name="n3">#BA6B57</color>
-    <color name="n4">#30475E</color>
-
-
     <color name="p1">#FFDF6B</color>
     <color name="p2">#FF79CD</color>
     <color name="p3">#AA2EE6</color>
@@ -34,4 +23,14 @@
     <color name="secondary_text">#757575</color>
     <color name="divider">#BDBDBD</color>
 
+    <color name="blue1">#E8FFC2</color>
+    <color name="blue2">#00FFDD</color>
+    <color name="blue3">#2FA4FF</color>
+    <color name="blue4">#0E185F</color>
+
+    <color name="v1">#F2FA5A</color>
+    <color name="v2">#5EE6EB</color>
+    <color name="v3">#56BBF1</color>
+    <color name="v4">#4D77FF</color>
+    <color name="v5">#534DFF</color>#
 </resources>

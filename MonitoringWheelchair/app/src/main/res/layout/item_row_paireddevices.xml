@@ -15,14 +15,14 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/purple_neon"
+        android:background="@color/v2"
         android:padding="6dp">
 
         <TextView
             android:id="@+id/tv_device"
             style="@style/TextItem"
             android:gravity="center"
-            android:textColor="@color/white"
+            android:textColor="@color/primary_text"
             card_view:layout_constraintEnd_toEndOf="parent"
             card_view:layout_constraintStart_toStartOf="parent"
             card_view:layout_constraintTop_toTopOf="parent"
@@ -31,7 +31,7 @@
         <TextView
             android:id="@+id/tv_mac"
             style="@style/TextItem.Name"
-            android:textColor="@color/white"
+            android:textColor="@color/primary_text"
             card_view:layout_constraintEnd_toEndOf="@+id/tv_device"
             card_view:layout_constraintStart_toStartOf="@+id/tv_device"
             card_view:layout_constraintTop_toBottomOf="@+id/tv_device"
