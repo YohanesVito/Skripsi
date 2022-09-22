@@ -212,7 +212,7 @@
         app:layout_constraintVertical_bias="0.211" />
 
     <ImageView
-        android:id="@+id/iv_compass2"
+        android:id="@+id/iv_battery"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_gravity="center"
@@ -261,12 +261,12 @@
         android:textColor="@color/text_icon"
         android:textSize="20sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/iv_compass2"
-        app:layout_constraintEnd_toEndOf="@+id/iv_compass2"
-        app:layout_constraintStart_toStartOf="@+id/iv_compass2" />
+        app:layout_constraintBottom_toTopOf="@+id/iv_battery"
+        app:layout_constraintEnd_toEndOf="@+id/iv_battery"
+        app:layout_constraintStart_toStartOf="@+id/iv_battery" />
 
     <TextView
-        android:id="@+id/textView8"
+        android:id="@+id/tv_batteryVal"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -274,10 +274,10 @@
         android:textColor="@color/accent"
         android:textSize="20sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="@+id/iv_compass2"
+        app:layout_constraintEnd_toEndOf="@+id/iv_battery"
         app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="@+id/iv_compass2"
-        app:layout_constraintTop_toBottomOf="@+id/iv_compass2"
+        app:layout_constraintStart_toStartOf="@+id/iv_battery"
+        app:layout_constraintTop_toBottomOf="@+id/iv_battery"
         tools:text="78%" />
 
     <TextView

@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.graphics.drawable.Drawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
@@ -85,11 +86,11 @@ class MonitorActivity : AppCompatActivity() {
             updateLocation(it)
         }
 
-        viewModel.dataDummy.observe(this) {
-            updateSpeed(it["speed"]!!, duration)
-            updateRPM(it["rpm"]!!, duration)
-            Log.d("viw",it["speed"].toString())
-        }
+//        viewModel.dataDummy.observe(this) {
+//            updateSpeed(it["speed"]!!, duration)
+//            updateRPM(it["rpm"]!!, duration)
+//            Log.d("viw",it["speed"].toString())
+//        }
 
         serviceIntent = Intent(applicationContext,TimerService::class.java)
         registerReceiver(updateTime, IntentFilter(TIMER_UPDATED))
@@ -112,6 +113,28 @@ class MonitorActivity : AppCompatActivity() {
             updateRPM(randomRPM, duration)
         }
 
+        binding.ivBattery.setOnClickListener{
+            val randomBatt = (0..100).random()
+            updateBatt(randomBatt)
+            binding.tvBatteryVal.text = "$randomBatt%"
+        }
+
+    }
+
+    private fun updateBatt(percentage: Int) {
+
+        if (percentage<=25){
+            binding.ivBattery.setImageResource(R.drawable.batt1)
+        }
+        else if (percentage<=50){
+            binding.ivBattery.setImageResource(R.drawable.batt2)
+        }
+        else if(percentage<=75){
+            binding.ivBattery.setImageResource(R.drawable.batt3)
+        }
+        else if(percentage<=100){
+            binding.ivBattery.setImageResource(R.drawable.batt4)
+        }
     }
 
     private fun updateRPM(i: Int, duration: Long) {
