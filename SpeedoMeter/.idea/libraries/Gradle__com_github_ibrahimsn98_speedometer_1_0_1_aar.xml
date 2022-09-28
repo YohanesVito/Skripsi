@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Gradle: com.github.ibrahimsn98:speedometer:1.0.1@aar">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/163851eee2a08429f6d363202a57ba4e/transformed/speedometer-1.0.1/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/163851eee2a08429f6d363202a57ba4e/transformed/speedometer-1.0.1/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/163851eee2a08429f6d363202a57ba4e/transformed/speedometer-1.0.1/AndroidManifest.xml" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.ibrahimsn98/speedometer/1.0.1/221d95d36b708534bafbb0e49bcc9b44f04cf2ba/speedometer-1.0.1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
