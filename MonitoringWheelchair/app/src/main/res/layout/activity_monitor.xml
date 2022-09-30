@@ -13,7 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginBottom="15dp"
+        android:layout_marginBottom="20dp"
         android:text="Speed"
         android:textColor="@color/v1"
         android:textSize="20sp"
@@ -24,26 +24,12 @@
 
 
     <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="20dp"
-        android:text="@string/app_name"
-        android:textColor="@color/text_icon"
-        android:textSize="30sp"
-        android:textStyle="italic"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
         android:id="@+id/tv_timer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="00:00:00"
         android:textColor="@color/v2"
-        android:textSize="40sp"
+        android:textSize="45sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@+id/tv_timer2"
         app:layout_constraintTop_toBottomOf="@+id/tv_timer2" />
@@ -54,7 +40,7 @@
         android:layout_height="wrap_content"
         android:text="092122"
         android:textColor="@color/v2"
-        android:textSize="40sp"
+        android:textSize="45sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@+id/tv_timer3"
         app:layout_constraintTop_toBottomOf="@+id/tv_timer3" />
@@ -83,28 +69,28 @@
 
     <me.ibrahimsn.lib.Speedometer
         android:id="@+id/speedometer"
-        android:layout_width="400dp"
-        android:layout_height="400dp"
+        android:layout_width="220dp"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginStart="40dp"
+        android:layout_marginStart="25dp"
         app:borderColor="@color/v4"
-        app:borderSize="10dp"
+        app:borderSize="5dp"
         app:fillColor="@color/blue2"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.535"
+        app:layout_constraintVertical_bias="0.375"
         app:maxSpeed="70"
         app:metricText="km/h"
         app:textColor="@color/text_icon"
-        app:textGap="70dp" />
+        app:textGap="10dp" />
 
     <me.ibrahimsn.lib.Speedometer
         android:id="@+id/rpm"
-        android:layout_width="300dp"
-        android:layout_height="300dp"
+        android:layout_width="170dp"
+        android:layout_height="0dp"
         android:layout_gravity="center"
         android:layout_marginStart="40dp"
         app:borderColor="@color/v4"
@@ -115,7 +101,7 @@
         app:maxSpeed="10"
         app:metricText="rad/s"
         app:textColor="@color/text_icon"
-        app:textGap="40dp" />
+        app:textGap="10dp" />
 
     <!--    <TextView-->
     <!--        android:id="@+id/tv_speed"-->
@@ -145,7 +131,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginBottom="15dp"
+        android:layout_marginBottom="20dp"
         android:text="RPM"
         android:textColor="@color/v1"
         android:textSize="20sp"
@@ -158,7 +144,7 @@
         android:id="@+id/tv_lat"
         android:layout_width="50dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="20dp"
         android:text="Lat: "
         android:textColor="@color/v4"
         android:textSize="20sp"
@@ -214,8 +200,8 @@
 
     <ImageView
         android:id="@+id/iv_compass"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:layout_gravity="center"
         android:layout_marginStart="44dp"
         android:rotation="-90"
@@ -223,12 +209,12 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/rpm"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.363" />
+        app:layout_constraintVertical_bias="0.211" />
 
     <ImageView
         android:id="@+id/iv_battery"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:layout_gravity="center"
         android:layout_marginStart="28dp"
         android:src="@drawable/batt3"
@@ -242,7 +228,7 @@
         android:id="@+id/textView"
         android:layout_width="229dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="20dp"
         android:text="Location"
         android:textColor="@color/v1"
         android:textSize="20sp"
@@ -255,7 +241,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginBottom="15dp"
+        android:layout_marginBottom="20dp"
         android:text="Compass"
         android:textColor="@color/v1"
         android:textSize="20sp"
@@ -270,7 +256,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginBottom="15dp"
+        android:layout_marginBottom="20dp"
         android:text="Battery"
         android:textColor="@color/v1"
         android:textSize="20sp"
@@ -313,10 +299,22 @@
         android:id="@+id/bt_disconnect"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="96dp"
-        android:layout_marginBottom="108dp"
+        android:layout_marginEnd="40dp"
+        android:layout_marginBottom="40dp"
         android:backgroundTint="@color/blue3"
         android:text="Disconnect"
+        android:textColor="@color/primary_text"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <Button
+        android:id="@+id/bt_test"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="40dp"
+        android:layout_marginBottom="100dp"
+        android:backgroundTint="@color/blue3"
+        android:text="test"
         android:textColor="@color/primary_text"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />

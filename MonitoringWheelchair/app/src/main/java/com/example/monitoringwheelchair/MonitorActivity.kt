@@ -5,14 +5,12 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.graphics.drawable.Drawable
+import android.os.*
 import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import android.os.Message
 import android.util.Log
 import android.view.animation.Animation
 import android.view.animation.RotateAnimation
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModelProvider
 import com.example.monitoringwheelchair.Constants.Companion.TIMER_UPDATED
 import com.example.monitoringwheelchair.Constants.Companion.TIME_EXTRA
@@ -22,7 +20,11 @@ import com.example.monitoringwheelchair.databinding.ActivityMonitorBinding
 import com.example.monitoringwheelchair.gyroscope.Gyroscope
 import com.example.monitoringwheelchair.gyroscope.GyroscopeData
 import com.example.monitoringwheelchair.location.Location
+import com.example.monitoringwheelchair.logging.Data
+import com.example.monitoringwheelchair.logging.LoggingData
 import com.example.monitoringwheelchair.time.TimerService
+import java.time.Instant
+import java.time.format.DateTimeFormatter
 import java.util.*
 import kotlin.math.roundToInt
 import kotlin.math.roundToLong
@@ -42,6 +44,7 @@ class MonitorActivity : AppCompatActivity() {
         val EXTRA_ADDRESS: String = "Device"
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMonitorBinding.inflate(layoutInflater)
@@ -117,6 +120,23 @@ class MonitorActivity : AppCompatActivity() {
             val randomBatt = (0..100).random()
             updateBatt(randomBatt)
             binding.tvBatteryVal.text = "$randomBatt%"
+        }
+
+        binding.btTest.setOnClickListener {
+            val timeStamp = DateTimeFormatter.ISO_INSTANT.format(Instant.now()).toString()
+            val randomSpeed = (0..70).random()
+
+            val randomRPM = (0..10).random()
+
+            val randomBatt = (0..100).random()
+
+            updateSpeed(randomSpeed, duration)
+            updateRPM(randomRPM, duration)
+            updateBatt(randomBatt)
+            binding.tvBatteryVal.text = "$randomBatt%"
+
+            val data = Data(timeStamp,randomSpeed.toString(),randomRPM.toString(),randomBatt.toString())
+            LoggingData().sendData(data)
         }
 
     }
