@@ -1,5 +1,3 @@
-
-from email.policy import default
 from flask import Flask, jsonify, request
 from flask_mysqldb import MySQL
 
@@ -17,10 +15,9 @@ def get_all_users():
 
     cur = mysql.connection.cursor()
     cur.execute("SELECT * FROM data")
-    mysql.connection.commit()
-    cur.close()
-
-    return ''
+    data = cur.fetchall()
+  
+    return jsonify(data)
 
 # @app.route('/user/<user_id>',methods=['GET'])
 # def get_one_users():
@@ -30,12 +27,12 @@ def get_all_users():
 def insert_data():
 
 # kalau datanya bentuk json
-    data = request.get_json()
+    # data = request.get_json()
     
-    time_stamp = data["time_stamp"]
-    speed = data["speed"]
-    rpm = data["rpm"]
-    battery = data["battery"]
+    # time_stamp = data["time_stamp"]
+    # speed = data["speed"]
+    # rpm = data["rpm"]
+    # battery = data["battery"]
 
 
 # kalau datanya bentuk x-www-form-urlencoded
@@ -54,5 +51,5 @@ def insert_data():
     return jsonify({'message': 'data inserted!'})
 
 if __name__ == "__main__":
-    app.run(host="192.168.100.8", port=5000, debug=True)
+    app.run(debug=True)
 
