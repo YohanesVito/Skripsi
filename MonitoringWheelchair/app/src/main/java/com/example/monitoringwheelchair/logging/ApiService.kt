@@ -18,6 +18,10 @@ interface ApiService {
         @Field("speed") speed: String,
         @Field("rpm") rpm: String,
         @Field("battery") battery: String,
+        @Field("duty_cycle") duty_cycle: String,
+        @Field("compass") compass: String,
+        @Field("lat") lat: String,
+        @Field("lon") lon: String,
     ): Call<Data>
 
 //    @GET("users/{username}")

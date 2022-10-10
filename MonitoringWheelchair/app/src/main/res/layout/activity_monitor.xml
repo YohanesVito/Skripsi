@@ -82,7 +82,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.375"
-        app:maxSpeed="70"
+        app:maxSpeed="50"
         app:metricText="km/h"
         app:textColor="@color/text_icon"
         app:textGap="10dp" />
@@ -99,7 +99,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/speedometer"
         app:layout_constraintStart_toEndOf="@+id/speedometer"
         app:maxSpeed="10"
-        app:metricText="rad/s"
+        app:metricText="x100"
         app:textColor="@color/text_icon"
         app:textGap="10dp" />
 

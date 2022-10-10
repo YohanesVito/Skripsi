@@ -4,7 +4,6 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.graphics.drawable.Drawable
 import android.os.*
 import androidx.appcompat.app.AppCompatActivity
 import android.util.Log
@@ -12,6 +11,8 @@ import android.view.animation.Animation
 import android.view.animation.RotateAnimation
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import com.example.monitoringwheelchair.Constants.Companion.DURATION
 import com.example.monitoringwheelchair.Constants.Companion.TIMER_UPDATED
 import com.example.monitoringwheelchair.Constants.Companion.TIME_EXTRA
 import com.example.monitoringwheelchair.bluetooth.ConnectToDevice
@@ -23,11 +24,13 @@ import com.example.monitoringwheelchair.location.Location
 import com.example.monitoringwheelchair.logging.Data
 import com.example.monitoringwheelchair.logging.LoggingData
 import com.example.monitoringwheelchair.time.TimerService
+import com.github.doyaaaaaken.kotlincsv.dsl.csvWriter
+import kotlinx.coroutines.launch
+import java.io.File
 import java.time.Instant
 import java.time.format.DateTimeFormatter
 import java.util.*
 import kotlin.math.roundToInt
-import kotlin.math.roundToLong
 
 class MonitorActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMonitorBinding
@@ -36,9 +39,11 @@ class MonitorActivity : AppCompatActivity() {
     lateinit var m_address: String
     private var time = 0.0
     private var timerStarted = false
+    private var compass: String? = null
+    private var lat: String? = null
+    private var lon: String? = null
 
     companion object{
-        const val duration = 200L
         private var currentDegree= 0f
         private lateinit var mHandler: Handler
         val EXTRA_ADDRESS: String = "Device"
@@ -51,6 +56,9 @@ class MonitorActivity : AppCompatActivity() {
         setContentView(binding.root)
         supportActionBar?.hide()
 
+        //create file
+        initiateLoggingFile()
+
         m_address = intent.getStringExtra(EXTRA_ADDRESS).toString()
         mHandler = object:Handler() {
             override fun handleMessage(msg: Message) {
@@ -61,7 +69,7 @@ class MonitorActivity : AppCompatActivity() {
                         // construct a string from the valid bytes in the buffer
                         val readMessage = String(readBuf, 0, msg.arg1)
                         Log.d("msghandler",readMessage)
-                        viewModel.dataSpeed.value = readMessage.toInt()
+                        viewModel.dataBluetooth.value = readMessage
                     }
                 }
             }
@@ -77,8 +85,18 @@ class MonitorActivity : AppCompatActivity() {
 //            updateGyroscope(it)
 //        }
 
-        viewModel.dataSpeed.observe(this) {
-            updateSpeed(it, duration)
+        viewModel.dataBluetooth.observe(this) {
+            val arrayData: List<String> = it.split(";")
+            val penanda = arrayData[0][0]
+            val rpm = arrayData[0].drop(1).toFloat()
+            val speed = arrayData[1].toFloat()
+            val battery = arrayData[2].toFloat()
+            val dutyCycle = arrayData[3].dropLast(1)
+            val timeStamp = DateTimeFormatter.ISO_INSTANT.format(Instant.now()).toString()
+
+            val newData = Data(timeStamp,speed.toString(), rpm.toString(), battery.toString(), dutyCycle, compass, lat, lon)
+            LoggingData(newData).logData()
+            updateData(it)
         }
 
         viewModel.dataCompass.observe(this){
@@ -108,12 +126,12 @@ class MonitorActivity : AppCompatActivity() {
 
         binding.speedometer.setOnClickListener{
             val randomSpeed = (0..70).random()
-            updateSpeed(randomSpeed, duration)
+            updateSpeed(randomSpeed)
         }
 
         binding.rpm.setOnClickListener{
             val randomRPM = (0..10).random()
-            updateRPM(randomRPM, duration)
+            updateRPM(randomRPM)
         }
 
         binding.ivBattery.setOnClickListener{
@@ -130,19 +148,65 @@ class MonitorActivity : AppCompatActivity() {
 
             val randomBatt = (0..100).random()
 
-            updateSpeed(randomSpeed, duration)
-            updateRPM(randomRPM, duration)
+            updateSpeed(randomSpeed)
+            updateRPM(randomRPM)
             updateBatt(randomBatt)
             binding.tvBatteryVal.text = "$randomBatt%"
 
             val data = Data(timeStamp,randomSpeed.toString(),randomRPM.toString(),randomBatt.toString())
-            LoggingData().sendData(data)
+
+            LoggingData(data).logData()
         }
 
     }
 
-    private fun updateBatt(percentage: Int) {
+    private fun initiateLoggingFile() {
+        //create directory in folder ABA
+        val folder = Environment.getExternalStorageDirectory().toString()
+        val f = File(folder,"MokuraLoggingData")
+        f.mkdir()
 
+        ///storage/emulated/0/MokuraLoggingData/Logging1.csv
+        val fileName = Environment.getExternalStorageDirectory().toString() + "/MokuraLoggingData/Logging1.csv"
+        Log.d("path","$fileName")
+
+        //create header csv
+        val header = listOf("timeStamp","speed","rpm","battery","compass","dutyCycle","lat","lon")
+        csvWriter().open(File(fileName)) {
+            writeRow(header)
+        }
+
+    }
+
+    private fun updateData(stringData: String?) {
+        val arrayData: List<String>? = stringData?.split(";")
+        val penanda = arrayData?.get(0)?.get(0)
+        val rpm = arrayData?.get(0)?.drop(1)?.toFloat()?.div(100)
+        val speed = arrayData?.get(1)?.toFloat()
+        val battery = arrayData?.get(2)?.toFloat()
+        val dutyCycle = arrayData?.get(3)?.dropLast(1)
+
+        if (penanda != null) {
+            if (penanda.hashCode() == 0x02 ){
+                Log.d("Data: ","valid")
+            }else{
+                Log.d("Data: ","invalid")
+            }
+        }
+
+        if (speed != null) {
+            updateSpeed(speed.toInt())
+        }
+        if (rpm != null) {
+            updateRPM(rpm.toInt())
+        }
+        if (battery != null) {
+            updateBatt(battery.toInt())
+        }
+    }
+
+    private fun updateBatt(percentage: Int) {
+        binding.tvBatteryVal.text = "$percentage%"
         if (percentage<=25){
             binding.ivBattery.setImageResource(R.drawable.batt1)
         }
@@ -157,9 +221,9 @@ class MonitorActivity : AppCompatActivity() {
         }
     }
 
-    private fun updateRPM(i: Int, duration: Long) {
+    private fun updateRPM(i: Int) {
         val rpm = binding.rpm
-        rpm.setSpeed(i,duration)
+        rpm.setSpeed(i, DURATION)
     }
 
     private val updateTime: BroadcastReceiver = object : BroadcastReceiver(){
@@ -185,8 +249,10 @@ class MonitorActivity : AppCompatActivity() {
     }
 
     private fun updateLocation(data: Array<Double>) {
-        binding.tvLatVal.text = "%.${3}f".format(data[0])
-        binding.tvLonVal.text = "%.${3}f".format(data[1])
+        lat = "%.${3}f".format(data[0])
+        lon = "%.${3}f".format(data[1])
+        binding.tvLatVal.text = lat
+        binding.tvLonVal.text = lon
         Log.i("tttt",data[0].toString())
         Log.i("lon",data[1].toString())
     }
@@ -205,12 +271,13 @@ class MonitorActivity : AppCompatActivity() {
         binding.ivCompass.startAnimation(rotateAnimation)
         currentDegree = (-degree).toFloat()
 
-        binding.tvCompassVal.text = "$currentDegree°"
+        compass = currentDegree.toString()
+        binding.tvCompassVal.text = compass
     }
 
-    private fun updateSpeed(s: Int, duration: Long) {
+    private fun updateSpeed(s: Int) {
         val speedometer = binding.speedometer
-        speedometer.setSpeed(s,duration)
+        speedometer.setSpeed(s, DURATION)
     }
 
     override fun onBackPressed() {

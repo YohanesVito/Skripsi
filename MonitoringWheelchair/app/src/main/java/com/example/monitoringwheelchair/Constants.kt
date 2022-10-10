@@ -29,5 +29,8 @@ interface Constants {
         const val PREFERENCES = "prefs"
         const val START_TIME_KEY = "startKey"
         const val STOP_TIME_KEY = "stopKey"
+
+        //speedometer and rpm animation duration
+        const val DURATION = 200L
     }
 }

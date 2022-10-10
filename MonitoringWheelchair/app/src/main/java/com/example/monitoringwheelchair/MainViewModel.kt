@@ -10,8 +10,8 @@ class MainViewModel:ViewModel() {
         MutableLiveData<Array<Double>>()
     }
 
-    val dataSpeed: MutableLiveData<Int> by lazy {
-        MutableLiveData<Int>()
+    val dataBluetooth: MutableLiveData<String> by lazy {
+        MutableLiveData<String>()
     }
 
     val dataGyroscope: MutableLiveData<GyroscopeData> by lazy {

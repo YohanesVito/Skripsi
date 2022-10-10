@@ -58,4 +58,8 @@ dependencies {
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation "com.squareup.retrofit2:converter-gson:2.9.0"
     implementation "com.squareup.okhttp3:logging-interceptor:4.9.0"
+
+    implementation"com.github.doyaaaaaken:kotlin-csv-jvm:1.6.0"//for JVM platform
+//    implementation"com.github.doyaaaaaken:kotlin-csv-js:1.6.0"  //for Kotlin JS platform
+
 }
