@@ -97,7 +97,7 @@ class ConnectToDevice(c: Context, m_address: String, mHandler: Handler): AsyncTa
     private inner class ConnectedThread(mmSocket: BluetoothSocket) : Thread() {
 
         private val mmInStream: InputStream = mmSocket.inputStream
-        private val mmBuffer: ByteArray = ByteArray(1024) // mmBuffer store for the stream
+        private val mmBuffer: ByteArray = ByteArray(25) // mmBuffer store for the stream
 
         override fun run() {
             Log.d("msgtol", "hhee")

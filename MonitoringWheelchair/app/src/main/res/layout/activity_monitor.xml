@@ -89,7 +89,7 @@
 
     <me.ibrahimsn.lib.Speedometer
         android:id="@+id/rpm"
-        android:layout_width="170dp"
+        android:layout_width="220dp"
         android:layout_height="0dp"
         android:layout_gravity="center"
         android:layout_marginStart="40dp"
@@ -98,8 +98,8 @@
         app:fillColor="@color/blue2"
         app:layout_constraintBottom_toBottomOf="@+id/speedometer"
         app:layout_constraintStart_toEndOf="@+id/speedometer"
-        app:maxSpeed="10"
-        app:metricText="x100"
+        app:maxSpeed="100"
+        app:metricText=""
         app:textColor="@color/text_icon"
         app:textGap="10dp" />
 
@@ -132,7 +132,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginBottom="20dp"
-        android:text="RPM"
+        android:text="Throttle"
         android:textColor="@color/v1"
         android:textSize="20sp"
         android:textStyle="bold"

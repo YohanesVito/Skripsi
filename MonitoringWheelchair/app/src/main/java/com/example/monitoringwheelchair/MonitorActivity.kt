@@ -86,17 +86,21 @@ class MonitorActivity : AppCompatActivity() {
 //        }
 
         viewModel.dataBluetooth.observe(this) {
-            val arrayData: List<String> = it.split(";")
-            val penanda = arrayData[0][0]
-            val rpm = arrayData[0].drop(1).toFloat()
-            val speed = arrayData[1].toFloat()
-            val battery = arrayData[2].toFloat()
-            val dutyCycle = arrayData[3].dropLast(1)
-            val timeStamp = DateTimeFormatter.ISO_INSTANT.format(Instant.now()).toString()
 
-            val newData = Data(timeStamp,speed.toString(), rpm.toString(), battery.toString(), dutyCycle, compass, lat, lon)
-            LoggingData(newData).logData()
-            updateData(it)
+            if(it.endsWith("#") && it.startsWith("$")){
+                val arrayData: List<String> = it.split(";")
+                val penanda = arrayData[0][0]
+                val rpm = arrayData[0].drop(1).toFloat()
+                val speed = arrayData[1].toFloat()
+                val battery = arrayData[2].toFloat()
+                val dutyCycle = arrayData[3].dropLast(1)
+                val timeStamp = DateTimeFormatter.ISO_INSTANT.format(Instant.now()).toString()
+
+                val newData = Data(timeStamp,speed.toString(), rpm.toString(), battery.toString(), dutyCycle, compass, lat, lon)
+                LoggingData(newData).logData()
+                updateData(it)
+            }
+
         }
 
         viewModel.dataCompass.observe(this){
@@ -179,29 +183,35 @@ class MonitorActivity : AppCompatActivity() {
     }
 
     private fun updateData(stringData: String?) {
-        val arrayData: List<String>? = stringData?.split(";")
-        val penanda = arrayData?.get(0)?.get(0)
-        val rpm = arrayData?.get(0)?.drop(1)?.toFloat()?.div(100)
-        val speed = arrayData?.get(1)?.toFloat()
-        val battery = arrayData?.get(2)?.toFloat()
-        val dutyCycle = arrayData?.get(3)?.dropLast(1)
+        if (stringData != null) {
+            if(stringData.endsWith("#") && stringData.startsWith("$")) {
+                val arrayData: List<String>? = stringData?.split(";")
+                val penanda = arrayData?.get(0)?.get(0)
+                val rpm = arrayData?.get(0)?.drop(1)?.toFloat()?.div(100)
+                val speed = arrayData?.get(1)?.toFloat()
+                val battery = arrayData?.get(2)?.toFloat()
+                val dutyCycle = arrayData?.get(3)?.dropLast(1)?.toFloat()?.times(100)
 
-        if (penanda != null) {
-            if (penanda.hashCode() == 0x02 ){
-                Log.d("Data: ","valid")
-            }else{
-                Log.d("Data: ","invalid")
+    //        if (penanda != null) {
+    //            if (penanda.hashCode() == 0x02 ){
+    //                Log.d("Data: ","valid")
+    //            }else{
+    //                Log.d("Data: ","invalid")
+    //            }
+    //        }
+
+                if (speed != null) {
+                    updateSpeed(speed.toInt())
+                }
+
+                if (dutyCycle != null) {
+                    updateRPM(dutyCycle.toInt())
+                }
+
+                if (battery != null) {
+                    updateBatt(battery.toInt())
+                }
             }
-        }
-
-        if (speed != null) {
-            updateSpeed(speed.toInt())
-        }
-        if (rpm != null) {
-            updateRPM(rpm.toInt())
-        }
-        if (battery != null) {
-            updateBatt(battery.toInt())
         }
     }
 
