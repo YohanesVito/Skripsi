@@ -1,5 +1,5 @@
 from flask import Flask, jsonify, request
-from flask_mysqldb import MySQL
+from flaskext.mysql import MySQL
 
 app = Flask(__name__)
 
@@ -51,5 +51,5 @@ def insert_data():
     return jsonify({'message': 'data inserted!'})
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host="192.168.65.6", port=5000,debug=True)
 
