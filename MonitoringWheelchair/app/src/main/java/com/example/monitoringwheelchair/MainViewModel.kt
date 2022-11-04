@@ -1,11 +1,18 @@
 package com.example.monitoringwheelchair
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.monitoringwheelchair.gyroscope.GyroscopeData
 import com.example.monitoringwheelchair.logging.Data
 
 class MainViewModel:ViewModel() {
+
+    var arrayDataModel = ArrayList<Data>()
+
+    val currentArrayData : MutableLiveData<ArrayList<Data>> by lazy{
+        MutableLiveData<ArrayList<Data>>()
+    }
 
     val dataLocation: MutableLiveData<Array<Double>> by lazy {
         MutableLiveData<Array<Double>>()
@@ -27,8 +34,6 @@ class MainViewModel:ViewModel() {
         MutableLiveData<Map<String,Int>>()
     }
 
-    val arrayResponse : MutableLiveData<ArrayList<Data>> by lazy{
-        MutableLiveData<ArrayList<Data>>()
-    }
+
 
 }

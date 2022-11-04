@@ -1,5 +1,5 @@
 from flask import Flask, jsonify, request
-from flaskext.mysql import MySQL
+from flask_mysqldb import MySQL
 
 app = Flask(__name__)
 
@@ -22,6 +22,29 @@ def get_all_users():
 # @app.route('/user/<user_id>',methods=['GET'])
 # def get_one_users():
 #     return ''
+
+@app.route('/datalist/',methods=['POST'])
+def insert_datalist():
+    datas = request.get_json()
+    
+    # parsing data list
+    for data in datas:
+        time_stamp = data["timeStamp"]
+        lat = data["lat"]
+        lon = data["lon"]
+        compass = data["compass"]
+        speed = data["speed"]
+        rpm = data["rpm"]
+        battery = data["battery"]
+        duty_cycle = data["battery"]   
+
+        cur = mysql.connection.cursor()
+        cur.execute("INSERT INTO data (time_stamp,speed,rpm,battery,lat,lon,compass,duty_cycle) VALUES (%s,%s,%s,%s,%s,%s,%s,%s)",(time_stamp,speed,rpm,battery,lat,lon,compass,duty_cycle))
+        mysql.connection.commit()
+        cur.close()
+
+    return jsonify({'message': 'data inserted!'})
+
 
 @app.route('/data/',methods=['POST'])
 def insert_data():

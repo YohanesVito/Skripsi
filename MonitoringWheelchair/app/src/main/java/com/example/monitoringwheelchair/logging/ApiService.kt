@@ -25,7 +25,7 @@ interface ApiService {
     ): Call<Data>
 
     @Headers("Content-Type: application/json")
-    @POST("dataList")
+    @POST("datalist")
     fun sendDataList(@Body body: ArrayList<Data>): Call<Data>
 
 //    @GET("users/{username}")

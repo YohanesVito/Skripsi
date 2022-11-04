@@ -86,15 +86,16 @@ class MonitorActivity : AppCompatActivity() {
 //            updateGyroscope(it)
 //        }
 
-        viewModel.dataBluetooth.observe(this) {
+        viewModel.dataBluetooth.observe(this) { dataBluetooth ->
 
-            if (it.endsWith("#") && it.startsWith("$")) {
-                val arrayData: List<String> = it.split(";")
+            if (dataBluetooth.endsWith("#") && dataBluetooth.startsWith("$")) {
+                val arrayData: List<String> = dataBluetooth.split(";")
                 val penanda = arrayData[0][0]
                 val rpm = arrayData[0].drop(1).toFloat()
                 val speed = arrayData[1].toFloat()
                 val battery = arrayData[2].toFloat()
-                val dutyCycle = arrayData[3].dropLast(1)
+                val dutyCycle = arrayData[3].filterNot { it == '#' }
+
                 val timeStamp = DateTimeFormatter.ISO_INSTANT.format(Instant.now()).toString()
 
                 val newData = Data(
@@ -107,23 +108,27 @@ class MonitorActivity : AppCompatActivity() {
                     lat,
                     lon
                 )
-                updateData(it)
-                
-                val loggingData = LoggingData(newData)
-                loggingData.logData()
-                viewModel.arrayResponse.value?.add(newData)
+                updateData(dataBluetooth)
 
-                viewModel.arrayResponse.observe(this) { dataList ->
-                    if (dataList.size == 20) {
-                        loggingData.sendDataList(dataList)
-                    }
+                viewModel.arrayDataModel.add(newData)
+                viewModel.currentArrayData.value = viewModel.arrayDataModel
 
-                }
+//                Log.i("aa",viewModel.currentArrayData.value.toString())
 
             }
         }
 
+        viewModel.currentArrayData.observe(this) { dataList ->
+            if (dataList.size >= 50) {
+                LoggingData(dataList).apply {
+                    sendDataList()
+                    logData()
+                }
+                Log.i("dataList",dataList.size.toString())
+                dataList.clear()
+            }
 
+        }
 
         viewModel.dataCompass.observe(this){
             updateCompass(it)
@@ -181,7 +186,6 @@ class MonitorActivity : AppCompatActivity() {
 
             val data = Data(timeStamp,randomSpeed.toString(),randomRPM.toString(),randomBatt.toString())
 
-            LoggingData(data).logData()
         }
 
     }
@@ -213,14 +217,6 @@ class MonitorActivity : AppCompatActivity() {
                 val speed = arrayData?.get(1)?.toFloat()
                 val battery = arrayData?.get(2)?.toFloat()
                 val dutyCycle = arrayData?.get(3)?.dropLast(1)?.toFloat()?.times(100)
-
-    //        if (penanda != null) {
-    //            if (penanda.hashCode() == 0x02 ){
-    //                Log.d("Data: ","valid")
-    //            }else{
-    //                Log.d("Data: ","invalid")
-    //            }
-    //        }
 
                 if (speed != null) {
                     updateSpeed(speed.toInt())

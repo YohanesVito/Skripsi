@@ -10,31 +10,31 @@ import retrofit2.Response
 import java.io.File
 
 
-class LoggingData(private val data: Data){
+class LoggingData(private val data: ArrayList<Data>){
 
-     fun sendData() {
-        val client = ApiConfig.getApiService().sendData(data.timeStamp!!,data.speed!!,data.rpm!!,data.battery!!,data.dutyCycle!!,data.compass!!,data.lat!!,data.lon!!)
-        client.enqueue(object : Callback<Data> {
-            override fun onResponse(
-                call: Call<Data>,
-                response: Response<Data>
-            ) {
-                if (response.isSuccessful) {
-                    val responseBody = response.body()
-                    if (responseBody != null) {
-                        Log.d(TAG, "onSuccess: ${response.message()}")
-                    } else {
-                        Log.e(TAG, "onFailure: ${response.message()}")
-                    }
-                }
-            }
-            override fun onFailure(call: Call<Data>, t: Throwable) {
-                Log.e(TAG, "onFailure: ${t.message}")
-            }
-        })
-    }
+//     fun sendData() {
+//        val client = ApiConfig.getApiService().sendData(data.timeStamp!!,data.speed!!,data.rpm!!,data.battery!!,data.dutyCycle!!,data.compass!!,data.lat!!,data.lon!!)
+//        client.enqueue(object : Callback<Data> {
+//            override fun onResponse(
+//                call: Call<Data>,
+//                response: Response<Data>
+//            ) {
+//                if (response.isSuccessful) {
+//                    val responseBody = response.body()
+//                    if (responseBody != null) {
+//                        Log.d(TAG, "onSuccess: ${response.message()}")
+//                    } else {
+//                        Log.e(TAG, "onFailure: ${response.message()}")
+//                    }
+//                }
+//            }
+//            override fun onFailure(call: Call<Data>, t: Throwable) {
+//                Log.e(TAG, "onFailure: ${t.message}")
+//            }
+//        })
+//    }
 
-    fun sendDataList(data: ArrayList<Data>) {
+    fun sendDataList() {
         val client = ApiConfig.getApiService().sendDataList(data)
         client.enqueue(object : Callback<Data> {
             override fun onResponse(
@@ -67,7 +67,9 @@ class LoggingData(private val data: Data){
         val fileName = Environment.getExternalStorageDirectory().toString() + "/MokuraLoggingData/Logging1.csv"
         Log.d("path","$fileName")
 
-        val rows = listOf(listOf(data.timeStamp, data.speed, data.rpm, data.battery, data.compass, data.dutyCycle, data.lat, data.lon))
+        val listdata = ArrayList<Data>().toList()
+//        val rows = listOf(listOf(data.timeStamp, data.speed, data.rpm, data.battery, data.compass, data.dutyCycle, data.lat, data.lon))
+        val rows = listOf(listdata)
         csvWriter().writeAll(rows, fileName, append = true)
 
     }
