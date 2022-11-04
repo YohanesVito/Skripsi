@@ -30,6 +30,7 @@ import java.io.File
 import java.time.Instant
 import java.time.format.DateTimeFormatter
 import java.util.*
+import kotlin.collections.ArrayList
 import kotlin.math.roundToInt
 
 class MonitorActivity : AppCompatActivity() {
@@ -95,9 +96,20 @@ class MonitorActivity : AppCompatActivity() {
             val timeStamp = DateTimeFormatter.ISO_INSTANT.format(Instant.now()).toString()
 
             val newData = Data(timeStamp,speed.toString(), rpm.toString(), battery.toString(), dutyCycle, compass, lat, lon)
-            LoggingData(newData).logData()
             updateData(it)
+            val loggingData =  LoggingData(newData)
+            loggingData.logData()
+            viewModel.arrayResponse.value?.add(newData)
+
+            viewModel.arrayResponse.observe(this){ dataList ->
+                if (dataList.size == 20){
+                    loggingData.sendDataList(dataList)
+                }
+            }
+
         }
+
+
 
         viewModel.dataCompass.observe(this){
             updateCompass(it)

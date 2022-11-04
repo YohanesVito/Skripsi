@@ -69,10 +69,10 @@
 
     <me.ibrahimsn.lib.Speedometer
         android:id="@+id/speedometer"
-        android:layout_width="220dp"
-        android:layout_height="wrap_content"
+        android:layout_width="450dp"
+        android:layout_height="450dp"
         android:layout_gravity="center"
-        android:layout_marginStart="25dp"
+        android:layout_marginStart="100dp"
         app:borderColor="@color/v4"
         app:borderSize="5dp"
         app:fillColor="@color/blue2"
@@ -89,8 +89,8 @@
 
     <me.ibrahimsn.lib.Speedometer
         android:id="@+id/rpm"
-        android:layout_width="170dp"
-        android:layout_height="0dp"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
         android:layout_gravity="center"
         android:layout_marginStart="40dp"
         app:borderColor="@color/v4"
@@ -200,8 +200,8 @@
 
     <ImageView
         android:id="@+id/iv_compass"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
         android:layout_gravity="center"
         android:layout_marginStart="44dp"
         android:rotation="-90"
@@ -213,8 +213,8 @@
 
     <ImageView
         android:id="@+id/iv_battery"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
         android:layout_gravity="center"
         android:layout_marginStart="28dp"
         android:src="@drawable/batt3"
@@ -299,7 +299,7 @@
         android:id="@+id/bt_disconnect"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="40dp"
+        android:layout_marginEnd="50dp"
         android:layout_marginBottom="40dp"
         android:backgroundTint="@color/blue3"
         android:text="Disconnect"
@@ -311,7 +311,7 @@
         android:id="@+id/bt_test"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="40dp"
+        android:layout_marginEnd="50dp"
         android:layout_marginBottom="100dp"
         android:backgroundTint="@color/blue3"
         android:visibility="gone"

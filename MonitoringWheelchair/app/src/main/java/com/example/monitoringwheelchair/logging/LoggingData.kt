@@ -34,6 +34,28 @@ class LoggingData(private val data: Data){
         })
     }
 
+    fun sendDataList(data: ArrayList<Data>) {
+        val client = ApiConfig.getApiService().sendDataList(data)
+        client.enqueue(object : Callback<Data> {
+            override fun onResponse(
+                call: Call<Data>,
+                response: Response<Data>
+            ) {
+                if (response.isSuccessful) {
+                    val responseBody = response.body()
+                    if (responseBody != null) {
+                        Log.d(TAG, "onSuccess: ${response.message()}")
+                    } else {
+                        Log.e(TAG, "onFailure: ${response.message()}")
+                    }
+                }
+            }
+            override fun onFailure(call: Call<Data>, t: Throwable) {
+                Log.e(TAG, "onFailure: ${t.message}")
+            }
+        })
+    }
+
 
     fun logData(){
         //create directory in folder ABA

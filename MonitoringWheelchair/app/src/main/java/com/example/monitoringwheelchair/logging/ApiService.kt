@@ -24,6 +24,10 @@ interface ApiService {
         @Field("lon") lon: String,
     ): Call<Data>
 
+    @Headers("Content-Type: application/json")
+    @POST("dataList")
+    fun sendDataList(@Body body: ArrayList<Data>): Call<Data>
+
 //    @GET("users/{username}")
 //    @Headers("Authorization: token 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")
 //    fun getDetailUser(
