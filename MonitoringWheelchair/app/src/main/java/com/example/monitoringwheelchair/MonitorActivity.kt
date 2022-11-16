@@ -11,26 +11,22 @@ import android.view.animation.Animation
 import android.view.animation.RotateAnimation
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import com.example.monitoringwheelchair.Constants.Companion.DURATION
 import com.example.monitoringwheelchair.Constants.Companion.TIMER_UPDATED
 import com.example.monitoringwheelchair.Constants.Companion.TIME_EXTRA
 import com.example.monitoringwheelchair.bluetooth.ConnectToDevice
 import com.example.monitoringwheelchair.compass.Compass
 import com.example.monitoringwheelchair.databinding.ActivityMonitorBinding
-import com.example.monitoringwheelchair.gyroscope.Gyroscope
-import com.example.monitoringwheelchair.gyroscope.GyroscopeData
 import com.example.monitoringwheelchair.location.Location
 import com.example.monitoringwheelchair.logging.Data
 import com.example.monitoringwheelchair.logging.LoggingData
 import com.example.monitoringwheelchair.time.TimerService
 import com.github.doyaaaaaken.kotlincsv.dsl.csvWriter
-import kotlinx.coroutines.launch
 import java.io.File
 import java.time.Instant
+import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
-import kotlin.collections.ArrayList
 import kotlin.math.roundToInt
 
 class MonitorActivity : AppCompatActivity() {
@@ -57,8 +53,8 @@ class MonitorActivity : AppCompatActivity() {
         setContentView(binding.root)
         supportActionBar?.hide()
 
-        //create file
-        initiateLoggingFile()
+//        //create file
+//        initiateLoggingFile()
 
         m_address = intent.getStringExtra(EXTRA_ADDRESS).toString()
         mHandler = object:Handler() {
@@ -90,7 +86,6 @@ class MonitorActivity : AppCompatActivity() {
 
             if (dataBluetooth.endsWith("#") && dataBluetooth.startsWith("$")) {
                 val arrayData: List<String> = dataBluetooth.split(";")
-                val penanda = arrayData[0][0]
                 val rpm = arrayData[0].drop(1).toFloat()
                 val speed = arrayData[1].toFloat()
                 val battery = arrayData[2].toFloat()
@@ -106,14 +101,13 @@ class MonitorActivity : AppCompatActivity() {
                     dutyCycle,
                     compass,
                     lat,
-                    lon
-                )
-                updateData(dataBluetooth)
+                    lon,
 
+                )
+//                updateData(dataBluetooth)
+                updateData(newData)
                 viewModel.arrayDataModel.add(newData)
                 viewModel.currentArrayData.value = viewModel.arrayDataModel
-
-//                Log.i("aa",viewModel.currentArrayData.value.toString())
 
             }
         }
@@ -138,12 +132,6 @@ class MonitorActivity : AppCompatActivity() {
             updateLocation(it)
         }
 
-//        viewModel.dataDummy.observe(this) {
-//            updateSpeed(it["speed"]!!, duration)
-//            updateRPM(it["rpm"]!!, duration)
-//            Log.d("viw",it["speed"].toString())
-//        }
-
         serviceIntent = Intent(applicationContext,TimerService::class.java)
         registerReceiver(updateTime, IntentFilter(TIMER_UPDATED))
 
@@ -155,41 +143,42 @@ class MonitorActivity : AppCompatActivity() {
 
         startTimer()
 
-        binding.speedometer.setOnClickListener{
-            val randomSpeed = (0..70).random()
-            updateSpeed(randomSpeed)
-        }
+//        binding.speedometer.setOnClickListener{
+//            val randomSpeed = (0..70).random()
+//            updateSpeed(randomSpeed)
+//        }
+//
+//        binding.rpm.setOnClickListener{
+//            val randomRPM = (0..10).random()
+//            updateRPM(randomRPM)
+//        }
+//
+//        binding.ivBattery.setOnClickListener{
+//            val randomBatt = (0..100).random()
+//            updateBatt(randomBatt)
+//            binding.tvBatteryVal.text = "$randomBatt%"
+//        }
 
-        binding.rpm.setOnClickListener{
-            val randomRPM = (0..10).random()
-            updateRPM(randomRPM)
-        }
-
-        binding.ivBattery.setOnClickListener{
-            val randomBatt = (0..100).random()
-            updateBatt(randomBatt)
-            binding.tvBatteryVal.text = "$randomBatt%"
-        }
-
-        binding.btTest.setOnClickListener {
-            val timeStamp = DateTimeFormatter.ISO_INSTANT.format(Instant.now()).toString()
-            val randomSpeed = (0..70).random()
-
-            val randomRPM = (0..10).random()
-
-            val randomBatt = (0..100).random()
-
-            updateSpeed(randomSpeed)
-            updateRPM(randomRPM)
-            updateBatt(randomBatt)
-            binding.tvBatteryVal.text = "$randomBatt%"
-
-            val data = Data(timeStamp,randomSpeed.toString(),randomRPM.toString(),randomBatt.toString())
-
-        }
+//        binding.btTest.setOnClickListener {
+//            val timeStamp = DateTimeFormatter.ISO_INSTANT.format(Instant.now()).toString()
+//            val randomSpeed = (0..70).random()
+//
+//            val randomRPM = (0..10).random()
+//
+//            val randomBatt = (0..100).random()
+//
+//            updateSpeed(randomSpeed)
+//            updateRPM(randomRPM)
+//            updateBatt(randomBatt)
+//            binding.tvBatteryVal.text = "$randomBatt%"
+//
+//            val data = Data(timeStamp,randomSpeed.toString(),randomRPM.toString(),randomBatt.toString())
+//
+//        }
 
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun initiateLoggingFile() {
         //create directory in folder ABA
         val folder = Environment.getExternalStorageDirectory().toString()
@@ -197,7 +186,7 @@ class MonitorActivity : AppCompatActivity() {
         f.mkdir()
 
         ///storage/emulated/0/MokuraLoggingData/Logging1.csv
-        val fileName = Environment.getExternalStorageDirectory().toString() + "/MokuraLoggingData/Logging1.csv"
+        val fileName = Environment.getExternalStorageDirectory().toString() + "/MokuraLoggingData/Logging-${LocalDateTime.now()}.csv"
         Log.d("path","$fileName")
 
         //create header csv
@@ -208,29 +197,28 @@ class MonitorActivity : AppCompatActivity() {
 
     }
 
-    private fun updateData(stringData: String?) {
-        if (stringData != null) {
-            if(stringData.endsWith("#") && stringData.startsWith("$")) {
-                val arrayData: List<String>? = stringData?.split(";")
-                val penanda = arrayData?.get(0)?.get(0)
-                val rpm = arrayData?.get(0)?.drop(1)?.toFloat()?.div(100)
-                val speed = arrayData?.get(1)?.toFloat()
-                val battery = arrayData?.get(2)?.toFloat()
-                val dutyCycle = arrayData?.get(3)?.dropLast(1)?.toFloat()?.times(100)
+    private fun updateData(data: Data) {
+        val rpm = data.rpm?.toFloat()
+        val speed = data.speed?.toFloat()
+        val battery = data.battery?.toFloat()
+        val dutyCycle = data.dutyCycle?.toFloat()
 
-                if (speed != null) {
-                    updateSpeed(speed.toInt())
-                }
-
-                if (dutyCycle != null) {
-                    updateRPM(dutyCycle.toInt())
-                }
-
-                if (battery != null) {
-                    updateBatt(battery.toInt())
-                }
-            }
+        if (speed != null) {
+            updateSpeed(speed.toInt())
         }
+
+        if (dutyCycle != null) {
+            updateRPM(dutyCycle.toInt())
+        }
+
+        if (battery != null) {
+            updateBatt(battery.toInt())
+        }
+
+        if (rpm != null) {
+            updateRPM(rpm.toInt())
+        }
+
     }
 
     private fun updateBatt(percentage: Int) {
@@ -254,36 +242,13 @@ class MonitorActivity : AppCompatActivity() {
         rpm.setSpeed(i, DURATION)
     }
 
-    private val updateTime: BroadcastReceiver = object : BroadcastReceiver(){
-        override fun onReceive(context: Context?, intent: Intent?) {
-            if (intent != null) {
-                time = intent.getDoubleExtra(TIME_EXTRA,0.0)
-            }
-            binding.tvTimer.text = getTimeStringFromDouble(time)
-        }
-    }
-
-    private fun getTimeStringFromDouble(time: Double): String {
-        val resultInt = time.roundToInt()
-        val hours = resultInt % 86400 / 3600
-        val minutes = resultInt % 86400 % 3600 / 60
-        val seconds = resultInt % 86400 % 3600 % 60
-
-        return makeTimeString(hours,minutes,seconds)
-    }
-
-    private fun makeTimeString(hour: Int, min: Int, sec: Int): String {
-        return String.format("%02d:%02d:%02d", hour, min, sec)
-    }
-
     private fun updateLocation(data: Array<Double>) {
         lat = "%.${3}f".format(data[0])
         lon = "%.${3}f".format(data[1])
         binding.tvLatVal.text = lat
         binding.tvLonVal.text = lon
-        Log.i("tttt",data[0].toString())
-        Log.i("lon",data[1].toString())
     }
+
     private fun updateCompass(degree: Int) {
         val rotateAnimation = RotateAnimation(
             currentDegree,
@@ -306,6 +271,28 @@ class MonitorActivity : AppCompatActivity() {
     private fun updateSpeed(s: Int) {
         val speedometer = binding.speedometer
         speedometer.setSpeed(s, DURATION)
+    }
+
+    private val updateTime: BroadcastReceiver = object : BroadcastReceiver(){
+        override fun onReceive(context: Context?, intent: Intent?) {
+            if (intent != null) {
+                time = intent.getDoubleExtra(TIME_EXTRA,0.0)
+            }
+            binding.tvTimer.text = getTimeStringFromDouble(time)
+        }
+    }
+
+    private fun getTimeStringFromDouble(time: Double): String {
+        val resultInt = time.roundToInt()
+        val hours = resultInt % 86400 / 3600
+        val minutes = resultInt % 86400 % 3600 / 60
+        val seconds = resultInt % 86400 % 3600 % 60
+
+        return makeTimeString(hours,minutes,seconds)
+    }
+
+    private fun makeTimeString(hour: Int, min: Int, sec: Int): String {
+        return String.format("%02d:%02d:%02d", hour, min, sec)
     }
 
     override fun onBackPressed() {
@@ -337,6 +324,5 @@ class MonitorActivity : AppCompatActivity() {
 //            setBackgroundColor(data.color)
 //            text = data.text
 //        }
-//
 //    }
 }

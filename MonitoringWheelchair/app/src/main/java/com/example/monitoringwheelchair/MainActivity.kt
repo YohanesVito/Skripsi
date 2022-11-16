@@ -23,7 +23,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var bluetoothManager: BluetoothManager
     private lateinit var bluetoothAdapter: BluetoothAdapter
     companion object{
-        val EXTRA_ADDRESS: String = "Device"
+        const val EXTRA_ADDRESS: String = "Device"
     }
 
     @RequiresApi(Build.VERSION_CODES.S)
@@ -35,7 +35,6 @@ class MainActivity : AppCompatActivity() {
 
         bluetoothManager= getSystemService(BluetoothManager::class.java)
         bluetoothAdapter= bluetoothManager.adapter
-//        Log.d("bt",bluetoothAdapter.toString())
 
         if (!bluetoothAdapter.isEnabled) {
             val enableBtIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
@@ -57,7 +56,6 @@ class MainActivity : AppCompatActivity() {
 
     @RequiresApi(Build.VERSION_CODES.S)
     private fun pairedDeviceList(){
-//        Log.d("masuk","tenan")
 
         val list: ArrayList<BluetoothDevice> = ArrayList()
 

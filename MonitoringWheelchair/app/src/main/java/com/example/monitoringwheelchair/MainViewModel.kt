@@ -1,6 +1,5 @@
 package com.example.monitoringwheelchair
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.monitoringwheelchair.gyroscope.GyroscopeData
@@ -30,9 +29,7 @@ class MainViewModel:ViewModel() {
         MutableLiveData<Int>()
     }
 
-    val dataDummy: MutableLiveData<Map<String,Int>> by lazy{
-        MutableLiveData<Map<String,Int>>()
-    }
+
 
 
 
