@@ -29,14 +29,14 @@ def insert_datalist():
     
     # parsing data list
     for data in datas:
-        time_stamp = data["timeStamp"]
+        time_stamp = data["time_stamp"]
         lat = data["lat"]
         lon = data["lon"]
         compass = data["compass"]
         speed = data["speed"]
         rpm = data["rpm"]
         battery = data["battery"]
-        duty_cycle = data["battery"]   
+        duty_cycle = data["duty_cycle"]   
 
         cur = mysql.connection.cursor()
         cur.execute("INSERT INTO data (time_stamp,speed,rpm,battery,lat,lon,compass,duty_cycle) VALUES (%s,%s,%s,%s,%s,%s,%s,%s)",(time_stamp,speed,rpm,battery,lat,lon,compass,duty_cycle))
@@ -46,32 +46,32 @@ def insert_datalist():
     return jsonify({'message': 'data inserted!'})
 
 
-@app.route('/data/',methods=['POST'])
-def insert_data():
+# @app.route('/data/',methods=['POST'])
+# def insert_data():
 
-# kalau datanya bentuk json
-    # data = request.get_json()
+# # kalau datanya bentuk json
+#     # data = request.get_json()
     
-    # time_stamp = data["time_stamp"]
-    # speed = data["speed"]
-    # rpm = data["rpm"]
-    # battery = data["battery"]
+#     # time_stamp = data["time_stamp"]
+#     # speed = data["speed"]
+#     # rpm = data["rpm"]
+#     # battery = data["battery"]
 
 
-# kalau datanya bentuk x-www-form-urlencoded
-    default_value = "null"
+# # kalau datanya bentuk x-www-form-urlencoded
+#     default_value = "null"
 
-    time_stamp = request.form.get('time_stamp', default_value)
-    speed = request.form.get('speed', default_value)
-    rpm = request.form.get('rpm', default_value)
-    battery = request.form.get('battery', default_value)
+#     time_stamp = request.form.get('time_stamp', default_value)
+#     speed = request.form.get('speed', default_value)
+#     rpm = request.form.get('rpm', default_value)
+#     battery = request.form.get('battery', default_value)
 
-    cur = mysql.connection.cursor()
-    cur.execute("INSERT INTO data (time_stamp,speed,rpm,battery) VALUES (%s,%s,%s,%s)",(time_stamp,speed,rpm,battery))
-    mysql.connection.commit()
-    cur.close()
+#     cur = mysql.connection.cursor()
+#     cur.execute("INSERT INTO data (time_stamp,speed,rpm,battery) VALUES (%s,%s,%s,%s)",(time_stamp,speed,rpm,battery))
+#     mysql.connection.commit()
+#     cur.close()
 
-    return jsonify({'message': 'data inserted!'})
+#     return jsonify({'message': 'data inserted!'})
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=6969,debug=True)
