@@ -17,7 +17,18 @@ def get_all_users():
     cur.execute("SELECT * FROM data")
     data = cur.fetchall()
   
-    return jsonify(data)
+    # return jsonify(data)
+    return jsonify({
+        "time_stamp" : data.time_stamp,
+        "speed" : data.speed,
+        "rpm" : data.rpm,
+        "battery": data.battery,
+        "lat" : data.lat,
+        "lon" : data.lon,
+        "compass" : data.compass,
+        "duty_cycle" : data.duty_cycle,
+        "time_stamp_database" : data.time_stamp.database
+    })
 
 # @app.route('/user/<user_id>',methods=['GET'])
 # def get_one_users():
