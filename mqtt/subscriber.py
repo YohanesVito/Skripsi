@@ -8,7 +8,7 @@ import MySQLdb
 
 broker = 'broker.emqx.io'
 port = 1883
-topic = "vito/test"
+topic = "mokura/logging/logging-vito-m03" 
 # generate client ID with pub prefix randomly
 client_id = f'python-mqtt-{random.randint(0, 100)}'
 username = 'emqx'
@@ -28,7 +28,6 @@ def connect_mqtt() -> mqtt_client:
     client.connect(broker, port)
     return client
 
-
 def subscribe(client: mqtt_client):
     def on_message(client, userdata, msg):
         print(f"Received `{msg.payload.decode()}` from `{msg.topic}` topic")
@@ -37,13 +36,13 @@ def subscribe(client: mqtt_client):
     client.subscribe(topic)
     client.on_message = on_message
     
-
 def run():
     client = connect_mqtt()
     subscribe(client)
     client.loop_forever()
 
 def insertDB(data):
+    
     host = "44.194.169.154"
     user = "vito"
     password = "123"
@@ -61,6 +60,21 @@ def insertDB(data):
 class JSONParser(object):
     def __init__(self, data):
         self.__dict__ = json.loads(data)
+    
+
+def parseLogging():
+    host = "44.194.169.154"
+    user = "vito"
+    password = "123"
+    db = "mokura"
+    
+    db = MySQLdb.connect(host,user,password,db)
+    cur = db.cursor()
+    cur.execute("SELECT * from data" )
+
+    db.commit() #commit the data insertion execution
+    cur.close()
+    db.close()
 
 if __name__ == '__main__':
     run()

@@ -11,24 +11,42 @@ app.config['MYSQL_DB'] = 'mokura'
 mysql = MySQL(app)
    
 @app.route('/data/',methods=['GET'])
-def get_all_users():
+def get_all_datas():
 
     cur = mysql.connection.cursor()
     cur.execute("SELECT * FROM data")
     data = cur.fetchall()
   
-    # return jsonify(data)
-    return jsonify({
-        "time_stamp" : data.time_stamp,
-        "speed" : data.speed,
-        "rpm" : data.rpm,
-        "battery": data.battery,
-        "lat" : data.lat,
-        "lon" : data.lon,
-        "compass" : data.compass,
-        "duty_cycle" : data.duty_cycle,
-        "time_stamp_database" : data.time_stamp.database
-    })
+    return jsonify(data)
+    # return jsonify({
+    #     "time_stamp" : data.time_stamp,
+    #     "speed" : data.speed,
+    #     "rpm" : data.rpm,
+    #     "battery": data.battery,
+    #     "lat" : data.lat,
+    #     "lon" : data.lon,
+    #     "compass" : data.compass,
+    #     "duty_cycle" : data.duty_cycle,
+    #     "time_stamp_database" : data.time_stamp.database
+    # })
+
+@app.route('/users/',methods=['GET'])
+def get_all_users():
+
+    cur = mysql.connection.cursor()
+    cur.execute("SELECT * FROM users")
+    data = cur.fetchall()
+  
+    return jsonify(data)
+
+@app.route('/mokuras/',methods=['GET'])
+def get_all_mokura():
+
+    cur = mysql.connection.cursor()
+    cur.execute("SELECT * FROM mokuras")
+    data = cur.fetchall()
+  
+    return jsonify(data)
 
 # @app.route('/user/<user_id>',methods=['GET'])
 # def get_one_users():
