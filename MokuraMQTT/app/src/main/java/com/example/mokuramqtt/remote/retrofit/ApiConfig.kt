@@ -1,6 +1,5 @@
-package com.example.mokuramqtt.api
+package com.example.mokuramqtt.remote.retrofit
 
-import com.example.monitoringwheelchair.logging.ApiService
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit

@@ -1,7 +1,8 @@
-package com.example.mokuramqtt
+package com.example.mokuramqtt.ui.main
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.example.mokuramqtt.R
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

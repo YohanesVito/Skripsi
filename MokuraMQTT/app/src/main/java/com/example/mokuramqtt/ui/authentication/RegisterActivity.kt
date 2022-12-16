@@ -1,4 +1,4 @@
-package com.example.mokuramqtt.authentication
+package com.example.mokuramqtt.ui.authentication
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
