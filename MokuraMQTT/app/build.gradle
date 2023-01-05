@@ -10,7 +10,7 @@ android {
 
     defaultConfig {
         applicationId "com.example.mokuramqtt"
-        minSdk 21
+        minSdk 22
         targetSdk 32
         versionCode 1
         versionName "1.0"
@@ -64,5 +64,6 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.4.1"
 
-
+    //speedometer
+    implementation 'com.github.ibrahimsn98:speedometer:1.0.1'
 }

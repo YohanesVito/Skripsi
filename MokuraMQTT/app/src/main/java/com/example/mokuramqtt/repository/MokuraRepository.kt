@@ -68,10 +68,10 @@ class MokuraRepository(
         }
     }
 
-    fun saveUser(name: String, email: String, password: String): LiveData<Result<Boolean>> {
+    fun saveUser(email: String, name: String, password: String): LiveData<Result<Boolean>> {
         val result = MutableLiveData<Result<Boolean>>()
         result.value = Result.Loading
-        apiService.register(name, email, password).enqueue(object : Callback<RegisterResponse> {
+        apiService.register(email, name, password).enqueue(object : Callback<RegisterResponse> {
             override fun onResponse(
                 call: Call<RegisterResponse>,
                 response: Response<RegisterResponse>
@@ -81,7 +81,7 @@ class MokuraRepository(
                     if (responseBody != null && !responseBody.error){
                         result.value = Result.Success(true)
                         MainScope().launch {
-                            userPreference.saveUser(name, email, password)
+                            userPreference.saveUser(email, name, password)
                         }
                     }
                 }else {

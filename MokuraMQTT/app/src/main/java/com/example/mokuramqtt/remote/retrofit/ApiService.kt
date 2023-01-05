@@ -25,7 +25,7 @@ interface ApiService {
 //        @Field("compass") compass: String,
 //        @Field("lat") lat: String,
 //        @Field("lon") lon: String,
-//    ): Call<Data>
+//    ): Call<DataModel>
 
     @FormUrlEncoded
     @POST("login")
@@ -37,8 +37,8 @@ interface ApiService {
     @FormUrlEncoded
     @POST("register")
     fun register(
-        @Field("name") name: String,
         @Field("email") email: String,
+        @Field("username") username: String,
         @Field("password") password: String
     ): Call<RegisterResponse>
 
@@ -53,11 +53,11 @@ interface ApiService {
 //        @Field("compass") compass: String,
 //        @Field("lat") lat: String,
 //        @Field("lon") lon: String,
-//    ): Call<Data>
+//    ): Call<DataModel>
 //
 //    @Headers("Content-Type: application/json")
 //    @POST("datalist")
-//    fun sendDataList(@Body body: ArrayList<Data>): Call<Data>
+//    fun sendDataList(@Body body: ArrayList<DataModel>): Call<DataModel>
 
 //    @GET("users/{username}")
 //    @Headers("Authorization: token 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")

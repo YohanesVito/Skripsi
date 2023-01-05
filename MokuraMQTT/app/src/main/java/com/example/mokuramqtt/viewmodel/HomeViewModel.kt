@@ -9,6 +9,7 @@ class HomeViewModel(private val mokuraRepository: MokuraRepository): ViewModel()
     fun insert(user: Mokura) {
         mokuraRepository.insert(user)
     }
+    fun getUser() = mokuraRepository.getUser()
 //    fun update(note: Note) {
 //        mUserRepository.update(note)
 //    }
