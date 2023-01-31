@@ -1,6 +1,7 @@
 package com.example.mokuramqtt.remote.retrofit
 
 import com.example.mokuramqtt.database.Mokura
+import com.example.mokuramqtt.remote.response.InsertResponse
 import com.example.mokuramqtt.remote.response.LoginResponse
 import com.example.mokuramqtt.remote.response.RegisterResponse
 import retrofit2.Call
@@ -42,18 +43,16 @@ interface ApiService {
         @Field("password") password: String
     ): Call<RegisterResponse>
 
-//    @FormUrlEncoded
-//    @POST("register")
-//    fun register(
-//        @Field("time_stamp") time_stamp: String,
-//        @Field("speed") speed: String,
-//        @Field("rpm") rpm: String,
-//        @Field("battery") battery: String,
-//        @Field("duty_cycle") duty_cycle: String,
-//        @Field("compass") compass: String,
-//        @Field("lat") lat: String,
-//        @Field("lon") lon: String,
-//    ): Call<DataModel>
+    @Headers("Content-Type: application/json")
+    @POST("datalist")
+    fun sendDataList(@Body body: ArrayList<Mokura>): Call<InsertResponse>
+
+    @FormUrlEncoded
+    @POST("hardware")
+    fun postMokura(
+        @Field("hardware") hardware: String,
+    ): Call<InsertResponse>
+
 //
 //    @Headers("Content-Type: application/json")
 //    @POST("datalist")

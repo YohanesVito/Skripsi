@@ -9,11 +9,11 @@ import com.example.mokuramqtt.viewmodel.MonitorViewModel
 
 import kotlin.math.roundToInt
 
-class Accelerometer(private val context: Context, private val viewModel: MonitorViewModel): SensorEventListener {
+class Accelerometer(private val context: Context, private val monitorViewModel: MonitorViewModel): SensorEventListener {
 
     override fun onSensorChanged(event: SensorEvent?) {
         val degree = (event?.values?.get(0)!!).roundToInt()
-        viewModel.dataCompass.value = degree
+        monitorViewModel.dataCompass.value = degree
     }
 
     override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {

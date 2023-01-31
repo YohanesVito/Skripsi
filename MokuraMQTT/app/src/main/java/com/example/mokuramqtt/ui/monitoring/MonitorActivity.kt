@@ -1,21 +1,25 @@
 package com.example.mokuramqtt.ui.monitoring
 
 import android.content.Intent
-import android.opengl.Visibility
 import android.os.*
 import android.util.Log
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
+import android.view.animation.Animation
+import android.view.animation.RotateAnimation
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.example.mokuramqtt.Constants
 import com.example.mokuramqtt.ViewModelFactory
+import com.example.mokuramqtt.database.Mokura
 import com.example.mokuramqtt.databinding.ActivityMonitorBinding
-import com.example.mokuramqtt.ui.monitoring.PairActivity.Companion.EXTRA_ADDRESS
+import com.example.mokuramqtt.helper.DateHelper
+import com.example.mokuramqtt.utils.Accelerometer
 import com.example.mokuramqtt.utils.BluetoothService
+import com.example.mokuramqtt.utils.Location
 import com.example.mokuramqtt.viewmodel.MonitorViewModel
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
@@ -26,6 +30,15 @@ class MonitorActivity : AppCompatActivity() {
     private lateinit var mBluetoothService: BluetoothService
     private lateinit var mAddress: String
     private lateinit var mHandler: Handler
+    private lateinit var compass: String
+    private var lat: String = ""
+    private var lon: String = ""
+
+    companion object{
+        private var currentDegree= 0f
+        val EXTRA_ADDRESS: String = "Device"
+        val MAX_CAPACITY: Int = 20
+    }
 
     @RequiresApi(Build.VERSION_CODES.S)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,19 +46,72 @@ class MonitorActivity : AppCompatActivity() {
         binding = ActivityMonitorBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
-
         //get bluetooth address
         mAddress = intent.getStringExtra(EXTRA_ADDRESS).toString()
 
         setupView()
         setupViewModel()
+        setUpCompass()
+        setUpLocation()
+        setupAction()
         connectBluetooth()
 
-        monitorViewModel.dataBluetooth.observe(this){
-            binding.tvLat.text = it.toString()
+        binding.btDisconnect.setOnClickListener {
+            disconnectBluetooth()
+        }
+    }
+
+    private fun setUpCompass() {
+        Accelerometer(this, monitorViewModel).setUpCompass()
+    }
+
+    private fun setUpLocation() {
+        Location(this, monitorViewModel).setUpLocation()
+    }
+
+    private fun setupAction() {
+        //insert hardware
+        monitorViewModel.saveHardware(mAddress)
+
+        //observe bluetooth message
+        monitorViewModel.dataBluetooth.observe(this) { bluetoothMessage ->
+
+            if (bluetoothMessage.endsWith("#") && bluetoothMessage.startsWith("$")) {
+
+                val arrayData: List<String> = bluetoothMessage.split(";")
+                val rpm = arrayData[0].drop(1).toFloat()
+                val speed = arrayData[1].toFloat()
+                val battery = arrayData[2].toFloat()
+                val dutyCycle = arrayData[3].filterNot { it == '#' }
+
+//                val timeStamp = DateTimeFormatter.ISO_INSTANT.format(Instant.now()).toString()
+                val timeStamp = DateHelper.getCurrentDate()
+
+                val newData = Mokura(
+                    timeStamp = timeStamp,
+                    speed = speed.toString(),
+                    rpm = rpm.toString(),
+                    battery = battery.toString(),
+                    dutyCycle = dutyCycle,
+                    compass = compass,
+                    lat = lat,
+                    lon = lon,
+                    )
+                monitorViewModel.saveData(newData)
+                monitorViewModel.valArrayLogging.add(newData)
+                monitorViewModel.arrayLogging.value = monitorViewModel.valArrayLogging
+            }
         }
 
+        monitorViewModel.dataCompass.observe(this){
+            updateCompass(it)
+        }
+
+        monitorViewModel.dataLocation.observe(this) {
+            updateLocation(it)
+        }
+
+        //observe loading
         monitorViewModel.isLoading.observe(this){
             if (it){
                 binding.progressBar.visibility = View.VISIBLE
@@ -53,9 +119,39 @@ class MonitorActivity : AppCompatActivity() {
             else binding.progressBar.visibility = View.GONE
         }
 
-        binding.btDisconnect.setOnClickListener {
-            disconnectBluetooth()
+        monitorViewModel.arrayLogging.observe(this){
+            if(it.size>=MAX_CAPACITY){
+                monitorViewModel.uploadData()
+            }
+            monitorViewModel.valArrayLogging.clear()
         }
+
+    }
+
+    private fun updateCompass(degree: Int) {
+        val rotateAnimation = RotateAnimation(
+            currentDegree,
+            (-degree).toFloat(),
+            Animation.RELATIVE_TO_SELF,
+            0.5f,
+            Animation.RELATIVE_TO_SELF,
+            0.5f
+        )
+        rotateAnimation.duration = 210
+        rotateAnimation.fillAfter = true
+
+        binding.ivCompass.startAnimation(rotateAnimation)
+        currentDegree = (-degree).toFloat()
+
+        compass = currentDegree.toString()
+        binding.tvCompassVal.text = compass
+    }
+
+    private fun updateLocation(data: Array<Double>) {
+        lat = "%.${3}f".format(data[0])
+        lon = "%.${3}f".format(data[1])
+        binding.tvLatVal.text = lat
+        binding.tvLonVal.text = lon
     }
 
     override fun onBackPressed() {

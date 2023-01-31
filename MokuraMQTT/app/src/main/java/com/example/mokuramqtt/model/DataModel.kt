@@ -1,6 +1,9 @@
 package com.example.mokuramqtt.model
 
 data class DataModel(
+    val idLogging: String? = null,
+    val idHardware: String? = null,
+    val idUser: String? = null,
     val timeStamp: String? = null,
     val speed: String? = null,
     val rpm: String? = null,

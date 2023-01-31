@@ -2,6 +2,7 @@ package com.example.mokuramqtt.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.mokuramqtt.database.Mokura
 import com.example.mokuramqtt.model.DataModel
 import com.example.mokuramqtt.repository.MokuraRepository
 
@@ -10,6 +11,12 @@ class MonitorViewModel(private val mokuraRepository: MokuraRepository): ViewMode
 
     val currentArrayData : MutableLiveData<ArrayList<DataModel>> by lazy{
         MutableLiveData<ArrayList<DataModel>>()
+    }
+
+    val valArrayLogging = ArrayList<Mokura>()
+
+    val arrayLogging: MutableLiveData<ArrayList<Mokura>> by lazy {
+        MutableLiveData<ArrayList<Mokura>>()
     }
 
     val dataLocation: MutableLiveData<Array<Double>> by lazy {
@@ -23,6 +30,12 @@ class MonitorViewModel(private val mokuraRepository: MokuraRepository): ViewMode
     val dataBluetooth: MutableLiveData<String> by lazy {
         MutableLiveData<String>()
     }
+
+    fun saveData(mokura: Mokura) = mokuraRepository.insertMokura(mokura)
+
+    fun uploadData()= mokuraRepository.postLogging(valArrayLogging)
+
+    fun saveHardware(hardwareSerial: String) = mokuraRepository.postMokura(hardwareSerial)
 
 //    val dataGyroscope: MutableLiveData<GyroscopeData> by lazy {
 //        MutableLiveData<GyroscopeData>()
