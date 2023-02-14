@@ -17,10 +17,9 @@ mysql = MySQL(app)
    
 default_value = "null"
 
-@app.route('/login/',methods=['POST'])
+@app.route('/users/login/',methods=['POST'])
 def login_user():
 
-    default_value = "null"
     email = request.form.get('email', default_value)
     password = request.form.get('password', default_value)
 
@@ -37,10 +36,9 @@ def login_user():
 
         return jsonify({"error": False,"message": "login success!", "loginResult":{"idUser":user[0][0],"email":user[0][1],"username":user[0][2],"password":user[0][3]}})
 
-@app.route('/register/',methods=['POST'])
+@app.route('/users/register/',methods=['POST'])
 def register_user():
 
-    default_value = "null"
     email = request.form.get('email', default_value)
     username = request.form.get('username', default_value)
     password = request.form.get('password', default_value)
@@ -52,7 +50,40 @@ def register_user():
 
     return jsonify({"error": "false", "message": "user registered!"})
 
-@app.route('/hardware/',methods=['POST'])
+@app.route('/users/',methods=['GET'])
+def get_users():
+    data = ""
+
+    username = request.form.get('username', default_value)
+    email = request.form.get('email', default_value)
+
+    if(username):
+        cur = mysql.connection.cursor()
+        cur.execute("SELECT * FROM users WHERE username = %s",(username))
+        data = cur.fetchall()
+    elif(email):
+        cur = mysql.connection.cursor()
+        cur.execute("SELECT * FROM users WHERE email = %s",(email))
+        data = cur.fetchall()
+    else:
+        cur = mysql.connection.cursor()
+        cur.execute("SELECT * FROM users")
+        data = cur.fetchall()
+  
+    return jsonify(data)
+
+# @app.route('/users/',methods=['GET'])
+# def get_a_user_by_username():
+
+#     username = request.form.get('username', default_value)
+
+#     cur = mysql.connection.cursor()
+#     cur.execute("SELECT * FROM users WHERE username = %s",(username))
+#     data = cur.fetchall()
+  
+#     return jsonify(data)
+
+@app.route('/mokura/register',methods=['POST'])
 def register_mokura():
 
     hardware = request.form.get('hardware', default_value)
@@ -62,14 +93,6 @@ def register_mokura():
     cur.close()
 
     return jsonify({"error": "false", "message": "hardware registered!"})
-
-@app.route('/users/',methods=['GET'])
-def get_all_users():
-    cur = mysql.connection.cursor()
-    cur.execute("SELECT * FROM users")
-    data = cur.fetchall()
-  
-    return jsonify(data)
 
 @app.route('/mokuras/',methods=['GET'])
 def get_all_mokura():
