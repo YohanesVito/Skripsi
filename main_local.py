@@ -59,15 +59,18 @@ def get_users():
   
     return jsonify(data)
 
-@app.route('/users/',methods=['GET'])
+@app.route('/users/',methods=['POST'])
 def get_a_user_by_username():
 
     username = request.form.get('username', default_value)
 
     cur = mysql.connection.cursor()
-    cur.execute("SELECT * FROM users WHERE username = %s",(username))
+    cur.execute("SELECT * FROM users WHERE username = %s",(username,))
+    mysql.connection.commit()
     data = cur.fetchall()
-  
+
+    cur.close()
+
     return jsonify(data)
 
 @app.route('/mokura/register',methods=['POST'])
@@ -81,11 +84,12 @@ def register_mokura():
 
     return jsonify({"error": "false", "message": "hardware registered!"})
 
-@app.route('/mokura/',methods=['GET'])
+@app.route('/mokura',methods=['GET'])
 def get_all_mokura():
-
+    hardware_name = request.form.get('hardware_name', default_value,type=str)
+    
     cur = mysql.connection.cursor()
-    cur.execute("SELECT * FROM mokura")
+    cur.execute("SELECT * FROM mokura WHERE hardware_name = %s",(hardware_name))
     data = cur.fetchall()
   
     return jsonify(data)
