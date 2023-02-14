@@ -52,36 +52,23 @@ def register_user():
 
 @app.route('/users/',methods=['GET'])
 def get_users():
-    data = ""
 
-    username = request.form.get('username', default_value)
-    email = request.form.get('email', default_value)
-
-    if(username):
-        cur = mysql.connection.cursor()
-        cur.execute("SELECT * FROM users WHERE username = %s",(username))
-        data = cur.fetchall()
-    elif(email):
-        cur = mysql.connection.cursor()
-        cur.execute("SELECT * FROM users WHERE email = %s",(email))
-        data = cur.fetchall()
-    else:
-        cur = mysql.connection.cursor()
-        cur.execute("SELECT * FROM users")
-        data = cur.fetchall()
+    cur = mysql.connection.cursor()
+    cur.execute("SELECT * FROM users")
+    data = cur.fetchall()
   
     return jsonify(data)
 
-# @app.route('/users/',methods=['GET'])
-# def get_a_user_by_username():
+@app.route('/users/',methods=['GET'])
+def get_a_user_by_username():
 
-#     username = request.form.get('username', default_value)
+    username = request.form.get('username', default_value)
 
-#     cur = mysql.connection.cursor()
-#     cur.execute("SELECT * FROM users WHERE username = %s",(username))
-#     data = cur.fetchall()
+    cur = mysql.connection.cursor()
+    cur.execute("SELECT * FROM users WHERE username = %s",(username))
+    data = cur.fetchall()
   
-#     return jsonify(data)
+    return jsonify(data)
 
 @app.route('/mokura/register',methods=['POST'])
 def register_mokura():
@@ -94,11 +81,11 @@ def register_mokura():
 
     return jsonify({"error": "false", "message": "hardware registered!"})
 
-@app.route('/mokuras/',methods=['GET'])
+@app.route('/mokura/',methods=['GET'])
 def get_all_mokura():
 
     cur = mysql.connection.cursor()
-    cur.execute("SELECT * FROM mokuras")
+    cur.execute("SELECT * FROM mokura")
     data = cur.fetchall()
   
     return jsonify(data)
