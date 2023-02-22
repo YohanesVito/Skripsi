@@ -35,7 +35,7 @@ class MonitorViewModel(private val mokuraRepository: MokuraRepository): ViewMode
 
     fun uploadData()= mokuraRepository.postLogging(valArrayLogging)
 
-    fun saveHardware(hardwareSerial: String) = mokuraRepository.postMokura(hardwareSerial)
+    fun saveHardware(hardwareSerial: String) = mokuraRepository.postHardware(hardwareSerial)
 
 //    val dataGyroscope: MutableLiveData<GyroscopeData> by lazy {
 //        MutableLiveData<GyroscopeData>()

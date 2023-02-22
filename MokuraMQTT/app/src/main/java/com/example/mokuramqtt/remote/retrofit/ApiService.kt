@@ -1,7 +1,8 @@
 package com.example.mokuramqtt.remote.retrofit
 
 import com.example.mokuramqtt.database.Mokura
-import com.example.mokuramqtt.remote.response.InsertResponse
+import com.example.mokuramqtt.remote.response.InsertHardwareResponse
+import com.example.mokuramqtt.remote.response.InsertLoggingResponse
 import com.example.mokuramqtt.remote.response.LoginResponse
 import com.example.mokuramqtt.remote.response.RegisterResponse
 import retrofit2.Call
@@ -45,13 +46,14 @@ interface ApiService {
 
     @Headers("Content-Type: application/json")
     @POST("datalist")
-    fun sendDataList(@Body body: ArrayList<Mokura>): Call<InsertResponse>
+    fun sendDataList(@Body body: ArrayList<Mokura>): Call<InsertLoggingResponse>
 
     @FormUrlEncoded
-    @POST("hardware")
+    @POST("mokura/register")
     fun postMokura(
-        @Field("hardware") hardware: String,
-    ): Call<InsertResponse>
+        @Field("hardware_serial") hardware_serial: String,
+        @Field("hardware_name") hardware_name: String,
+    ): Call<InsertHardwareResponse>
 
 //
 //    @Headers("Content-Type: application/json")

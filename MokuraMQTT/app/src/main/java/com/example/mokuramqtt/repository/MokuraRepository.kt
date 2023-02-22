@@ -7,7 +7,8 @@ import androidx.lifecycle.asLiveData
 import com.example.mokuramqtt.database.*
 import com.example.mokuramqtt.model.UserModel
 import com.example.mokuramqtt.model.UserPreference
-import com.example.mokuramqtt.remote.response.InsertResponse
+import com.example.mokuramqtt.remote.response.InsertHardwareResponse
+import com.example.mokuramqtt.remote.response.InsertLoggingResponse
 import com.example.mokuramqtt.remote.response.LoginResponse
 import com.example.mokuramqtt.remote.response.RegisterResponse
 import com.example.mokuramqtt.remote.retrofit.ApiService
@@ -30,11 +31,11 @@ class MokuraRepository(
         mokuraDatabase.userDao().insertUser(mUser)
     }
 
-    fun insertHardware(mHardwareSerial: String) {
-        hardwareSerial = mHardwareSerial
-        val mHardware = Hardware(hardwareSerial = mHardwareSerial)
-        mokuraDatabase.hardwareDao().insertHardware(mHardware)
-    }
+//    fun insertHardware(mHardwareSerial: String) {
+//        hardwareSerial = mHardwareSerial
+//        val mHardware = Hardware(hardwareSerial = mHardwareSerial)
+//        mokuraDatabase.hardwareDao().insertHardware(mHardware)
+//    }
 
     fun insertMokura(mMokura: Mokura) {
         mMokura.idUser = getUserId()
@@ -102,61 +103,68 @@ class MokuraRepository(
         return result
     }
 
-    fun logout() {
+    fun logoutUser(): LiveData<Result<Boolean>> {
+        val result = MutableLiveData<Result<Boolean>>()
+        result.value = Result.Loading
         MainScope().launch {
             userPreference.logout()
         }
+        result.value = Result.Success(true)
+        return result
     }
 
-    fun postMokura(hardware: String): LiveData<Result<Boolean>>{
+    fun postHardware(hardware: String): LiveData<Result<Boolean>>{
         val result = MutableLiveData<Result<Boolean>>()
         result.value = Result.Loading
-        apiService.postMokura(hardware).enqueue(object : Callback<InsertResponse> {
+        apiService.postMokura(hardware).enqueue(object : Callback<InsertHardwareResponse> {
             override fun onResponse(
-                call: Call<InsertResponse>,
-                response: Response<InsertResponse>
+                call: Call<InsertHardwareResponse>,
+                response: Response<InsertHardwareResponse>
             ) {
                 if (response.isSuccessful) {
                     val responseBody = response.body()
                     if (responseBody != null){
-                        insertHardware(hardware)
+                        saveIdHardware(responseBody.)
                         result.value = Result.Success(true)
                     }
                 }else {
                     result.value = Result.Error(response.message())
                 }
             }
-            override fun onFailure(call: Call<InsertResponse>, t: Throwable) {
+            override fun onFailure(call: Call<InsertHardwareResponse>, t: Throwable) {
                 result.value = Result.Error("Can't Connect Retrofit")
             }
         })
         return result
     }
 
+    //http
     fun postLogging(arrayLogging: ArrayList<Mokura>): LiveData<Result<Boolean>> {
         val result = MutableLiveData<Result<Boolean>>()
         result.value = Result.Loading
-        apiService.sendDataList(arrayLogging).enqueue(object : Callback<InsertResponse> {
+        apiService.sendDataList(arrayLogging).enqueue(object : Callback<InsertLoggingResponse> {
             override fun onResponse(
-                call: Call<InsertResponse>,
-                response: Response<InsertResponse>
+                call: Call<InsertLoggingResponse>,
+                response: Response<InsertLoggingResponse>
             ) {
                 if (response.isSuccessful) {
                     val responseBody = response.body()
                     if (responseBody != null){
                         result.value = Result.Success(true)
+
                     }
                 }else {
                     result.value = Result.Error(response.message())
                 }
             }
-            override fun onFailure(call: Call<InsertResponse>, t: Throwable) {
+            override fun onFailure(call: Call<InsertLoggingResponse>, t: Throwable) {
                 result.value = Result.Error("Can't Connect Retrofit")
             }
         })
         return result
     }
 
+    //SP
     fun saveUser(email: String, name: String, password: String): LiveData<Result<Boolean>> {
         val result = MutableLiveData<Result<Boolean>>()
         result.value = Result.Loading
@@ -170,7 +178,7 @@ class MokuraRepository(
                     if (responseBody != null && !responseBody.error){
                         result.value = Result.Success(true)
                         MainScope().launch {
-                            userPreference.saveUser(email, name, password)
+                            userPreference.saveUser(, email, name, password)
                         }
                         result.value = Result.Success(true)
                     }
@@ -182,6 +190,17 @@ class MokuraRepository(
                 result.value = Result.Error("Can't Connect Retrofit")
             }
         })
+        return result
+    }
+
+    //save idhardware
+    fun saveIdHardware(hardware: String): LiveData<Result<Boolean>> {
+        val result = MutableLiveData<Result<Boolean>>()
+        result.value = Result.Loading
+        MainScope().launch {
+            userPreference.saveHardware(hardware)
+        }
+        result.value = Result.Success(true)
         return result
     }
 }

@@ -3,11 +3,15 @@ package com.example.mokuramqtt.ui.home
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import com.example.mokuramqtt.R
 import com.example.mokuramqtt.ViewModelFactory
 import com.example.mokuramqtt.databinding.ActivityHomeBinding
 import com.example.mokuramqtt.model.UserModel
+import com.example.mokuramqtt.repository.Result
+import com.example.mokuramqtt.ui.authentication.LoginActivity
 import com.example.mokuramqtt.ui.main.MainActivity
 import com.example.mokuramqtt.ui.monitoring.PairActivity
 import com.example.mokuramqtt.viewmodel.HomeViewModel
@@ -33,13 +37,29 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun setupAction() {
-        homeViewModel.getUser().observe(this) { user ->
-            if (user.isLogin) {
-                binding.tvUser.text = getString(R.string.welcome, user.name)
-            } else {
-                startActivity(Intent(this, MainActivity::class.java))
-                finish()
+//        homeViewModel.getUser().observe(this) { user ->
+//            if (user.isLogin) {
+//                binding.tvUser.text = getString(R.string.welcome, user.name)
+//            } else {
+//                startActivity(Intent(this, PairActivity::class.java))
+//                finish()
+//            }
+//        }
+        binding.btLogout.setOnClickListener {
+            homeViewModel.logoutUser().observe(this){
+                when(it) {
+                    is Result.Loading -> binding.progressBar.visibility = View.VISIBLE
+                    is Result.Success -> {
+                        binding.progressBar.visibility = View.GONE
+                        Toast.makeText(this@HomeActivity, "Berhasil Keluar", Toast.LENGTH_SHORT).show()
+                        val intentToHome = Intent(this, LoginActivity::class.java)
+                        startActivity(intentToHome)
+                        finish()
+                    }
+                    is Result.Error -> Toast.makeText(this@HomeActivity, "Gagal Keluar", Toast.LENGTH_SHORT).show()
+                }
             }
+
         }
     }
 

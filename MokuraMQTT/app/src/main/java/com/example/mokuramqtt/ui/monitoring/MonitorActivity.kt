@@ -97,7 +97,10 @@ class MonitorActivity : AppCompatActivity() {
                     lat = lat,
                     lon = lon,
                     )
+                //save data to db
                 monitorViewModel.saveData(newData)
+
+                //logging data to csv
                 monitorViewModel.valArrayLogging.add(newData)
                 monitorViewModel.arrayLogging.value = monitorViewModel.valArrayLogging
             }
@@ -119,6 +122,7 @@ class MonitorActivity : AppCompatActivity() {
             else binding.progressBar.visibility = View.GONE
         }
 
+        //logging data to csv
         monitorViewModel.arrayLogging.observe(this){
             if(it.size>=MAX_CAPACITY){
                 monitorViewModel.uploadData()

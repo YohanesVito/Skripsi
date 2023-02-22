@@ -8,4 +8,6 @@ class HomeViewModel(private val mokuraRepository: MokuraRepository): ViewModel()
 
     fun getUser() = mokuraRepository.getUser()
 
+    fun logoutUser() = mokuraRepository.logoutUser()
+
 }

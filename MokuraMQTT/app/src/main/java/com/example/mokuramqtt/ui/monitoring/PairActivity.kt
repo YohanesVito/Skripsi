@@ -85,6 +85,7 @@ class PairActivity : AppCompatActivity() {
     }
 
     private fun showMonitoring(data: BluetoothDevice) {
+
         val intent = Intent(this,MonitorActivity::class.java)
         intent.putExtra(EXTRA_ADDRESS, data.address)
 
