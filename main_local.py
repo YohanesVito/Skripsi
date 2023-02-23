@@ -51,7 +51,8 @@ def register_user():
     if len(record) > 0:
         #user sudah ada
         response = record
-        return jsonify({"error": "true", "message": "email already registered","data":{"id_user":response[0][0],"username":response[0][1],"email":response[0][2],"password":response[0][3]}})
+
+        return jsonify({"error": "true", "message": "email already registered","data":{"id_user":response[0][0],"email":response[0][1],"username":response[0][2],"password":response[0][3]}})
     else:
         cur.execute("INSERT INTO users (email,username,password) VALUES (%s,%s,%s)",(email,username,password))
         mysql.connection.commit()
