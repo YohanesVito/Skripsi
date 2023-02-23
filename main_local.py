@@ -40,17 +40,26 @@ def login_user():
 #login user UNCLEAR, respon belum benar
 @app.route('/users/register/',methods=['POST'])
 def register_user():
-
+    response = ()
     email = request.form.get('email', default_value)
     username = request.form.get('username', default_value)
     password = request.form.get('password', default_value)
-
     cur = mysql.connection.cursor()
-    cur.execute("INSERT INTO users (email,username,password) VALUES (%s,%s,%s)",(email,username,password))
-    mysql.connection.commit()
+
+    cur.execute("SELECT * FROM users WHERE email = %s",(email,))
+    record = cur.fetchall()
+    if len(record) > 0:
+        #user sudah ada
+        return jsonify({"error": "true", "message": "email already registered"})
+    else:
+        cur.execute("INSERT INTO users (email,username,password) VALUES (%s,%s,%s)",(email,username,password))
+        mysql.connection.commit()
+
+        cur.execute("SELECT * FROM users WHERE email = %s",(email,))
+        response = cur.fetchall()
     cur.close()
 
-    return jsonify({"error": "false", "message": "user registered!"})
+    return jsonify({"error": "false", "message": "user registered!", "data":{"id_user":response[0][0],"username":response[0][1],"email":response[0][2],"password":response[0][3]}})
 
 @app.route('/users/',methods=['GET'])
 def get_users():
@@ -68,7 +77,6 @@ def get_a_user_by_username():
 
     cur = mysql.connection.cursor()
     cur.execute("SELECT * FROM users WHERE username = %s",(username,))
-    mysql.connection.commit()
     data = cur.fetchall()
 
     cur.close()
@@ -117,7 +125,7 @@ def get_all_mokura():
 
     # return jsonify({"error": "false","id_hardware":response[0][0],"hardware_serial":response[0][1],"hardware_name": response[0][2]})
 
-    return jsonify (data)
+    return jsonify(response)
 
 @app.route('/logging/datalist/',methods=['POST'])
 def insert_datalist():
@@ -137,7 +145,7 @@ def insert_datalist():
         duty_cycle = data["dutyCycle"]   
 
         cur = mysql.connection.cursor()
-        cur.execute("INSERT INTO logging (time_stamp,speed,rpm,battery,lat,lon,compass,duty_cycle) VALUES (%s,%s,%s,%s,%s,%s,%s,%s) ",(time_stamp,speed,rpm,battery,lat,lon,compass,duty_cycle))
+        cur.execute("INSERT INTO logging (time_stamp,speed,rpm,battery,lat,lon,compass,duty_cycle) VALUES (%s,%s,%s,%s,%s,%s,%s,%s) WHERE id_user = %s AND id_hardware = %s",(time_stamp,speed,rpm,battery,lat,lon,compass,duty_cycle,id_user,id_hardware))
         mysql.connection.commit()
         cur.close()
 
