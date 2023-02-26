@@ -1,0 +1,9 @@
+version: "3.8"
+
+services:
+  web:
+    build: .
+    expose:
+      - "6969"
+    ports:
+      - "6969:6969" 
