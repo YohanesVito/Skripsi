@@ -22,8 +22,8 @@ services:
         - "3306:3306"
     volumes:
      - mariadb:/var/lib/mysql
-    networks:
-      db:
+    # networks:
+    #   db:
 
   phpmyadmin:
     image: phpmyadmin
@@ -35,5 +35,5 @@ services:
     environment:
       - PMA_HOST=mariadb
       - PMA_PORT=3306
-    networks:
-      db:
+    # networks:
+    #   db:
