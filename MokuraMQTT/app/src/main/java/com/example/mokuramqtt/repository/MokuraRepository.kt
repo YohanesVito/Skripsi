@@ -7,10 +7,7 @@ import androidx.lifecycle.asLiveData
 import com.example.mokuramqtt.database.*
 import com.example.mokuramqtt.model.UserModel
 import com.example.mokuramqtt.model.UserPreference
-import com.example.mokuramqtt.remote.response.InsertHardwareResponse
-import com.example.mokuramqtt.remote.response.InsertLoggingResponse
-import com.example.mokuramqtt.remote.response.LoginResponse
-import com.example.mokuramqtt.remote.response.RegisterResponse
+import com.example.mokuramqtt.remote.response.*
 import com.example.mokuramqtt.remote.retrofit.ApiService
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
@@ -73,13 +70,14 @@ class MokuraRepository(
                 if (response.isSuccessful) {
                     val responseBody = response.body()
                     if (responseBody != null){
-                        if (!responseBody.error) {
+                        if (!responseBody.error!!) {
                             result.value = Result.Success(true)
                             val loginResult = responseBody.loginResult
-                            val mUser = User(email = loginResult.email, username = loginResult.username, password = loginResult.password)
+                            val mUser = User(idUser = loginResult!!.idUser,email = loginResult.email, username = loginResult.username, password = loginResult.password)
                             insertUser(mUser)
                             MainScope().launch {
                                 userPreference.saveUser(
+                                    idUser = loginResult.idUser.toString(),
                                     name = loginResult.username,
                                     email = loginResult.email,
                                     password = loginResult.password
@@ -89,7 +87,7 @@ class MokuraRepository(
                             result.value = Result.Success(true)
 
                         } else {
-                            result.value = Result.Error(responseBody.message)
+                            result.value = responseBody.message?.let { Result.Error(it) }
                         }
                     }
                 }else {
@@ -113,10 +111,10 @@ class MokuraRepository(
         return result
     }
 
-    fun postHardware(hardware: String): LiveData<Result<Boolean>>{
+    fun postHardware(hardwareSerial: String, hardwareName: String): LiveData<Result<Boolean>>{
         val result = MutableLiveData<Result<Boolean>>()
         result.value = Result.Loading
-        apiService.postMokura(hardware).enqueue(object : Callback<InsertHardwareResponse> {
+        apiService.postMokura(hardwareSerial,hardwareName).enqueue(object : Callback<InsertHardwareResponse> {
             override fun onResponse(
                 call: Call<InsertHardwareResponse>,
                 response: Response<InsertHardwareResponse>
@@ -124,7 +122,7 @@ class MokuraRepository(
                 if (response.isSuccessful) {
                     val responseBody = response.body()
                     if (responseBody != null){
-                        saveIdHardware(responseBody.)
+                        saveIdHardware(responseBody.idHardware.toString())
                         result.value = Result.Success(true)
                     }
                 }else {
@@ -174,11 +172,15 @@ class MokuraRepository(
                 response: Response<RegisterResponse>
             ) {
                 if (response.isSuccessful) {
-                    val responseBody = response.body()
-                    if (responseBody != null && !responseBody.error){
+                    val responseBody = response.body()!!.data
+                    if (responseBody != null){
                         result.value = Result.Success(true)
                         MainScope().launch {
-                            userPreference.saveUser(, email, name, password)
+                            userPreference.saveUser(
+                                idUser = responseBody.idUser.toString(),
+                                email = responseBody.email,
+                                name = responseBody.username,
+                                password = responseBody.password)
                         }
                         result.value = Result.Success(true)
                     }
@@ -203,5 +205,7 @@ class MokuraRepository(
         result.value = Result.Success(true)
         return result
     }
+
+
 }
 

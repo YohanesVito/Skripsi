@@ -7,20 +7,20 @@ import kotlinx.parcelize.Parcelize
 data class LoginResponse(
 
 	@field:SerializedName("loginResult")
-	val loginResult: LoginResult,
+	val loginResult: LoginResult? = null,
 
 	@field:SerializedName("error")
-	val error: Boolean,
+	val error: Boolean? = null,
 
 	@field:SerializedName("message")
-	val message: String
+	val message: String? = null
 )
 
 @Parcelize
 data class LoginResult(
 
-	@field:SerializedName("username")
-	val username: String,
+	@field:SerializedName("idUser")
+	val idUser: Int,
 
 	@field:SerializedName("password")
 	val password: String,
@@ -28,4 +28,6 @@ data class LoginResult(
 	@field:SerializedName("email")
 	val email: String,
 
-) : Parcelable
+	@field:SerializedName("username")
+	val username: String
+): Parcelable
