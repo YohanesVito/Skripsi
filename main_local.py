@@ -3,7 +3,7 @@ from flask_mysqldb import MySQL
 
 app = Flask(__name__)
 
-# app.config['MYSQL_HOST'] = '3.89.63.60'
+# app.config['MYSQL_HOST'] = '44.203.243.165'
 # app.config['MYSQL_USER'] = 'vito'
 # app.config['MYSQL_PASSWORD'] = '123'
 # app.config['MYSQL_DB'] = 'mokura'
@@ -58,7 +58,8 @@ def register_user():
         mysql.connection.commit()
 
         cur.execute("SELECT * FROM users WHERE email = %s",(email,))
-        response = record
+        record2 = cur.fetchall()
+        response = record2
     cur.close()
 
     return jsonify({"error": "false", "message": "user registered!", "data":{"id_user":response[0][0],"email":response[0][1],"username":response[0][2],"password":response[0][3]}})
