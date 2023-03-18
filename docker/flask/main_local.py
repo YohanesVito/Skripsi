@@ -115,7 +115,7 @@ def insert_datalist():
         return jsonify({'message': 'data inserted!'})
     
 #get user CLEAR
-@app.route('/users/',methods=['GET'])
+@app.route('/users',methods=['GET'])
 def get_users():
     response = ()
     email = request.form.get('email', default_value)
@@ -170,41 +170,46 @@ def get_all_mokura():
         return jsonify(listhardware)
     # return jsonify({"error": "false","id_hardware":response[0][0],"hardware_serial":response[0][1],"hardware_name": response[0][2]})
 
-@app.route('/logging/',methods=['GET'])
+@app.route('/logging',methods=['GET'])
 def get_datalist():
-    listlogging = []
-    cur = mysql.connection.cursor()
-    cur.execute("SELECT * FROM logging")
-    datas = cur.fetchall()
-    for data in datas:
-        id_logging = data[0]
-        id_hardware = data[1]
-        id_user = data[2]
-        time_stamp = data[3]
-        speed = data[4]
-        rpm = data[5]
-        battery = data[6]
-        lat = data[7]
-        lon = data[8]
-        compass = data[9]
-        duty_cycle = data[10]
+    id_user = request.form.get('id_user', default_value)
 
-        listlogging.append({
-            "id_logging": id_logging,
-            "id_hardware": id_hardware,
-            "id_user": id_user,
-            "data":{
-                "time_stamp":time_stamp,
-                "speed":speed,
-                "rpm":rpm,
-                "battery":battery,
-                "lat":lat,
-                "lon":lon,
-                "compass":compass,
-                "duty_cycle":duty_cycle,
-            }})
-    cur.close()
-    return jsonify({'data': listlogging})
+    if id_user != "null":
+            
+        listlogging = []
+        cur = mysql.connection.cursor()
+        cur.execute("SELECT * FROM logging WHERE id_user = %s",(id_user,))
+        datas = cur.fetchall()
+
+        for data in datas:
+            id_logging = data[0]
+            id_hardware = data[1]
+            id_user = data[2]
+            time_stamp = data[3]
+            speed = data[4]
+            rpm = data[5]
+            battery = data[6]
+            lat = data[7]
+            lon = data[8]
+            compass = data[9]
+            duty_cycle = data[10]
+
+            listlogging.append({
+                "id_logging": id_logging,
+                "id_hardware": id_hardware,
+                "id_user": id_user,
+                "data":{
+                    "time_stamp":time_stamp,
+                    "speed":speed,
+                    "rpm":rpm,
+                    "battery":battery,
+                    "lat":lat,
+                    "lon":lon,
+                    "compass":compass,
+                    "duty_cycle":duty_cycle,
+                }})
+        cur.close()
+        return jsonify({'logging': listlogging})
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=6969,debug=True)
