@@ -139,7 +139,6 @@ def get_all_mokura():
         listhardware = []
         cur.execute("SELECT * FROM mokura")
         response = cur.fetchall()
-        print(response)
         for hardware in response:
             id = hardware[0]
             serial = hardware[1]
@@ -151,7 +150,7 @@ def get_all_mokura():
 
 #logging
 @app.route('/logging/datalist', methods=['POST'])
-def insert_or_get_datalist():
+def insert_datalist():
     if request.method == 'POST':
         datas = request.get_json()
         # parsing data list
@@ -172,11 +171,39 @@ def insert_or_get_datalist():
             cur.close()
         return jsonify({'message': 'data inserted!'})
     
-@app.route('/logging/', methods=['GET'])
-def insert_or_get_datalist():
+@app.route('/logging', methods=['GET'])
+def get_datalist():
+    listlogging = []
     cur = mysql.connection.cursor()
     cur.execute("SELECT * FROM logging")
-    data = cur.fetchall()
+    datas = cur.fetchall()
+    for data in datas:
+        id_logging = data[0]
+        id_hardware = data[1]
+        id_user = data[2]
+        time_stamp = data[3]
+        speed = data[4]
+        rpm = data[5]
+        battery = data[6]
+        lat = data[7]
+        lon = data[8]
+        compass = data[9]
+        duty_cycle = data[10]
+
+        listlogging.append({
+            "id_logging": data[0],
+            "id_hardware": data[1],
+            "id_user": data[2],
+            "data":{
+                "time_stamp":time_stamp,
+                "speed":speed,
+                "rpm":rpm,
+                "battery":battery,
+                "lat":lat,
+                "lon":lon,
+                "compass":compass,
+                "duty_cycle":duty_cycle,
+            }})
     cur.close()
     return jsonify({'data': data})
 
