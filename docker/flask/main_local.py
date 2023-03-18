@@ -3,15 +3,17 @@ from flask_mysqldb import MySQL
 
 app = Flask(__name__)
 
-# app.config['MYSQL_HOST'] = '44.203.243.165'
-# app.config['MYSQL_USER'] = 'vito'
-# app.config['MYSQL_PASSWORD'] = '123'
-# app.config['MYSQL_DB'] = 'mokura'
-
+# enable this when run on cloud 
 app.config['MYSQL_HOST'] = 'mariadb'
-app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = 'toor'
+app.config['MYSQL_USER'] = 'vito'
+app.config['MYSQL_PASSWORD'] = '123'
 app.config['MYSQL_DB'] = 'mokura'
+
+#enable this when run in local
+# app.config['MYSQL_HOST'] = 'localhost'
+# app.config['MYSQL_USER'] = 'root'
+# app.config['MYSQL_PASSWORD'] = ''
+# app.config['MYSQL_DB'] = 'mokura'
 
 mysql = MySQL(app)
    
@@ -148,29 +150,33 @@ def get_all_mokura():
     # return jsonify({"error": "false","id_hardware":response[0][0],"hardware_serial":response[0][1],"hardware_name": response[0][2]})
 
 #logging
-@app.route('/logging/datalist/',methods=['POST'])
-def insert_datalist():
-    datas = request.get_json()
-    
-    # parsing data list
-    for data in datas:
-        id_user = data["id_user"]
-        id_hardware = data["id_hardware"]
-        time_stamp = data["time_stamp"]
-        lat = data["lat"]
-        lon = data["lon"]
-        compass = data["compass"]
-        speed = data["speed"]
-        rpm = data["rpm"]
-        battery = data["battery"]
-        duty_cycle = data["duty_cycle"]   
-
+@app.route('/logging/datalist/', methods=['GET', 'POST'])
+def insert_or_get_datalist():
+    if request.method == 'POST':
+        datas = request.get_json()
+        # parsing data list
+        for data in datas:
+            id_user = data["id_user"]
+            id_hardware = data["id_hardware"]
+            time_stamp = data["time_stamp"]
+            lat = data["lat"]
+            lon = data["lon"]
+            compass = data["compass"]
+            speed = data["speed"]
+            rpm = data["rpm"]
+            battery = data["battery"]
+            duty_cycle = data["duty_cycle"]   
+            cur = mysql.connection.cursor()
+            cur.execute("INSERT INTO logging (time_stamp,speed,rpm,battery,lat,lon,compass,duty_cycle,id_user,id_hardware) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",(time_stamp,speed,rpm,battery,lat,lon,compass,duty_cycle,id_user,id_hardware))
+            mysql.connection.commit()
+            cur.close()
+        return jsonify({'message': 'data inserted!'})
+    elif request.method == 'GET':
         cur = mysql.connection.cursor()
-        cur.execute("INSERT INTO logging (time_stamp,speed,rpm,battery,lat,lon,compass,duty_cycle,id_user,id_hardware) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",(time_stamp,speed,rpm,battery,lat,lon,compass,duty_cycle,id_user,id_hardware))
-        mysql.connection.commit()
+        cur.execute("SELECT * FROM logging")
+        data = cur.fetchall()
         cur.close()
-
-    return jsonify({'message': 'data inserted!'})
+        return jsonify({'data': data})
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=6969,debug=True)
