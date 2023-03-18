@@ -172,7 +172,7 @@ def insert_or_get_datalist():
             cur.close()
         return jsonify({'message': 'data inserted!'})
     
-@app.route('/logging/datalist', methods=['GET'])
+@app.route('/logging/', methods=['GET'])
 def insert_or_get_datalist():
     cur = mysql.connection.cursor()
     cur.execute("SELECT * FROM logging")
