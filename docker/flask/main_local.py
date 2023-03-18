@@ -66,6 +66,54 @@ def register_user():
 
     return jsonify({"error": "false", "message": "user registered!", "data":{"id_user":response[0][0],"email":response[0][1],"username":response[0][2],"password":response[0][3]}})
 
+#save hardware to db CLEAR
+@app.route('/mokura/register',methods=['POST'])
+def register_mokura():
+    response = ()
+
+    hardware_name = request.form.get('hardware_name', default_value)
+    hardware_serial = request.form.get('hardware_serial', default_value)
+    cur = mysql.connection.cursor()
+
+    cur.execute("SELECT * FROM mokura WHERE hardware_serial = %s AND hardware_name = %s ",(hardware_serial,hardware_name))
+    record = cur.fetchall()
+
+    if len(record) > 0:
+        cur.execute("SELECT * FROM mokura WHERE hardware_serial = %s ",(hardware_serial,))
+        response = cur.fetchall()
+    else:
+        cur.execute("INSERT IGNORE INTO mokura (hardware_serial,hardware_name) VALUES(%s,%s)",(hardware_serial,hardware_name))
+        mysql.connection.commit()
+        cur.execute("SELECT * FROM mokura WHERE hardware_serial = %s AND hardware_name = %s ",(hardware_serial,hardware_name))
+        response = cur.fetchall()
+
+    cur.close()
+
+    return jsonify({"error": "false","id_hardware":response[0][0],"hardware_serial":response[0][1],"message": "hardware registered!"})
+
+#logging
+@app.route('/logging/datalist', methods=['POST'])
+def insert_datalist():
+    if request.method == 'POST':
+        datas = request.get_json()
+        # parsing data list
+        for data in datas:
+            id_user = data["id_user"]
+            id_hardware = data["id_hardware"]
+            time_stamp = data["time_stamp"]
+            lat = data["lat"]
+            lon = data["lon"]
+            compass = data["compass"]
+            speed = data["speed"]
+            rpm = data["rpm"]
+            battery = data["battery"]
+            duty_cycle = data["duty_cycle"]   
+            cur = mysql.connection.cursor()
+            cur.execute("INSERT INTO logging (time_stamp,speed,rpm,battery,lat,lon,compass,duty_cycle,id_user,id_hardware) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",(time_stamp,speed,rpm,battery,lat,lon,compass,duty_cycle,id_user,id_hardware))
+            mysql.connection.commit()
+            cur.close()
+        return jsonify({'message': 'data inserted!'})
+    
 #get user CLEAR
 @app.route('/users/',methods=['GET'])
 def get_users():
@@ -98,36 +146,10 @@ def get_users():
             listuser.append({"error":"false","message":"success","data":{"id_user":id,"email":email,"username":username,"password":password}})
     return jsonify(listuser)
 
-#save hardware to db CLEAR
-@app.route('/mokura/register',methods=['POST'])
-def register_mokura():
-    response = ()
-
-    hardware_name = request.form.get('hardware_name', default_value)
-    hardware_serial = request.form.get('hardware_serial', default_value)
-    cur = mysql.connection.cursor()
-
-    cur.execute("SELECT * FROM mokura WHERE hardware_serial = %s AND hardware_name = %s ",(hardware_serial,hardware_name))
-    record = cur.fetchall()
-
-    if len(record) > 0:
-        cur.execute("SELECT * FROM mokura WHERE hardware_serial = %s ",(hardware_serial,))
-        response = cur.fetchall()
-    else:
-        cur.execute("INSERT IGNORE INTO mokura (hardware_serial,hardware_name) VALUES(%s,%s)",(hardware_serial,hardware_name))
-        mysql.connection.commit()
-        cur.execute("SELECT * FROM mokura WHERE hardware_serial = %s AND hardware_name = %s ",(hardware_serial,hardware_name))
-        response = cur.fetchall()
-
-    cur.close()
-
-    return jsonify({"error": "false","id_hardware":response[0][0],"hardware_serial":response[0][1],"message": "hardware registered!"})
-
 #get all hardware from db CLEAR
 @app.route('/mokura',methods=['GET'])
 def get_all_mokura():
     response = ()
-
     hardware_name = request.form.get('hardware_name', default_value)
     cur = mysql.connection.cursor()
 
@@ -148,30 +170,7 @@ def get_all_mokura():
         return jsonify(listhardware)
     # return jsonify({"error": "false","id_hardware":response[0][0],"hardware_serial":response[0][1],"hardware_name": response[0][2]})
 
-#logging
-@app.route('/logging/datalist', methods=['POST'])
-def insert_datalist():
-    if request.method == 'POST':
-        datas = request.get_json()
-        # parsing data list
-        for data in datas:
-            id_user = data["id_user"]
-            id_hardware = data["id_hardware"]
-            time_stamp = data["time_stamp"]
-            lat = data["lat"]
-            lon = data["lon"]
-            compass = data["compass"]
-            speed = data["speed"]
-            rpm = data["rpm"]
-            battery = data["battery"]
-            duty_cycle = data["duty_cycle"]   
-            cur = mysql.connection.cursor()
-            cur.execute("INSERT INTO logging (time_stamp,speed,rpm,battery,lat,lon,compass,duty_cycle,id_user,id_hardware) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",(time_stamp,speed,rpm,battery,lat,lon,compass,duty_cycle,id_user,id_hardware))
-            mysql.connection.commit()
-            cur.close()
-        return jsonify({'message': 'data inserted!'})
-    
-@app.route('/logging', methods=['GET'])
+@app.route('/logging/',methods=['GET'])
 def get_datalist():
     listlogging = []
     cur = mysql.connection.cursor()
@@ -191,9 +190,9 @@ def get_datalist():
         duty_cycle = data[10]
 
         listlogging.append({
-            "id_logging": data[0],
-            "id_hardware": data[1],
-            "id_user": data[2],
+            "id_logging": id_logging,
+            "id_hardware": id_hardware,
+            "id_user": id_user,
             "data":{
                 "time_stamp":time_stamp,
                 "speed":speed,
@@ -205,7 +204,7 @@ def get_datalist():
                 "duty_cycle":duty_cycle,
             }})
     cur.close()
-    return jsonify({'data': data})
+    return jsonify({'data': listlogging})
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=6969,debug=True)
