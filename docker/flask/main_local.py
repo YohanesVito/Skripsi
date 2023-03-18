@@ -150,7 +150,7 @@ def get_all_mokura():
     # return jsonify({"error": "false","id_hardware":response[0][0],"hardware_serial":response[0][1],"hardware_name": response[0][2]})
 
 #logging
-@app.route('/logging/datalist', methods=['GET', 'POST'])
+@app.route('/logging/datalist', methods=['POST'])
 def insert_or_get_datalist():
     if request.method == 'POST':
         datas = request.get_json()
@@ -171,12 +171,14 @@ def insert_or_get_datalist():
             mysql.connection.commit()
             cur.close()
         return jsonify({'message': 'data inserted!'})
-    elif request.method == 'GET':
-        cur = mysql.connection.cursor()
-        cur.execute("SELECT * FROM logging")
-        data = cur.fetchall()
-        cur.close()
-        return jsonify({'data': data})
+    
+@app.route('/logging/datalist', methods=['GET'])
+def insert_or_get_datalist():
+    cur = mysql.connection.cursor()
+    cur.execute("SELECT * FROM logging")
+    data = cur.fetchall()
+    cur.close()
+    return jsonify({'data': data})
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=6969,debug=True)
