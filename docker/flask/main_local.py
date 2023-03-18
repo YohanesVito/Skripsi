@@ -150,7 +150,7 @@ def get_all_mokura():
     # return jsonify({"error": "false","id_hardware":response[0][0],"hardware_serial":response[0][1],"hardware_name": response[0][2]})
 
 #logging
-@app.route('/logging/datalist/', methods=['GET', 'POST'])
+@app.route('/logging/datalist', methods=['GET', 'POST'])
 def insert_or_get_datalist():
     if request.method == 'POST':
         datas = request.get_json()
