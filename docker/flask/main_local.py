@@ -92,28 +92,109 @@ def register_mokura():
     return jsonify({"error": "false","id_hardware":response[0][0],"hardware_serial":response[0][1],"message": "hardware registered!"})
 
 #logging
-@app.route('/logging/datalist', methods=['POST'])
-def insert_datalist():
+# @app.route('/logging/datalist', methods=['POST'])
+# def insert_datalist():
+#     if request.method == 'POST':
+#         datas = request.get_json()
+#         # parsing data list
+#         for data in datas:
+#             id_user = data["id_user"]
+#             id_hardware = data["id_hardware"]
+#             time_stamp = data["time_stamp"]
+#             lat = data["lat"]
+#             lon = data["lon"]
+#             compass = data["compass"]
+#             speed = data["speed"]
+#             rpm = data["rpm"]
+#             battery = data["battery"]
+#             duty_cycle = data["duty_cycle"]   
+#             cur = mysql.connection.cursor()
+#             cur.execute("INSERT INTO logging (time_stamp,speed,rpm,battery,lat,lon,compass,duty_cycle,id_user,id_hardware) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",(time_stamp,speed,rpm,battery,lat,lon,compass,duty_cycle,id_user,id_hardware))
+#             mysql.connection.commit()
+#             cur.close()
+#         return jsonify({'message': 'data inserted!'})
+
+# @app.route('/logging/datalist',methods=['GET'])
+# def get_datalist():
+#     id_user = request.form.get('id_user', default_value)
+
+#     if id_user != "null":
+            
+#         listlogging = []
+#         cur = mysql.connection.cursor()
+#         cur.execute("SELECT * FROM logging WHERE id_user = %s",(id_user,))
+#         datas = cur.fetchall()
+
+#         for data in datas:
+#             id_logging = data[0]
+#             id_hardware = data[1]
+#             id_user = data[2]
+#             time_stamp = data[3]
+#             speed = data[4]
+#             rpm = data[5]
+#             battery = data[6]
+#             lat = data[7]
+#             lon = data[8]
+#             compass = data[9]
+#             duty_cycle = data[10]
+
+#             listlogging.append({
+#                 "id_logging": id_logging,
+#                 "id_hardware": id_hardware,
+#                 "id_user": id_user,
+#                 "data":{
+#                     "time_stamp":time_stamp,
+#                     "speed":speed,
+#                     "rpm":rpm,
+#                     "battery":battery,
+#                     "lat":lat,
+#                     "lon":lon,
+#                     "compass":compass,
+#                     "duty_cycle":duty_cycle,
+#                 }})
+#         cur.close()
+#         return jsonify({'logging': listlogging})
+
+
+@app.route('/logging/datalist', methods=['GET', 'POST'])
+def datalist():
     if request.method == 'POST':
         datas = request.get_json()
         # parsing data list
         for data in datas:
-            id_user = data["id_user"]
-            id_hardware = data["id_hardware"]
-            time_stamp = data["time_stamp"]
-            lat = data["lat"]
-            lon = data["lon"]
-            compass = data["compass"]
-            speed = data["speed"]
-            rpm = data["rpm"]
-            battery = data["battery"]
-            duty_cycle = data["duty_cycle"]   
             cur = mysql.connection.cursor()
-            cur.execute("INSERT INTO logging (time_stamp,speed,rpm,battery,lat,lon,compass,duty_cycle,id_user,id_hardware) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",(time_stamp,speed,rpm,battery,lat,lon,compass,duty_cycle,id_user,id_hardware))
+            cur.execute("INSERT INTO logging (id_user, id_hardware, time_stamp, lat, lon, compass, speed, rpm, battery, duty_cycle) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", tuple(data.values()))
             mysql.connection.commit()
             cur.close()
         return jsonify({'message': 'data inserted!'})
-    
+    elif request.method == 'GET':
+        id_user = request.form.get('id_user')
+
+        if id_user:
+            cur = mysql.connection.cursor()
+            cur.execute("SELECT * FROM logging WHERE id_user = %s", (id_user,))
+            datas = cur.fetchall()
+
+            listlogging = []
+            for data in datas:
+                id_logging, id_hardware, id_user, time_stamp, speed, rpm, battery, lat, lon, compass, duty_cycle = data
+                listlogging.append({
+                    "id_logging": id_logging,
+                    "id_hardware": id_hardware,
+                    "id_user": id_user,
+                    "data":{
+                        "time_stamp":time_stamp,
+                        "speed":speed,
+                        "rpm":rpm,
+                        "battery":battery,
+                        "lat":lat,
+                        "lon":lon,
+                        "compass":compass,
+                        "duty_cycle":duty_cycle,
+                    }})
+            cur.close()
+            return jsonify({'logging': listlogging})
+
 #get user CLEAR
 @app.route('/users',methods=['GET'])
 def get_users():
@@ -170,46 +251,6 @@ def get_all_mokura():
         return jsonify(listhardware)
     # return jsonify({"error": "false","id_hardware":response[0][0],"hardware_serial":response[0][1],"hardware_name": response[0][2]})
 
-@app.route('/logging',methods=['GET'])
-def get_datalist():
-    id_user = request.form.get('id_user', default_value)
-
-    if id_user != "null":
-            
-        listlogging = []
-        cur = mysql.connection.cursor()
-        cur.execute("SELECT * FROM logging WHERE id_user = %s",(id_user,))
-        datas = cur.fetchall()
-
-        for data in datas:
-            id_logging = data[0]
-            id_hardware = data[1]
-            id_user = data[2]
-            time_stamp = data[3]
-            speed = data[4]
-            rpm = data[5]
-            battery = data[6]
-            lat = data[7]
-            lon = data[8]
-            compass = data[9]
-            duty_cycle = data[10]
-
-            listlogging.append({
-                "id_logging": id_logging,
-                "id_hardware": id_hardware,
-                "id_user": id_user,
-                "data":{
-                    "time_stamp":time_stamp,
-                    "speed":speed,
-                    "rpm":rpm,
-                    "battery":battery,
-                    "lat":lat,
-                    "lon":lon,
-                    "compass":compass,
-                    "duty_cycle":duty_cycle,
-                }})
-        cur.close()
-        return jsonify({'logging': listlogging})
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=6969,debug=True)
