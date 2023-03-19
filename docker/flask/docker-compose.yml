@@ -14,7 +14,7 @@ services:
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: toor
-      MYSQL_USER:  vito
+      MYSQL_USER: vito
       MYSQL_PASSWORD: 123
     expose:
         - "3306"
