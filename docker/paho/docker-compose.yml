@@ -12,6 +12,9 @@ services:
       - "3306:3306"
     volumes:
       - mariadb:/var/lib/mysql
+    networks:
+      - mqtt_network       
+       
   phpmyadmin:
     image: phpmyadmin
     restart: always
@@ -20,7 +23,8 @@ services:
     environment:
       - PMA_HOST=mariadb
       - PMA_PORT=3306
-      
+    networks:
+      - mqtt_network  
   # mqtt-broker:
   #   image: eclipse-mosquitto
   #   ports:
