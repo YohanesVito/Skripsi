@@ -31,6 +31,7 @@ services:
   #     - "1883:1883"
   #   restart: always
   mqtt-broker:
+    build: .
     image: eclipse-mosquitto:1.6
     restart: always
     ports:
