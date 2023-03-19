@@ -37,10 +37,16 @@ services:
     networks:
       - mqtt_network
 
+# volumes:
+#   mariadb:
+
+networks:
+  mqtt_network:
+
 volumes:
-  mariadb:
-
-
+  mariadb_data:
+  mosquitto_data:
+  mosquitto_log:
 
 # version: '3'
 
