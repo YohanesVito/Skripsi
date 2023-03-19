@@ -1,80 +1,45 @@
-# python3.6
-
-import random
-
-from paho.mqtt import client as mqtt_client
-import json
+import paho.mqtt.client as mqtt
 import MySQLdb
 
-broker = 'broker.emqx.io'
-port = 1883
-topic = "mokura/logging/logging-vito-m03" 
-# generate client ID with pub prefix randomly
-client_id = f'python-mqtt-{random.randint(0, 100)}'
-username = 'emqx'
-password = 'public'
+# MQTT broker settings
+broker_address = "mqtt-broker"
+broker_port = 1883
+topic = "test/topic"
+#topic = "mokura/logging/logging-vito-m03" 
+#topic1= "mokura/user/email/vitorizki37@gmail.com"
+#topic2= "mokura/mokura/hardwareaddress/{}"
+#topic2= "mokura/logging/id_logging/{}"
 
+# MySQL database settings
+db_host = "mariadb"
+db_user = "vito"
+db_password = "123"
+db_name = "mokura"
 
-def connect_mqtt() -> mqtt_client:
-    def on_connect(client, userdata, flags, rc):
-        if rc == 0:
-            print("Connected to MQTT Broker!")
-        else:
-            print("Failed to connect, return code %d\n", rc)
+# Connect to MySQL database
+db = MySQLdb.connect(host=db_host, user=db_user, passwd=db_password, db=db_name)
+cursor = db.cursor()
 
-    client = mqtt_client.Client(client_id)
-    client.username_pw_set(username, password)
-    client.on_connect = on_connect
-    client.connect(broker, port)
-    return client
-
-def subscribe(client: mqtt_client):
-    def on_message(client, userdata, msg):
-        print(f"Received `{msg.payload.decode()}` from `{msg.topic}` topic")
-        insertDB(JSONParser(msg.payload))
-
+# Define MQTT callbacks
+def on_connect(client, userdata, flags, rc):
+    print("Connected to MQTT broker with result code "+str(rc))
     client.subscribe(topic)
-    client.on_message = on_message
-    
-def run():
-    client = connect_mqtt()
-    subscribe(client)
-    client.loop_forever()
 
-def insertDB(data):
-    
-    host = "44.194.169.154"
-    user = "vito"
-    password = "123"
-    db = "mokura"
-    
-    db = MySQLdb.connect(host,user,password,db)
-    cur = db.cursor()
-    cur.execute("INSERT INTO data (time_stamp,speed,rpm,battery,lat,lon,compass,duty_cycle) VALUES (%s,%s,%s,%s,%s,%s,%s,%s)",(data.time_stamp,data.speed,data.rpm,data.battery,data.lat,data.lon,data.compass,data.duty_cycle))
+def on_message(client, userdata, msg):
+    print("Received message on topic "+msg.topic+": "+msg.payload.decode())
 
-    db.commit() #commit the data insertion execution
-    cur.close()
-    db.close()
-    print(data.time_stamp,data.speed,data.rpm,data.battery,data.lat,data.lon,data.compass,data.duty_cycle)
+    # if(msg.topic.start"mokura/user/email/")
+    # Insert message into MySQL database
+    sql = "INSERT INTO messages (topic, payload) VALUES (%s, %s)"
+    values = (msg.topic, msg.payload.decode())
+    cursor.execute(sql, values)
+    db.commit()
 
-class JSONParser(object):
-    def __init__(self, data):
-        self.__dict__ = json.loads(data)
-    
+# Create MQTT client and connect to broker
+client = mqtt.Client()
+client.on_connect = on_connect
+client.on_message = on_message
+client.connect(broker_address, broker_port, 60)
 
-def parseLogging():
-    host = "44.194.169.154"
-    user = "vito"
-    password = "123"
-    db = "mokura"
-    
-    db = MySQLdb.connect(host,user,password,db)
-    cur = db.cursor()
-    cur.execute("SELECT * from data" )
-
-    db.commit() #commit the data insertion execution
-    cur.close()
-    db.close()
-
-if __name__ == '__main__':
-    run()
+# Start MQTT loop
+client.loop_forever()
