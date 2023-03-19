@@ -5,7 +5,7 @@ volumes:
     driver: local
   mosquitto_data:
   mosquitto_log:
-  
+
 networks:
     db:
         driver: host
@@ -47,11 +47,9 @@ services:
       - mosquitto_data:/mosquitto/data
       - mosquitto_log:/mosquitto/log
 
-  web:
+  script:
     build: .
     expose:
       - "1883"
-    ports:
-      - "1883:1883"
 
 
