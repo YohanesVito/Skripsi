@@ -14,7 +14,7 @@ services:
       - mariadb:/var/lib/mysql
     networks:
       - mqtt_network       
-       
+
   phpmyadmin:
     image: phpmyadmin
     restart: always
@@ -48,7 +48,7 @@ networks:
   mqtt_network:
 
 volumes:
-  mariadb_data:
+  mariadb:
   mosquitto_data:
   mosquitto_log:
 
