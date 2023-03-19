@@ -3,7 +3,9 @@ version: '3'
 volumes:
   mariadb:
     driver: local
-
+  mosquitto_data:
+  mosquitto_log:
+  
 networks:
     db:
         driver: host
