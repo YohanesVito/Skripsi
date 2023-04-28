@@ -10,6 +10,6 @@ interface HardwareDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertHardware(hardware: Hardware)
 
-    @Query("SELECT * FROM hardware WHERE hardwareSerial = :hardwareSerial")
-    fun getHardwareId(hardwareSerial: String): Hardware?
+//    @Query("SELECT * FROM hardware WHERE hardwareSerial = :hardwareSerial")
+//    fun getHardwareId(hardwareSerial: String): Hardware?
 }

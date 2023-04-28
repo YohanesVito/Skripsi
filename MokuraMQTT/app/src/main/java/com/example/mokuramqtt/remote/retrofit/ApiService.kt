@@ -30,7 +30,7 @@ interface ApiService {
 //    ): Call<DataModel>
 
     @FormUrlEncoded
-    @POST("login")
+    @POST("users/login")
     fun login(
         @Field("email") email: String,
         @Field("password") password: String,

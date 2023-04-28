@@ -15,4 +15,8 @@ data class Hardware(
 
     @ColumnInfo(name = "hardwareSerial")
     val hardwareSerial: String,
+
+    @ColumnInfo(name = "hardwareName")
+    val hardwareName: String,
+
 ) : Parcelable

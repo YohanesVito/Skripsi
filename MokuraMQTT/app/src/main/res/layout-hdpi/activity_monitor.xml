@@ -69,7 +69,7 @@
 
     <me.ibrahimsn.lib.Speedometer
         android:id="@+id/speedometer"
-        android:layout_width="220dp"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginStart="25dp"
@@ -89,7 +89,7 @@
 
     <me.ibrahimsn.lib.Speedometer
         android:id="@+id/rpm"
-        android:layout_width="220dp"
+        android:layout_width="150dp"
         android:layout_height="0dp"
         android:layout_gravity="center"
         android:layout_marginStart="40dp"

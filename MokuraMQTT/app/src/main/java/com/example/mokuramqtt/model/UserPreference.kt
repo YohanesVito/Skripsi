@@ -31,7 +31,7 @@ class UserPreference private constructor(private val dataStore: DataStore<Prefer
         }
     }
 
-    suspend fun saveHardware(hardware: String) {
+    suspend fun saveIdHardware(hardware: String) {
         dataStore.edit { preferences ->
             preferences[ID_HARDWARE_KEY] = hardware
         }

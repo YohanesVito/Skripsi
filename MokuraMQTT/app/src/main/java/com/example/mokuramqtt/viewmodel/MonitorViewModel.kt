@@ -3,15 +3,10 @@ package com.example.mokuramqtt.viewmodel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.mokuramqtt.database.Mokura
-import com.example.mokuramqtt.model.DataModel
 import com.example.mokuramqtt.repository.MokuraRepository
+import com.example.mokuramqtt.utils.CSVLogger2
 
 class MonitorViewModel(private val mokuraRepository: MokuraRepository): ViewModel() {
-    var arrayDataModel = ArrayList<DataModel>()
-
-    val currentArrayData : MutableLiveData<ArrayList<DataModel>> by lazy{
-        MutableLiveData<ArrayList<DataModel>>()
-    }
 
     val valArrayLogging = ArrayList<Mokura>()
 
@@ -31,17 +26,21 @@ class MonitorViewModel(private val mokuraRepository: MokuraRepository): ViewMode
         MutableLiveData<String>()
     }
 
-    fun saveData(mokura: Mokura) = mokuraRepository.insertMokura(mokura)
-
     fun uploadData()= mokuraRepository.postLogging(valArrayLogging)
 
-    fun saveHardware(hardwareSerial: String) = mokuraRepository.postHardware(hardwareSerial)
-
-//    val dataGyroscope: MutableLiveData<GyroscopeData> by lazy {
-//        MutableLiveData<GyroscopeData>()
-//    }
+    fun saveHardware(hardwareSerial: String, hardwareName: String) = mokuraRepository.postHardware(hardwareSerial,hardwareName)
 
     val dataCompass: MutableLiveData<Int> by lazy{
         MutableLiveData<Int>()
     }
+
+    fun writeToCSV() {
+        arrayLogging.value?.let { list ->
+            for (mokura in list) {
+                // Code to write Mokura object to CSV file
+                CSVLogger2().logToCsv(mokura)
+            }
+        }
+    }
+
 }

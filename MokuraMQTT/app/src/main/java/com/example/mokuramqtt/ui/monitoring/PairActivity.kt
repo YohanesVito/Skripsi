@@ -9,7 +9,6 @@ import android.content.pm.PackageManager
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.MotionEvent
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
@@ -23,21 +22,21 @@ import com.example.mokuramqtt.databinding.ActivityPairBinding
 
 class PairActivity : AppCompatActivity() {
     private lateinit var binding: ActivityPairBinding
-//    private lateinit var pairViewModel: MonitorViewModel
     private lateinit var pairedDevices: Set<BluetoothDevice>
     private lateinit var bluetoothManager: BluetoothManager
     private lateinit var bluetoothAdapter: BluetoothAdapter
     companion object{
-        const val EXTRA_ADDRESS: String = "Device"
+        const val EXTRA_ADDRESS: String = "Device Address"
+        const val EXTRA_NAME: String = "Device Name"
     }
-    @RequiresApi(Build.VERSION_CODES.S)
+
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPairBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         setupView()
-//        setupViewModel()
         setupBluetooth()
 
         binding.rvBt.setHasFixedSize(true)
@@ -48,7 +47,9 @@ class PairActivity : AppCompatActivity() {
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.S)
+
+
+    @RequiresApi(Build.VERSION_CODES.M)
     private fun setupBluetooth() {
         bluetoothManager= getSystemService(BluetoothManager::class.java)
         bluetoothAdapter= bluetoothManager.adapter
@@ -65,7 +66,7 @@ class PairActivity : AppCompatActivity() {
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.S)
+
     private fun pairedDeviceList(){
 
         val list: ArrayList<BluetoothDevice> = ArrayList()
@@ -87,7 +88,17 @@ class PairActivity : AppCompatActivity() {
     private fun showMonitoring(data: BluetoothDevice) {
 
         val intent = Intent(this,MonitorActivity::class.java)
+
+        //send bluetooth address and bluetooth name
         intent.putExtra(EXTRA_ADDRESS, data.address)
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.BLUETOOTH_CONNECT
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            return
+        }
+        intent.putExtra(EXTRA_NAME, data.name)
 
         startActivity(intent)
     }
@@ -125,11 +136,4 @@ class PairActivity : AppCompatActivity() {
         }
         supportActionBar?.hide()
     }
-//
-//    private fun setupViewModel() {
-//        pairViewModel = ViewModelProvider(
-//            this,
-//            ViewModelFactory(this)
-//        )[MonitorViewModel::class.java]
-//    }
 }

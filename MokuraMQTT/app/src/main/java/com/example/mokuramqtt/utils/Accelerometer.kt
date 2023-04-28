@@ -6,7 +6,6 @@ import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import com.example.mokuramqtt.viewmodel.MonitorViewModel
-
 import kotlin.math.roundToInt
 
 class Accelerometer(private val context: Context, private val monitorViewModel: MonitorViewModel): SensorEventListener {

@@ -7,32 +7,20 @@ interface Constants {
         // Message types sent from the BluetoothChatService Handler
         const val BLUETOOTH_LOADING = 0
         const val BLUETOOTH_NOT_LOADING = 6
-        const val MESSAGE_STATE_CHANGE = 1
         const val MESSAGE_READ = 2
-        const val MESSAGE_WRITE = 3
-        const val MESSAGE_DEVICE_NAME = 4
-        const val MESSAGE_TOAST = 5
-
-        // Key names received from the BluetoothChatService Handler
-        const val DEVICE_NAME = "device_name"
-        const val TOAST = "toast"
 
         //permission
-        const val REQUEST_ENABLE_BLUETOOTH = 1
-        const val locationPermissionCode = 2
+        const val REQUEST_EXTERNAL_STORAGE_PERMISSION = 660
+        const val REQUEST_ENABLE_BLUETOOTH = 661
+        const val locationPermissionCode = 662
+        const val REQUEST_CODE_PERMISSIONS = 663
+        val REQUIRED_PERMISSIONS = arrayOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
 
         //uuid
         var mUUID: UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB")
 
-        //timer
-        const val TIMER_UPDATED = "timerUpdated"
-        const val TIME_EXTRA = "timeExtra"
-
-        const val PREFERENCES = "prefs"
-        const val START_TIME_KEY = "startKey"
-        const val STOP_TIME_KEY = "stopKey"
-
         //speedometer and rpm animation duration
         const val DURATION = 200L
+
     }
 }

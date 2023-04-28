@@ -19,7 +19,7 @@ class Location(private val context: Context, private val monitorViewModel: Monit
         if ((ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)) {
             ActivityCompat.requestPermissions(context as Activity, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), locationPermissionCode)
         }
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 5f, this)
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 1f, this)
     }
 
     override fun onLocationChanged(location: Location) {

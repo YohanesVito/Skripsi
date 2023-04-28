@@ -82,10 +82,4 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-//    override fun onBackPressed() {
-//        super.onBackPressed()
-//        val intentToMain = Intent(this@LoginActivity, MainActivity::class.java)
-//        startActivity(intentToMain)
-//        finish()
-//    }
 }

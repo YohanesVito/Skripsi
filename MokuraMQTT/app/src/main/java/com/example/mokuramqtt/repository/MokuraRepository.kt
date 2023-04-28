@@ -20,43 +20,32 @@ class MokuraRepository(
     private val apiService: ApiService,
     private val userPreference: UserPreference
 ) {
-    private var hardwareSerial: String = ""
-    private var email: String = ""
 
     fun insertUser(mUser: User) {
-        email = mUser.email
         mokuraDatabase.userDao().insertUser(mUser)
     }
 
-//    fun insertHardware(mHardwareSerial: String) {
-//        hardwareSerial = mHardwareSerial
-//        val mHardware = Hardware(hardwareSerial = mHardwareSerial)
-//        mokuraDatabase.hardwareDao().insertHardware(mHardware)
-//    }
+    fun insertHardware(mHardware: Hardware) {
+        mokuraDatabase.hardwareDao().insertHardware(mHardware)
+    }
 
     fun insertMokura(mMokura: Mokura) {
-        mMokura.idUser = getUserId()
-        mMokura.idHardware = getHardwareId()
         mokuraDatabase.mokuraDao().insertMokura(mMokura)
-    }
-
-    private fun getUserId(): Int{
-        val rowUser = mokuraDatabase.userDao().getUserId(email)
-        Log.d("email ",email)
-        Log.d("rowUser ",rowUser.toString())
-        return rowUser?.idUser ?: 0
-
-    }
-
-    private fun getHardwareId(): Int{
-        val rowHardware = mokuraDatabase.hardwareDao().getHardwareId(hardwareSerial)
-
-        return rowHardware?.idHardware ?: 0
     }
 
 
     fun getUser(): LiveData<UserModel> {
         return userPreference.getUser().asLiveData()
+    }
+
+    fun logoutUser(): LiveData<Result<Boolean>> {
+        val result = MutableLiveData<Result<Boolean>>()
+        result.value = Result.Loading
+        MainScope().launch {
+            userPreference.logout()
+        }
+        result.value = Result.Success(true)
+        return result
     }
 
     fun login(email: String, password: String): LiveData<Result<Boolean>> {
@@ -73,8 +62,17 @@ class MokuraRepository(
                         if (!responseBody.error!!) {
                             result.value = Result.Success(true)
                             val loginResult = responseBody.loginResult
-                            val mUser = User(idUser = loginResult!!.idUser,email = loginResult.email, username = loginResult.username, password = loginResult.password)
+
+
+                            //insert to Room
+                            val mUser = User(
+                                idUser = loginResult!!.idUser,
+                                email = loginResult.email,
+                                username = loginResult.username,
+                                password = loginResult.password)
                             insertUser(mUser)
+
+                            //insert to SP
                             MainScope().launch {
                                 userPreference.saveUser(
                                     idUser = loginResult.idUser.toString(),
@@ -84,6 +82,7 @@ class MokuraRepository(
                                 )
                                 userPreference.login()
                             }
+
                             result.value = Result.Success(true)
 
                         } else {
@@ -101,16 +100,7 @@ class MokuraRepository(
         return result
     }
 
-    fun logoutUser(): LiveData<Result<Boolean>> {
-        val result = MutableLiveData<Result<Boolean>>()
-        result.value = Result.Loading
-        MainScope().launch {
-            userPreference.logout()
-        }
-        result.value = Result.Success(true)
-        return result
-    }
-
+    //http
     fun postHardware(hardwareSerial: String, hardwareName: String): LiveData<Result<Boolean>>{
         val result = MutableLiveData<Result<Boolean>>()
         result.value = Result.Loading
@@ -122,7 +112,20 @@ class MokuraRepository(
                 if (response.isSuccessful) {
                     val responseBody = response.body()
                     if (responseBody != null){
-                        saveIdHardware(responseBody.idHardware.toString())
+
+                        //insert to room
+                        val mHardware = Hardware(
+                            hardwareName = responseBody.hardwareName!!,
+                            hardwareSerial = responseBody.hardwareSerial!!,
+                            idHardware = responseBody.idHardware!!
+                        )
+                        insertHardware(mHardware)
+
+                        //insert to SP
+                        MainScope().launch {
+                            userPreference.saveIdHardware(responseBody.idHardware.toString())
+                        }
+
                         result.value = Result.Success(true)
                     }
                 }else {
@@ -149,7 +152,6 @@ class MokuraRepository(
                     val responseBody = response.body()
                     if (responseBody != null){
                         result.value = Result.Success(true)
-
                     }
                 }else {
                     result.value = Result.Error(response.message())
@@ -192,17 +194,6 @@ class MokuraRepository(
                 result.value = Result.Error("Can't Connect Retrofit")
             }
         })
-        return result
-    }
-
-    //save idhardware
-    fun saveIdHardware(hardware: String): LiveData<Result<Boolean>> {
-        val result = MutableLiveData<Result<Boolean>>()
-        result.value = Result.Loading
-        MainScope().launch {
-            userPreference.saveHardware(hardware)
-        }
-        result.value = Result.Success(true)
         return result
     }
 

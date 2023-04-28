@@ -1,18 +1,19 @@
 package com.example.mokuramqtt.ui.home
 
 import android.content.Intent
+import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
+import com.example.mokuramqtt.Constants.Companion.REQUEST_EXTERNAL_STORAGE_PERMISSION
 import com.example.mokuramqtt.R
 import com.example.mokuramqtt.ViewModelFactory
 import com.example.mokuramqtt.databinding.ActivityHomeBinding
 import com.example.mokuramqtt.model.UserModel
 import com.example.mokuramqtt.repository.Result
 import com.example.mokuramqtt.ui.authentication.LoginActivity
-import com.example.mokuramqtt.ui.main.MainActivity
 import com.example.mokuramqtt.ui.monitoring.PairActivity
 import com.example.mokuramqtt.viewmodel.HomeViewModel
 
@@ -37,14 +38,15 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun setupAction() {
-//        homeViewModel.getUser().observe(this) { user ->
-//            if (user.isLogin) {
-//                binding.tvUser.text = getString(R.string.welcome, user.name)
-//            } else {
-//                startActivity(Intent(this, PairActivity::class.java))
-//                finish()
-//            }
-//        }
+        homeViewModel.getUser().observe(this) { user ->
+            if (user.isLogin) {
+                binding.tvUser.text = getString(R.string.welcome, user.name)
+            } else {
+                startActivity(Intent(this, LoginActivity::class.java))
+                finish()
+            }
+        }
+
         binding.btLogout.setOnClickListener {
             homeViewModel.logoutUser().observe(this){
                 when(it) {
@@ -73,4 +75,20 @@ class HomeActivity : AppCompatActivity() {
             this.user = user
         }
     }
+
+
+    // Handle the result of the permission request
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == REQUEST_EXTERNAL_STORAGE_PERMISSION) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission has been granted, so we can log data now
+                return
+            } else {
+                // Permission has been denied
+                Toast.makeText(this, "External storage permission has been denied", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
 }

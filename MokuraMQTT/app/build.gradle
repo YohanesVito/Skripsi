@@ -68,4 +68,7 @@ dependencies {
     implementation 'org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.2.4'
     implementation 'org.eclipse.paho:org.eclipse.paho.android.service:1.1.1'
     implementation 'androidx.work:work-runtime-ktx:2.7.0'
+
+    //csv
+    implementation"com.github.doyaaaaaken:kotlin-csv-jvm:1.6.0"//for JVM platform
 }

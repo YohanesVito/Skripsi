@@ -56,7 +56,6 @@ class RegisterActivity : AppCompatActivity() {
             }
         }
 
-
     }
 
     private fun setupViewModel() {

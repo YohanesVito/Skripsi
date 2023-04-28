@@ -5,17 +5,12 @@ import android.app.Activity
 import android.bluetooth.BluetoothDevice
 import android.content.Context
 import android.content.pm.PackageManager
-import android.graphics.Color
-import android.graphics.drawable.Drawable
-import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mokuramqtt.Constants
 import com.example.mokuramqtt.R
@@ -35,7 +30,7 @@ class PairAdapter(private val context: Context, private val listPairedDevice: Ar
         return ListViewHolder(view)
     }
 
-    @RequiresApi(Build.VERSION_CODES.S)
+
     override fun onBindViewHolder(holder:ListViewHolder, position: Int) {
         val device = listPairedDevice[position]
 
