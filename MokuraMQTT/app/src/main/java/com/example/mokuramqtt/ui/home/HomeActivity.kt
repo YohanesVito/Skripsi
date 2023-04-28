@@ -12,7 +12,7 @@ import com.example.mokuramqtt.R
 import com.example.mokuramqtt.ViewModelFactory
 import com.example.mokuramqtt.databinding.ActivityHomeBinding
 import com.example.mokuramqtt.model.UserModel
-import com.example.mokuramqtt.repository.Result
+import com.example.mokuramqtt.model.Result
 import com.example.mokuramqtt.ui.authentication.LoginActivity
 import com.example.mokuramqtt.ui.monitoring.PairActivity
 import com.example.mokuramqtt.viewmodel.HomeViewModel

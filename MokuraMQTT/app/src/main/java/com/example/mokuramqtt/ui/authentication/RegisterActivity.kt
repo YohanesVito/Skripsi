@@ -11,7 +11,7 @@ import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import com.example.mokuramqtt.ViewModelFactory
 import com.example.mokuramqtt.databinding.ActivityRegisterBinding
-import com.example.mokuramqtt.repository.Result
+import com.example.mokuramqtt.model.Result
 import com.example.mokuramqtt.ui.home.HomeActivity
 
 import com.example.mokuramqtt.viewmodel.RegisterViewModel

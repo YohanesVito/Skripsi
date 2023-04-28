@@ -1,14 +1,16 @@
 package com.example.mokuramqtt.repository
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.asLiveData
 import com.example.mokuramqtt.database.*
+import com.example.mokuramqtt.model.Result
 import com.example.mokuramqtt.model.UserModel
 import com.example.mokuramqtt.model.UserPreference
 import com.example.mokuramqtt.remote.response.*
 import com.example.mokuramqtt.remote.retrofit.ApiService
+import com.example.mokuramqtt.utils.PacketCapture
+import com.example.mokuramqtt.utils.PacketCapture2
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import retrofit2.Call
@@ -194,6 +196,44 @@ class MokuraRepository(
                 result.value = Result.Error("Can't Connect Retrofit")
             }
         })
+        return result
+    }
+
+
+    fun postLogging2(arrayLogging: ArrayList<Mokura>): LiveData<Result<Boolean>> {
+        val result = MutableLiveData<Result<Boolean>>()
+        result.value = Result.Loading
+
+        val startTime = System.currentTimeMillis() // track start time
+
+        val capture = PacketCapture2() // create PacketCapture instance
+
+        apiService.sendDataList(arrayLogging).enqueue(object : Callback<InsertLoggingResponse> {
+            override fun onResponse(
+                call: Call<InsertLoggingResponse>,
+                response: Response<InsertLoggingResponse>
+            ) {
+                val endTime = System.currentTimeMillis() // track end time
+                val latency = endTime - startTime // calculate latency
+
+                if (response.isSuccessful) {
+                    val responseBody = response.body()
+                    if (responseBody != null){
+                        result.value = Result.Success(true)
+                        capture.write(latency) // write latency to CSV file
+                    }
+                } else {
+                    result.value = Result.Error(response.message())
+                }
+                capture.close() // close writer after API call completes
+            }
+
+            override fun onFailure(call: Call<InsertLoggingResponse>, t: Throwable) {
+                result.value = Result.Error("Can't Connect Retrofit")
+                capture.close() // close writer on API call failure
+            }
+        })
+
         return result
     }
 

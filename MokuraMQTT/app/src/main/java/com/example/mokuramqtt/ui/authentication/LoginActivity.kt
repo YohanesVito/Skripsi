@@ -13,7 +13,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.mokuramqtt.ViewModelFactory
 import com.example.mokuramqtt.databinding.ActivityLoginBinding
 import com.example.mokuramqtt.model.UserModel
-import com.example.mokuramqtt.repository.Result
+import com.example.mokuramqtt.model.Result
 import com.example.mokuramqtt.ui.home.HomeActivity
 import com.example.mokuramqtt.viewmodel.LoginViewModel
 

@@ -26,13 +26,33 @@ class MonitorViewModel(private val mokuraRepository: MokuraRepository): ViewMode
         MutableLiveData<String>()
     }
 
+    val dataCompass: MutableLiveData<Int> by lazy{
+        MutableLiveData<Int>()
+    }
+
     fun uploadData()= mokuraRepository.postLogging(valArrayLogging)
 
     fun saveHardware(hardwareSerial: String, hardwareName: String) = mokuraRepository.postHardware(hardwareSerial,hardwareName)
 
-    val dataCompass: MutableLiveData<Int> by lazy{
-        MutableLiveData<Int>()
+    fun saveData(mMokura: Mokura) {
+        val mUser = mokuraRepository.getUser()
+        val idUser = mUser.value?.id_user
+        val idHardware = mUser.value?.id_hardware
+        val newMokura = Mokura(
+            idUser = idUser?.toInt() ?: throw IllegalStateException("User ID is null"),
+            idHardware = idHardware?.toInt() ?: throw IllegalStateException("Hardware ID is null"),
+            timeStamp = mMokura.timeStamp,
+            speed = mMokura.speed,
+            rpm = mMokura.rpm,
+            battery = mMokura.battery,
+            dutyCycle = mMokura.dutyCycle,
+            compass = mMokura.compass,
+            lat = mMokura.lat,
+            lon = mMokura.lon,
+        )
+        mokuraRepository.insertMokura(newMokura)
     }
+
 
     fun writeToCSV() {
         arrayLogging.value?.let { list ->

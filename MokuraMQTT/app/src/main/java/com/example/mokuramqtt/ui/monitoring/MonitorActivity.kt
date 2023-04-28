@@ -120,8 +120,9 @@ class MonitorActivity : AppCompatActivity() {
                     lat = lat,
                     lon = lon,
                     )
+
                 //save data to db
-//                monitorViewModel.saveData(newData)
+                monitorViewModel.saveData(newData)
 
                 //logging data to csv
                 updateUI(newData)
