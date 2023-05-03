@@ -35,6 +35,7 @@ services:
       - PMA_PORT=3306
       
   web:
+    restart: always
     build: .
     expose:
       - "6969"
