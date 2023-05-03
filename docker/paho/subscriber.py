@@ -28,6 +28,21 @@ def on_connect(client, userdata, flags, rc):
 def on_message(client, userdata, msg):
     print("Received message on topic "+msg.topic+": "+msg.payload.decode())
 
+    match (msg.topic):
+
+        case "mokura/logging/logging-vito-m03":
+            print(msg.topic)
+ 
+        case "mokura/mokura/hardwareaddress/{}":
+            print(msg.topic)
+
+        case "mokura/logging/id_logging/userId":
+            user = 
+            print(msg.topic)
+            
+        case _:
+            print("Invalid topic")
+
     # if(msg.topic.start"mokura/user/email/")
     # Insert message into MySQL database
     sql = "INSERT INTO messages (topic, payload) VALUES (%s, %s)"
