@@ -270,7 +270,7 @@ def get_servertime_diff():
     current_time_int = int(current_time.timestamp() * 1000)  # convert the timestamp to milliseconds
 
     response = ()
-    hardware_name = request.form.get('local_time_int', default_value)
+    local_time_int = request.form.get('local_time_int', default_value)
     if local_time_int:
         local_time = datetime.datetime.fromtimestamp(int(local_time_int))
         local_time_str = local_time.strftime('%Y-%m-%d %H:%M:%S.%f')
