@@ -252,11 +252,14 @@ def get_all_mokura():
         return jsonify(listhardware)
     # return jsonify({"error": "false","id_hardware":response[0][0],"hardware_serial":response[0][1],"hardware_name": response[0][2]})
 
-
 @app.route('/server/time', methods=['GET'])
 def get_servertime():
-    current_time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f')
+    utc_offset = datetime.timedelta(hours=7)  # set the UTC offset to +7 hours
+    tz = datetime.timezone(utc_offset)  # create a timezone with the UTC offset
+    current_time = datetime.datetime.now(tz).strftime('%Y-%m-%d %H:%M:%S.%f')
     return jsonify({'server_time': current_time})
+
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=6969,debug=True)
