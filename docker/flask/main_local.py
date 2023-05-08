@@ -1,20 +1,20 @@
 from flask import Flask, jsonify, request
 from flask_mysqldb import MySQL
-import datetime
+import datetime, time
 
 app = Flask(__name__)
 
 # enable this when run on cloud 
-app.config['MYSQL_HOST'] = 'mariadb'
-app.config['MYSQL_USER'] = 'vito'
-app.config['MYSQL_PASSWORD'] = '123'
-app.config['MYSQL_DB'] = 'mokura'
+# app.config['MYSQL_HOST'] = 'mariadb'
+# app.config['MYSQL_USER'] = 'vito'
+# app.config['MYSQL_PASSWORD'] = '123'
+# app.config['MYSQL_DB'] = 'mokura'
 
 #enable this when run in local
-# app.config['MYSQL_HOST'] = 'localhost'
-# app.config['MYSQL_USER'] = 'root'
-# app.config['MYSQL_PASSWORD'] = ''
-# app.config['MYSQL_DB'] = 'mokura'
+app.config['MYSQL_HOST'] = 'localhost'
+app.config['MYSQL_USER'] = 'root'
+app.config['MYSQL_PASSWORD'] = ''
+app.config['MYSQL_DB'] = 'mokura'
 
 mysql = MySQL(app)
    
@@ -92,71 +92,6 @@ def register_mokura():
 
     return jsonify({"error": "false","id_hardware":response[0][0],"hardware_serial":response[0][1],"hardware_name":response[0][2],"message": "hardware registered!"})
 
-#logging
-# @app.route('/logging/datalist', methods=['POST'])
-# def insert_datalist():
-#     if request.method == 'POST':
-#         datas = request.get_json()
-#         # parsing data list
-#         for data in datas:
-#             id_user = data["id_user"]
-#             id_hardware = data["id_hardware"]
-#             time_stamp = data["time_stamp"]
-#             lat = data["lat"]
-#             lon = data["lon"]
-#             compass = data["compass"]
-#             speed = data["speed"]
-#             rpm = data["rpm"]
-#             battery = data["battery"]
-#             duty_cycle = data["duty_cycle"]   
-#             cur = mysql.connection.cursor()
-#             cur.execute("INSERT INTO logging (time_stamp,speed,rpm,battery,lat,lon,compass,duty_cycle,id_user,id_hardware) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",(time_stamp,speed,rpm,battery,lat,lon,compass,duty_cycle,id_user,id_hardware))
-#             mysql.connection.commit()
-#             cur.close()
-#         return jsonify({'message': 'data inserted!'})
-
-# @app.route('/logging/datalist',methods=['GET'])
-# def get_datalist():
-#     id_user = request.form.get('id_user', default_value)
-
-#     if id_user != "null":
-            
-#         listlogging = []
-#         cur = mysql.connection.cursor()
-#         cur.execute("SELECT * FROM logging WHERE id_user = %s",(id_user,))
-#         datas = cur.fetchall()
-
-#         for data in datas:
-#             id_logging = data[0]
-#             id_hardware = data[1]
-#             id_user = data[2]
-#             time_stamp = data[3]
-#             speed = data[4]
-#             rpm = data[5]
-#             battery = data[6]
-#             lat = data[7]
-#             lon = data[8]
-#             compass = data[9]
-#             duty_cycle = data[10]
-
-#             listlogging.append({
-#                 "id_logging": id_logging,
-#                 "id_hardware": id_hardware,
-#                 "id_user": id_user,
-#                 "data":{
-#                     "time_stamp":time_stamp,
-#                     "speed":speed,
-#                     "rpm":rpm,
-#                     "battery":battery,
-#                     "lat":lat,
-#                     "lon":lon,
-#                     "compass":compass,
-#                     "duty_cycle":duty_cycle,
-#                 }})
-#         cur.close()
-#         return jsonify({'logging': listlogging})
-
-
 @app.route('/logging/datalist', methods=['GET', 'POST'])
 def datalist():
     if request.method == 'POST':
@@ -167,7 +102,19 @@ def datalist():
             cur.execute("INSERT INTO logging (id_user, id_hardware, time_stamp, lat, lon, compass, speed, rpm, battery, duty_cycle) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", tuple(data.values()))
             mysql.connection.commit()
             cur.close()
-        return jsonify({'message': 'data inserted!'})
+        
+         # get current timestamp
+        timestamp = int(time.time())
+        
+        # create response dictionary
+        response = {
+            'message': 'data inserted!',
+            'server_time_str': time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(timestamp)),
+            'server_time_int': timestamp
+        }
+    
+        return jsonify(response)
+    
     elif request.method == 'GET':
         id_user = request.form.get('id_user')
 
@@ -269,27 +216,29 @@ def get_servertime_diff():
     current_time_str = current_time.strftime('%Y-%m-%d %H:%M:%S.%f')
     current_time_int = int(current_time.timestamp() * 1000)  # convert the timestamp to milliseconds
 
-    response = ()
-    local_time_int = request.form.get('local_time_int', default_value)
+    local_time_int = request.args.get('local_time_int')
     if local_time_int:
-        local_time = datetime.datetime.fromtimestamp(int(local_time_int))
+        local_time = datetime.datetime.fromtimestamp(int(local_time_int) / 1000, tz)  # convert to datetime with timezone
         local_time_str = local_time.strftime('%Y-%m-%d %H:%M:%S.%f')
         time_diff = current_time - local_time
         time_diff_str = str(time_diff)
         time_diff_int = int(time_diff.total_seconds() * 1000)
+        time_diff_ms = int(time_diff.total_seconds() * 1000) + (time_diff.microseconds // 1000)
     else:
         local_time_str = ''
         local_time_int = ''
         time_diff_str = ''
         time_diff_int = ''
-    
+        time_diff_ms = ''
+
     return jsonify({
         'server_time_str': current_time_str,
         'server_time_int': current_time_int,
         'local_time_str': local_time_str,
         'local_time_int': local_time_int,
         'difference_time_str': time_diff_str,
-        'difference_time_int': time_diff_int
+        'difference_time_int': time_diff_int,
+        'difference_time_ms': time_diff_ms
     })
 
  
