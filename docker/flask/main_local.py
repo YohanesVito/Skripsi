@@ -5,16 +5,16 @@ import datetime, time
 app = Flask(__name__)
 
 # enable this when run on cloud 
-# app.config['MYSQL_HOST'] = 'mariadb'
-# app.config['MYSQL_USER'] = 'vito'
-# app.config['MYSQL_PASSWORD'] = '123'
-# app.config['MYSQL_DB'] = 'mokura'
+app.config['MYSQL_HOST'] = 'mariadb'
+app.config['MYSQL_USER'] = 'vito'
+app.config['MYSQL_PASSWORD'] = '123'
+app.config['MYSQL_DB'] = 'mokura'
 
 #enable this when run in local
-app.config['MYSQL_HOST'] = 'localhost'
-app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = ''
-app.config['MYSQL_DB'] = 'mokura'
+# app.config['MYSQL_HOST'] = 'localhost'
+# app.config['MYSQL_USER'] = 'root'
+# app.config['MYSQL_PASSWORD'] = ''
+# app.config['MYSQL_DB'] = 'mokura'
 
 mysql = MySQL(app)
    
