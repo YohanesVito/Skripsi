@@ -261,7 +261,38 @@ def get_servertime():
     current_time_int = int(current_time.timestamp() * 1000)  # convert the timestamp to milliseconds
     return jsonify({'server_time_str': current_time_str, 'server_time_int': current_time_int})
 
+@app.route('/server/time_difference', methods=['GET'])
+def get_servertime():
+    utc_offset = datetime.timedelta(hours=7)  # set the UTC offset to +7 hours
+    tz = datetime.timezone(utc_offset)  # create a timezone with the UTC offset
+    current_time = datetime.datetime.now(tz)
+    current_time_str = current_time.strftime('%Y-%m-%d %H:%M:%S.%f')
+    current_time_int = int(current_time.timestamp() * 1000)  # convert the timestamp to milliseconds
 
+    response = ()
+    hardware_name = request.form.get('local_time_int', default_value)
+    if local_time_int:
+        local_time = datetime.datetime.fromtimestamp(int(local_time_int))
+        local_time_str = local_time.strftime('%Y-%m-%d %H:%M:%S.%f')
+        time_diff = current_time - local_time
+        time_diff_str = str(time_diff)
+        time_diff_int = int(time_diff.total_seconds() * 1000)
+    else:
+        local_time_str = ''
+        local_time_int = ''
+        time_diff_str = ''
+        time_diff_int = ''
+    
+    return jsonify({
+        'server_time_str': current_time_str,
+        'server_time_int': current_time_int,
+        'local_time_str': local_time_str,
+        'local_time_int': local_time_int,
+        'difference_time_str': time_diff_str,
+        'difference_time_int': time_diff_int
+    })
+
+ 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=6969,debug=True)
 
