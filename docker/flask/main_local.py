@@ -103,16 +103,25 @@ def datalist():
             mysql.connection.commit()
             cur.close()
         
-         # get current timestamp
-        timestamp = int(time.time())
+        # get current timestamp in UTC timezone
+        utc_timestamp = datetime.datetime.utcnow()
+        
+        # create UTC+7 timezone object
+        timezone_offset = datetime.timedelta(hours=7)
+        
+        # convert to UTC+7 timezone
+        timestamp = utc_timestamp + timezone_offset
+        
+        # convert to timestamp format
+        timestamp_unix = int(timestamp.timestamp())
         
         # create response dictionary
         response = {
             'message': 'data inserted!',
-            'server_time_str': time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(timestamp)),
-            'server_time_int': timestamp
+            'server_time_str': timestamp.strftime('%Y-%m-%d %H:%M:%S'),
+            'server_time_int': timestamp_unix
         }
-    
+        
         return jsonify(response)
     
     elif request.method == 'GET':
