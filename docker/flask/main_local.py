@@ -256,9 +256,10 @@ def get_all_mokura():
 def get_servertime():
     utc_offset = datetime.timedelta(hours=7)  # set the UTC offset to +7 hours
     tz = datetime.timezone(utc_offset)  # create a timezone with the UTC offset
-    current_time = datetime.datetime.now(tz).strftime('%Y-%m-%d %H:%M:%S.%f')
-    return jsonify({'server_time': current_time})
-
+    current_time = datetime.datetime.now(tz)
+    current_time_str = current_time.strftime('%Y-%m-%d %H:%M:%S.%f')
+    current_time_int = int(current_time.timestamp() * 1000)  # convert the timestamp to milliseconds
+    return jsonify({'server_time_str': current_time_str, 'server_time_int': current_time_int})
 
 
 if __name__ == "__main__":
