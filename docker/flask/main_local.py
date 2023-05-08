@@ -262,7 +262,7 @@ def get_servertime():
     return jsonify({'server_time_str': current_time_str, 'server_time_int': current_time_int})
 
 @app.route('/server/time_difference', methods=['GET'])
-def get_servertime():
+def get_servertime_diff():
     utc_offset = datetime.timedelta(hours=7)  # set the UTC offset to +7 hours
     tz = datetime.timezone(utc_offset)  # create a timezone with the UTC offset
     current_time = datetime.datetime.now(tz)
