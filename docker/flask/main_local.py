@@ -90,7 +90,7 @@ def register_mokura():
 
     cur.close()
 
-    return jsonify({"error": "false","id_hardware":response[0][0],"hardware_serial":response[0][1],"message": "hardware registered!"})
+    return jsonify({"error": "false","id_hardware":response[0][0],"hardware_serial":response[0][1],"hardware_name":response[0][2],"message": "hardware registered!"})
 
 #logging
 # @app.route('/logging/datalist', methods=['POST'])
