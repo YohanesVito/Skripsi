@@ -1,5 +1,6 @@
 from flask import Flask, jsonify, request
 from flask_mysqldb import MySQL
+import datetime
 
 app = Flask(__name__)
 
@@ -251,6 +252,11 @@ def get_all_mokura():
         return jsonify(listhardware)
     # return jsonify({"error": "false","id_hardware":response[0][0],"hardware_serial":response[0][1],"hardware_name": response[0][2]})
 
+
+@app.route('/server/time', methods=['GET'])
+def get_servertime():
+    current_time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f')
+    return jsonify({'server_time': current_time})
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=6969,debug=True)
