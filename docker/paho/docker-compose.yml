@@ -36,19 +36,8 @@ services:
       - PMA_HOST=mariadb
       - PMA_PORT=3306
 
-  # mqtt-broker:
-  #   image: eclipse-mosquitto:1.6
-  #   restart: always
-  #   expose:
-  #     - "1883"
-  #   ports:
-  #     - "1883:1883"
-  #   volumes:
-  #     - mosquitto_data:/mosquitto/data
-  #     - mosquitto_log:/mosquitto/log
-
   mqtt-broker:
-    image: paho-mqtt:latest
+    image: eclipse-mosquitto:1.6
     restart: always
     expose:
       - "1883"
@@ -58,7 +47,6 @@ services:
       - mosquitto_data:/mosquitto/data
       - mosquitto_log:/mosquitto/log
     
-
   # emqx:
   #   image: emqx/emqx:latest
   #   expose:
@@ -69,10 +57,10 @@ services:
   #     - EMQX_LOADED_PLUGINS=emqx_recon,emqx_management
   #   restart: always
 
-  # script:
-  #   build: .
-  #   expose:
-  #     - "1883"
+  script:
+    build: .
+    expose:
+      - "1883"
 
 
 
