@@ -6,8 +6,8 @@ import User
 import Logging
 
 # MQTT broker settings
-# broker_address = "mqtt-broker"
-broker_address = "emqx"
+broker_address = "mqtt-broker"
+# broker_address = "emqx"
 broker_port = 1883
 
 # local MQTT broker settings
@@ -99,7 +99,7 @@ def on_message(client,userdata,msg):
 client = mqtt.Client()
 client.on_connect = on_connect
 client.on_message = on_message
-client.connect(broker_address, broker_port,60)
+client.connect(broker_address, broker_port, 60)
 
 # Start the MQTT clients
 client.loop_forever()
