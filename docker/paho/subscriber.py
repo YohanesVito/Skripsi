@@ -6,8 +6,8 @@ import User
 import Logging
 
 # MQTT broker settings
-broker_address = "mqtt-broker"
-# broker_address = "emqx"
+# broker_address = "mqtt-broker"
+broker_address = "emqx"
 broker_port = 1883
 
 # local MQTT broker settings
