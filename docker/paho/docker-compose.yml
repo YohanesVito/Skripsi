@@ -49,14 +49,10 @@ services:
 
   emqx:
     image: emqx/emqx:latest
-    container_name: emqx
     expose:
       - "1883"
     ports:
       - "1883:1883"
-      - "8883:8883"
-      - "8081:8081"
-      - "8083:8083"
     environment:
       - EMQX_LOADED_PLUGINS=emqx_recon,emqx_management
     restart: always
