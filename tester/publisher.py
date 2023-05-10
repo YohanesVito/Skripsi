@@ -4,10 +4,10 @@ import json
 
 # Set up MQTT client
 client = mqtt.Client("1")
-# broker_address = "35.171.206.57"
-# broker_port = 1883
-broker_address = "broker.emqx.io"
+broker_address = "35.171.206.57"
 broker_port = 1883
+# broker_address = "broker.emqx.io"
+# broker_port = 1883
 qos = 0
 
 client.connect(broker_address, broker_port)
