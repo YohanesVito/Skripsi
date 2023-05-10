@@ -33,7 +33,7 @@ def on_message(client, userdata, msg):
         if msg.topic == "mokura/user":
             # Deserialize the message payload into a User object
             user_data = json.loads(msg.payload.decode())
-            user = User(**user_data)
+            user = User.User(**user_data)
 
             # Insert the user data into the MySQL database
             sql = "INSERT INTO users (email, username, password) VALUES (%s, %s, %s)"
@@ -44,7 +44,7 @@ def on_message(client, userdata, msg):
         elif msg.topic == "mokura/hardware":
             # Deserialize the message payload into a Hardware object
             hardware_data = json.loads(msg.payload.decode())
-            hardware = Hardware(**hardware_data)
+            hardware = Hardware.Hardware(**hardware_data)
 
             # Insert the Hardware object into the database
             sql = "INSERT INTO hardware (hardware_name, hardware_address) VALUES (%s, %s)"
@@ -55,7 +55,7 @@ def on_message(client, userdata, msg):
         elif msg.topic == "mokura/logging":
             # Deserialize the message payload into a Logging object
             logging_data = json.loads(msg.payload.decode())
-            logging = Logging(**logging_data)
+            logging = Logging.Logging(**logging_data)
 
             # Insert the Logging object into the database
             sql = "INSERT INTO logging (idHardware, idUser, timeStamp, speed, rpm, battery, lat, lon, compass, dutyCycle) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
