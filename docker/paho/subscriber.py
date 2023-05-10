@@ -9,6 +9,11 @@ import Logging
 broker_address = "mqtt-broker"
 broker_port = 1883
 
+
+# local MQTT broker settings
+# broker_address = "broker.emqx.io"
+# broker_port = 1883
+
 # Define the MQTT topics
 user_topic = "mokura/user"
 hardware_topic = "mokura/hardware"
@@ -20,7 +25,20 @@ db_user = "vito"
 db_password = "123"
 db_name = "mokura"
 
-def on_message(client, userdata, msg):
+# local database settings
+# db_host = 'localhost'
+# db_user = 'root'
+# db_password = ''
+# db_name = "mokura"
+
+def on_connect(client, userdata, flags, rc):
+    print("Connected to MQTT broker with result code "+str(rc))
+    client.subscribe(logging_topic)
+    client.subscribe(hardware_topic)
+    client.subscribe(user_topic)
+
+def on_message(client,userdata,msg):
+
     print("Received message on topic "+msg.topic+": "+msg.payload.decode())
 
     try:
@@ -47,8 +65,8 @@ def on_message(client, userdata, msg):
             hardware = Hardware.Hardware(**hardware_data)
 
             # Insert the Hardware object into the database
-            sql = "INSERT INTO hardware (hardware_name, hardware_address) VALUES (%s, %s)"
-            val = (hardware.hardware_name, hardware.hardware_address)
+            sql = "INSERT INTO mokura (hardware_name, hardware_serial) VALUES (%s, %s)"
+            val = (hardware.hardware_name, hardware.hardware_serial)
             cursor.execute(sql, val)
             db.commit()
 
@@ -58,8 +76,8 @@ def on_message(client, userdata, msg):
             logging = Logging.Logging(**logging_data)
 
             # Insert the Logging object into the database
-            sql = "INSERT INTO logging (idHardware, idUser, timeStamp, speed, rpm, battery, lat, lon, compass, dutyCycle) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
-            val = (logging.idHardware, logging.idUser, logging.timeStamp, logging.speed, logging.rpm, logging.battery, logging.lat, logging.lon, logging.compass, logging.dutyCycle)
+            sql = "INSERT INTO logging (id_hardware, id_user, time_stamp, speed, rpm, battery, lat, lon, compass, duty_cycle) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+            val = (logging.id_hardware, logging.id_user, logging.time_stamp, logging.speed, logging.rpm, logging.battery, logging.lat, logging.lon, logging.compass, logging.duty_cycle)
             cursor.execute(sql, val)
             db.commit()
 
@@ -76,24 +94,10 @@ def on_message(client, userdata, msg):
 
 
 # Create the MQTT client for the user topic and subscribe to the topic
-user_client = mqtt.Client("user_client")
-user_client.connect(broker_address, broker_port)
-user_client.subscribe(user_topic)
-user_client.on_message = on_message
-
-# Create the MQTT client for the hardware topic and subscribe to the topic
-hardware_client = mqtt.Client("hardware_client")
-hardware_client.connect(broker_address, broker_port)
-hardware_client.subscribe(hardware_topic)
-hardware_client.on_message = on_message
-
-# Create the MQTT client for the logging topic and subscribe to the topic
-logging_client = mqtt.Client("logging_client")
-logging_client.connect(broker_address, broker_port)
-logging_client.subscribe(logging_topic)
-logging_client.on_message = on_message
+client = mqtt.Client()
+client.on_connect = on_connect
+client.on_message = on_message
+client.connect(broker_address, broker_port,60)
 
 # Start the MQTT clients
-user_client.loop_start()
-hardware_client.loop_start()
-logging_client.loop_start()
+client.loop_forever()

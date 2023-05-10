@@ -6,7 +6,11 @@ import json
 client = mqtt.Client()
 broker_address = "35.171.206.57"
 broker_port = 1883
+# broker_address = "broker.emqx.io"
+# broker_port = 1883
 qos = 0
+
+client.connect(broker_address, broker_port)
 
 # Define the MQTT topics
 user_topic = "mokura/user"
@@ -19,12 +23,12 @@ user_payload = json.dumps(user.__dict__)
 client.publish(user_topic, user_payload, qos)
 
 # Publish message for hardware topic
-hardware = Hardware.Hardware(222,"test_hardware", "12:34:56:78:90:ab")
+hardware = Hardware.Hardware(222,"test_hardware", "12:34:56:78:90")
 hardware_payload = json.dumps(hardware.__dict__)
 client.publish(hardware_topic, hardware_payload, qos)
 
 # Publish message for logging topic
-logging = Logging.Logging(222,"test1234", "5678", "50", "5000", "90", "1.234567", "5.678901", "180", "50")
+logging = Logging.Logging(222,222,"test1234", "5678", "50", "5000", "90", "1.234567", "5.678901", "180", "50")
 logging_payload = json.dumps(logging.__dict__)
 client.publish(logging_topic, logging_payload, qos)
 
