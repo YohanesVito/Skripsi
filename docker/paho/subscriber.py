@@ -6,13 +6,13 @@ import User
 import Logging
 
 # MQTT broker settings
-broker_address = "mqtt-broker"
-broker_port = 1883
+# broker_address = "mqtt-broker"
+# broker_port = 1883
 
 
 # local MQTT broker settings
-# broker_address = "broker.emqx.io"
-# broker_port = 1883
+broker_address = "broker.emqx.io"
+broker_port = 1883
 
 # Define the MQTT topics
 user_topic = "mokura/user"
@@ -20,16 +20,16 @@ hardware_topic = "mokura/hardware"
 logging_topic = "mokura/logging"
 
 # MySQL database settings
-db_host = "mariadb"
-db_user = "vito"
-db_password = "123"
-db_name = "mokura"
+# db_host = "mariadb"
+# db_user = "vito"
+# db_password = "123"
+# db_name = "mokura"
 
 # local database settings
-# db_host = 'localhost'
-# db_user = 'root'
-# db_password = ''
-# db_name = "mokura"
+db_host = 'localhost'
+db_user = 'root'
+db_password = ''
+db_name = "mokura"
 
 def on_connect(client, userdata, flags, rc):
     print("Connected to MQTT broker with result code "+str(rc))
@@ -80,6 +80,8 @@ def on_message(client,userdata,msg):
             val = (logging.id_hardware, logging.id_user, logging.time_stamp, logging.speed, logging.rpm, logging.battery, logging.lat, logging.lon, logging.compass, logging.duty_cycle)
             cursor.execute(sql, val)
             db.commit()
+            print("Inserted data into database")
+
 
         else:
             print("Invalid topic")

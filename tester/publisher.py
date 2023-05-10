@@ -3,11 +3,11 @@ import User, Hardware, Logging
 import json
 
 # Set up MQTT client
-client = mqtt.Client()
-broker_address = "35.171.206.57"
-broker_port = 1883
-# broker_address = "broker.emqx.io"
+client = mqtt.Client("1")
+# broker_address = "35.171.206.57"
 # broker_port = 1883
+broker_address = "broker.emqx.io"
+broker_port = 1883
 qos = 0
 
 client.connect(broker_address, broker_port)
@@ -28,9 +28,10 @@ hardware_payload = json.dumps(hardware.__dict__)
 client.publish(hardware_topic, hardware_payload, qos)
 
 # Publish message for logging topic
-logging = Logging.Logging(222,222,"test1234", "5678", "50", "5000", "90", "1.234567", "5.678901", "180", "50")
+logging = Logging.Logging("25","3","ppppp", "ppppp", "asd", "asd", "asd", "asd", "asd", "asd", "asd")
 logging_payload = json.dumps(logging.__dict__)
 client.publish(logging_topic, logging_payload, qos)
+client.loop(timeout=2)
 
 # Disconnect from MQTT broker
 client.disconnect()
