@@ -28,7 +28,19 @@ hardware_payload = json.dumps(hardware.__dict__)
 client.publish(hardware_topic, hardware_payload, qos)
 
 # Publish message for logging topic
-logging = Logging.Logging("25","3","2", "2", "2", "asd", "asd", "asd", "asd", "asd", "asd")
+logging = Logging.Logging(
+    id_logging= "default",
+    id_hardware=25,
+    id_user=3, 
+    time_stamp="test time", 
+    speed="test spd", 
+    rpm="test rpm", 
+    battery="test bat", 
+    lat="test lat", 
+    lon="test lon", 
+    compass="test compas", 
+    duty_cycle="test dc"
+    )
 logging_payload = json.dumps(logging.__dict__)
 client.publish(logging_topic, logging_payload, qos)
 client.loop(timeout=2)

@@ -5,7 +5,6 @@ import Hardware, User, Logging
 
 # MQTT broker settings
 broker_address = "mqtt-broker"
-# broker_address = "emqx"
 broker_port = 1883
 
 # local MQTT broker settings
@@ -53,6 +52,7 @@ def on_message(client,userdata,msg):
 
             # Insert the user data into the MySQL database
             sql = "INSERT INTO users (email, username, password) VALUES (%s, %s, %s)"
+            print(sql)
             val = (user.email, user.username, user.password)
             cursor.execute(sql, val)
             db.commit()
@@ -64,6 +64,7 @@ def on_message(client,userdata,msg):
 
             # Insert the Hardware object into the database
             sql = "INSERT INTO mokura (hardware_name, hardware_serial) VALUES (%s, %s)"
+            print(sql)
             val = (hardware.hardware_name, hardware.hardware_serial)
             cursor.execute(sql, val)
             db.commit()
@@ -75,6 +76,7 @@ def on_message(client,userdata,msg):
 
             # Insert the Logging object into the database
             sql = "INSERT INTO logging (id_hardware, id_user, time_stamp, speed, rpm, battery, lat, lon, compass, duty_cycle) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+            print(sql)
             val = (logging.id_hardware, logging.id_user, logging.time_stamp, logging.speed, logging.rpm, logging.battery, logging.lat, logging.lon, logging.compass, logging.duty_cycle)
             cursor.execute(sql, val)
             db.commit()

@@ -47,16 +47,6 @@ services:
       - mosquitto_data:/mosquitto/data
       - mosquitto_log:/mosquitto/log
     
-  # emqx:
-  #   image: emqx/emqx:latest
-  #   expose:
-  #     - "1883"
-  #   ports:
-  #     - "1883:1883"
-  #   environment:
-  #     - EMQX_LOADED_PLUGINS=emqx_recon,emqx_management
-  #   restart: always
-
   script:
     build: .
     expose:
