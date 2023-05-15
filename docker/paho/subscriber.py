@@ -1,13 +1,11 @@
 import paho.mqtt.client as mqtt
 import json
 import MySQLdb
-import Hardware
-import User
-import Logging
+import Hardware, User, Logging
 
 # MQTT broker settings
-# broker_address = "mqtt-broker"
-broker_address = "emqx"
+broker_address = "mqtt-broker"
+# broker_address = "emqx"
 broker_port = 1883
 
 # local MQTT broker settings

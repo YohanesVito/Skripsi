@@ -13,18 +13,3 @@ class Logging:
         self.lon = lon
         self.compass = compass
         self.duty_cycle = duty_cycle
-
-    def to_dict(self):
-        return {
-            "id_logging": self.id_logging,
-            "id_hardware": self.id_hardware,
-            "id_user": self.id_user,
-            "time_stamp": self.time_stamp,
-            "speed": self.speed,
-            "rpm": self.rpm,
-            "battery": self.battery,
-            "lat": self.lat,
-            "lon": self.lon,
-            "compass": self.compass,
-            "duty_cycle": self.duty_cycle
-        }
