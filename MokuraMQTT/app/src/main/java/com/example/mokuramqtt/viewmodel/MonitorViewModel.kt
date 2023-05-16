@@ -3,12 +3,12 @@ package com.example.mokuramqtt.viewmodel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.mokuramqtt.database.Mokura
+import com.example.mokuramqtt.model.UserModel
 import com.example.mokuramqtt.repository.MokuraRepository
-import com.example.mokuramqtt.utils.CSVLogger2
 
 class MonitorViewModel(private val mokuraRepository: MokuraRepository): ViewModel() {
 
-    val valArrayLogging = ArrayList<Mokura>()
+    private val valArrayLogging = ArrayList<Mokura>()
 
     val arrayLogging: MutableLiveData<ArrayList<Mokura>> by lazy {
         MutableLiveData<ArrayList<Mokura>>()
@@ -32,15 +32,17 @@ class MonitorViewModel(private val mokuraRepository: MokuraRepository): ViewMode
 
     fun uploadData()= mokuraRepository.postLogging(valArrayLogging)
 
+    fun getUser()= mokuraRepository.getUser()
+
+
     fun saveHardware(hardwareSerial: String, hardwareName: String) = mokuraRepository.postHardware(hardwareSerial,hardwareName)
 
-    fun saveData(mMokura: Mokura) {
-        val mUser = mokuraRepository.getUser()
-        val idUser = mUser.value?.id_user
-        val idHardware = mUser.value?.id_hardware
+    fun saveData(mUser: UserModel, mMokura: Mokura) {
+        val idUser = mUser.id_user
+        val idHardware = mUser.id_hardware
         val newMokura = Mokura(
-            idUser = idUser?.toInt() ?: throw IllegalStateException("User ID is null"),
-            idHardware = idHardware?.toInt() ?: throw IllegalStateException("Hardware ID is null"),
+            idUser = idUser.toInt(),
+            idHardware = idHardware.toInt(),
             timeStamp = mMokura.timeStamp,
             speed = mMokura.speed,
             rpm = mMokura.rpm,
@@ -51,16 +53,6 @@ class MonitorViewModel(private val mokuraRepository: MokuraRepository): ViewMode
             lon = mMokura.lon,
         )
         mokuraRepository.insertMokura(newMokura)
-    }
-
-
-    fun writeToCSV() {
-        arrayLogging.value?.let { list ->
-            for (mokura in list) {
-                // Code to write Mokura object to CSV file
-                CSVLogger2().logToCsv(mokura)
-            }
-        }
     }
 
 }

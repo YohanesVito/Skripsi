@@ -1,8 +1,6 @@
 package com.example.mokuramqtt.ui.monitoring
 
-import android.Manifest
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.os.*
 import android.util.Log
 import android.view.View
@@ -13,22 +11,20 @@ import android.view.animation.RotateAnimation
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.example.mokuramqtt.Constants
 import com.example.mokuramqtt.Constants.Companion.DURATION
-import com.example.mokuramqtt.Constants.Companion.REQUEST_CODE_PERMISSIONS
-import com.example.mokuramqtt.Constants.Companion.REQUIRED_PERMISSIONS
 import com.example.mokuramqtt.R
 import com.example.mokuramqtt.ViewModelFactory
 import com.example.mokuramqtt.database.Mokura
 import com.example.mokuramqtt.databinding.ActivityMonitorBinding
 import com.example.mokuramqtt.helper.DateHelper
+import com.example.mokuramqtt.model.UserModel
 import com.example.mokuramqtt.utils.Accelerometer
 import com.example.mokuramqtt.utils.BluetoothService
 import com.example.mokuramqtt.utils.Location
 import com.example.mokuramqtt.viewmodel.MonitorViewModel
+
 
 class MonitorActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMonitorBinding
@@ -40,6 +36,7 @@ class MonitorActivity : AppCompatActivity() {
     private lateinit var mName: String
     private lateinit var mHandler: Handler
     private lateinit var compass: String
+    private lateinit var mUser: UserModel
     private var lat: String = ""
     private var lon: String = ""
 
@@ -58,8 +55,9 @@ class MonitorActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         //get bluetooth address and name
-        mAddress = "B4:9D:02:8D:76:9C"
+        mAddress = intent.getStringExtra(EXTRA_ADDRESS).toString()
         mName = intent.getStringExtra(EXTRA_NAME).toString()
+        Log.d("Blutut","$mName - $mAddress")
 
         setupView()
         setupViewModel()
@@ -83,6 +81,7 @@ class MonitorActivity : AppCompatActivity() {
         mLocation.setUpLocation()
     }
 
+    @RequiresApi(Build.VERSION_CODES.R)
     private fun setupAction() {
         val mArrayMokura = ArrayList<Mokura>()
         //insert hardware to SP and post to cloud
@@ -122,10 +121,11 @@ class MonitorActivity : AppCompatActivity() {
                     )
 
                 //save data to db
-                monitorViewModel.saveData(newData)
+                monitorViewModel.saveData(mUser,newData)
+
+                updateUI(newData)
 
                 //logging data to csv
-                updateUI(newData)
                 mArrayMokura.add(newData)
                 Log.d("maray size",mArrayMokura.size.toString())
                 if(mArrayMokura.size >= MAX_CAPACITY){
@@ -139,22 +139,9 @@ class MonitorActivity : AppCompatActivity() {
 
         //logging data to cloud using http
         monitorViewModel.arrayLogging.observe(this){
-            Log.d("size",it.size.toString())
-            monitorViewModel.uploadData()
-
             //csv writer
             Log.d("arraylogging",it.toString())
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                // If the app doesn't have permission, request it from the user
-                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE), REQUEST_CODE_PERMISSIONS)
-                return@observe
-            }
-            if (ContextCompat.checkSelfPermission(this, REQUIRED_PERMISSIONS[0]) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this, REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS)
-            } else {
-                // Permission already granted, proceed with writing to external storage
-//                monitorViewModel.writeToCSV()
-            }
+            monitorViewModel.uploadData()
 
         }
 
@@ -177,12 +164,11 @@ class MonitorActivity : AppCompatActivity() {
         }
 
     }
-
     private fun updateUI(newData: Mokura) {
         val rpm = newData.rpm.toDouble().toInt()
         val speed = newData.speed.toDouble().toInt()
         val battery = newData.battery.toDouble().toInt()
-        val dutyCycle = newData.dutyCycle.toDouble().toInt()
+        val dutyCycle = newData.dutyCycle.toFloat().toInt()
 
         updateSpeed(speed)
         updateRPM(dutyCycle)
@@ -302,5 +288,9 @@ class MonitorActivity : AppCompatActivity() {
             this,
             ViewModelFactory(this)
         )[MonitorViewModel::class.java]
+
+        monitorViewModel.getUser().observe(this){
+            mUser = it
+        }
     }
 }

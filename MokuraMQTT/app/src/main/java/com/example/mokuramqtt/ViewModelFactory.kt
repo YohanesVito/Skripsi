@@ -25,9 +25,9 @@ class ViewModelFactory(private val context: Context) : ViewModelProvider.NewInst
             modelClass.isAssignableFrom(MonitorViewModel::class.java) -> {
                 MonitorViewModel(Injection.provideRepository(context)) as T
             }
-//            modelClass.isAssignableFrom(MapsViewModel::class.java) -> {
-//                MapsViewModel(Injection.provideRepository(context)) as T
-//            }
+            modelClass.isAssignableFrom(TestingViewModel::class.java) -> {
+                TestingViewModel(Injection.provideRepository2(context)) as T
+            }
             else -> throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
         }
     }

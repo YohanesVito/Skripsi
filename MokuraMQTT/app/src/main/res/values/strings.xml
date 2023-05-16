@@ -1,4 +1,4 @@
 <resources>
-    <string name="app_name">MokuraMQTT</string>
+    <string name="app_name">Mokura Sensor Display</string>
     <string name="welcome">Selamat Datang, %s</string>
 </resources>

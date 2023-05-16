@@ -28,15 +28,17 @@ class PairActivity : AppCompatActivity() {
     companion object{
         const val EXTRA_ADDRESS: String = "Device Address"
         const val EXTRA_NAME: String = "Device Name"
+        private const val REQUEST_CODE_ALL_PERMISSIONS = 1
     }
 
-    @RequiresApi(Build.VERSION_CODES.M)
+    @RequiresApi(Build.VERSION_CODES.S)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPairBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         setupView()
+        setupAllPermission()
         setupBluetooth()
 
         binding.rvBt.setHasFixedSize(true)
@@ -103,6 +105,8 @@ class PairActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
+
+
     private fun showRecylerList(list: ArrayList<BluetoothDevice>) {
         binding.rvBt.layoutManager = LinearLayoutManager(this)
 
@@ -136,4 +140,24 @@ class PairActivity : AppCompatActivity() {
         }
         supportActionBar?.hide()
     }
+
+    @RequiresApi(Build.VERSION_CODES.S)
+    private fun setupAllPermission() {
+        val permissions = arrayOf(
+            Manifest.permission.BLUETOOTH_CONNECT,
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.MANAGE_EXTERNAL_STORAGE
+        )
+
+        val notGrantedPermissions = permissions.filter {
+            ContextCompat.checkSelfPermission(this, it) != PackageManager.PERMISSION_GRANTED
+        }
+
+        if (notGrantedPermissions.isNotEmpty()) {
+            ActivityCompat.requestPermissions(
+                this, notGrantedPermissions.toTypedArray(), REQUEST_CODE_ALL_PERMISSIONS
+            )
+        }
+    }
+
 }

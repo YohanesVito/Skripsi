@@ -39,7 +39,7 @@ class HomeActivity : AppCompatActivity() {
 
     private fun setupAction() {
         homeViewModel.getUser().observe(this) { user ->
-            if (user.isLogin) {
+            if (user.email != "") {
                 binding.tvUser.text = getString(R.string.welcome, user.name)
             } else {
                 startActivity(Intent(this, LoginActivity::class.java))
