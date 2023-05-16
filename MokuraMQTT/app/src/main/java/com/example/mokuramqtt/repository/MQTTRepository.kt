@@ -19,6 +19,10 @@ class MQTTRepository(
         mqttService.connect(context)
     }
 
+    fun subscribe(topic: String){
+        mqttService.subscribe(topic)
+    }
+
     fun publishUser(user: UserModel) {
         mqttService.publishUser(user)
     }

@@ -79,10 +79,28 @@ class MQTTService {
                     Log.d(TAG, "Failed to subscribe $topic")
                 }
             })
+
+            mqttClient.setCallback(object : MqttCallback {
+                override fun messageArrived(topic: String?, message: MqttMessage?) {
+                    // Handle the received message here
+                    val payload = message?.payload?.toString(Charsets.UTF_8)
+                    Log.d(TAG, "Received message: $payload from topic: $topic")
+                    // Add your logic to handle the incoming message
+                }
+
+                override fun connectionLost(cause: Throwable?) {
+                    Log.d(TAG, "Connection lost ${cause.toString()}")
+                }
+
+                override fun deliveryComplete(token: IMqttDeliveryToken?) {
+
+                }
+            })
         } catch (e: MqttException) {
             e.printStackTrace()
         }
     }
+
 
     fun unsubscribe(topic: String) {
         try {

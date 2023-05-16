@@ -33,6 +33,10 @@ class TestingActivity : AppCompatActivity() {
             testingViewModel.connect(this)
         }
 
+        binding.btSubscribe.setOnClickListener {
+            testingViewModel.subscribe("mokura/user_response")
+        }
+
         //publish user
         binding.btPublish.setOnClickListener {
             testingViewModel.publishUser(mUser)
