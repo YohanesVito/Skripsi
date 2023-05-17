@@ -97,18 +97,23 @@ def on_message(client,userdata,msg):
         db.close()
 
 def publish_response(message):
-    # get current UTC+7 timestamp in int format
+    # Get the current UTC+7 timestamp in int format
     utc7_timestamp = datetime.datetime.utcnow() + datetime.timedelta(hours=7)
     timestamp_int = int(utc7_timestamp.timestamp())
-    
-    # get current UTC+7 timestamp in string format
+
+    # Convert the timestamp to string format
     timestamp_str = utc7_timestamp.strftime('%Y-%m-%d %H:%M:%S')
-    
-    # create MQTT message and publish to "mokura/user_response" topic
-    mqttMessage = publish.MQTTMessage()
-    mqttMessage.payload = message + str(timestamp_int).encode('utf-8')
-    publish.single("mokura/user_response", payload=mqttMessage.payload, hostname=broker_address)
-    
+
+    # Create MQTT client and connect to the broker
+    mqtt_client = mqtt.Client()
+    mqtt_client.connect(broker_address, broker_port)
+
+    # Publish the message with the timestamp to "mokura/user_response" topic
+    payload = message + str(timestamp_int).encode('utf-8')
+    mqtt_client.publish("mokura/user_response", payload=payload, qos=1)
+
+    # Disconnect from the MQTT broker
+    mqtt_client.disconnect()
 
 # Create the MQTT client for the user topic and subscribe to the topic
 client = mqtt.Client()
