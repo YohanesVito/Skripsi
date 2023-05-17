@@ -109,11 +109,12 @@ def publish_response(message):
     mqtt_client.connect(broker_address, broker_port)
 
     # Publish the message with the timestamp to "mokura/user_response" topic
-    payload = message + str(timestamp_int).encode('utf-8')
+    payload = message + str(timestamp_int)
     mqtt_client.publish("mokura/user_response", payload=payload, qos=1)
 
     # Disconnect from the MQTT broker
     mqtt_client.disconnect()
+
 
 # Create the MQTT client for the user topic and subscribe to the topic
 client = mqtt.Client()
