@@ -4,6 +4,7 @@ import json
 import MySQLdb
 import Hardware, User, Logging
 import datetime
+import pytz
 
 # MQTT broker settings
 broker_address = "mqtt-broker"
@@ -97,19 +98,20 @@ def on_message(client,userdata,msg):
         db.close()
 
 def publish_response(message):
-    # Get the current UTC+7 timestamp in int format
-    utc7_timestamp = datetime.datetime.utcnow() + datetime.timedelta(hours=7)
-    timestamp_int = int(utc7_timestamp.timestamp())
+    # Get the current Jakarta timestamp in int format
+    jakarta_timezone = pytz.timezone('Asia/Jakarta')
+    jakarta_timestamp = datetime.datetime.now(jakarta_timezone)
+    timestamp_int = int(jakarta_timestamp.timestamp())
 
     # Convert the timestamp to string format
-    timestamp_str = utc7_timestamp.strftime('%Y-%m-%d %H:%M:%S')
+    timestamp_str = jakarta_timestamp.strftime("%Y/%m/%d %H:%M:%S:%f")
 
     # Create MQTT client and connect to the broker
     mqtt_client = mqtt.Client()
     mqtt_client.connect(broker_address, broker_port)
 
     # Publish the message with the timestamp to "mokura/user_response" topic
-    payload = message + str(timestamp_int)
+    payload = message + str(timestamp_str)
     mqtt_client.publish("mokura/user_response", payload=payload, qos=1)
 
     # Disconnect from the MQTT broker
