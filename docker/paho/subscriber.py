@@ -1,7 +1,9 @@
 import paho.mqtt.client as mqtt
+import paho.mqtt.publish as publish
 import json
 import MySQLdb
 import Hardware, User, Logging
+import datetime
 
 # MQTT broker settings
 broker_address = "mqtt-broker"
@@ -52,7 +54,7 @@ def on_message(client,userdata,msg):
 
             # Insert the user data into the MySQL database
             sql = "INSERT INTO users (email, username, password) VALUES (%s, %s, %s)"
-            print(sql)
+            publish_response("user inserted! ")
             val = (user.email, user.username, user.password)
             cursor.execute(sql, val)
             db.commit()
@@ -61,10 +63,10 @@ def on_message(client,userdata,msg):
             # Deserialize the message payload into a Hardware object
             hardware_data = json.loads(msg.payload.decode())
             hardware = Hardware.Hardware(**hardware_data)
-
+            publish_response("hardware inserted! ")
             # Insert the Hardware object into the database
             sql = "INSERT INTO mokura (hardware_name, hardware_serial) VALUES (%s, %s)"
-            print(sql)
+            
             val = (hardware.hardware_name, hardware.hardware_serial)
             cursor.execute(sql, val)
             db.commit()
@@ -76,7 +78,7 @@ def on_message(client,userdata,msg):
 
             # Insert the Logging object into the database
             sql = "INSERT INTO logging (id_hardware, id_user, time_stamp, speed, rpm, battery, lat, lon, compass, duty_cycle) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
-            print(sql)
+            publish_response("logging inserted! ")
             val = (logging.id_hardware, logging.id_user, logging.time_stamp, logging.speed, logging.rpm, logging.battery, logging.lat, logging.lon, logging.compass, logging.duty_cycle)
             cursor.execute(sql, val)
             db.commit()
@@ -94,6 +96,19 @@ def on_message(client,userdata,msg):
         cursor.close()
         db.close()
 
+def publish_response(message):
+    # get current UTC+7 timestamp in int format
+    utc7_timestamp = datetime.datetime.utcnow() + datetime.timedelta(hours=7)
+    timestamp_int = int(utc7_timestamp.timestamp())
+    
+    # get current UTC+7 timestamp in string format
+    timestamp_str = utc7_timestamp.strftime('%Y-%m-%d %H:%M:%S')
+    
+    # create MQTT message and publish to "mokura/user_response" topic
+    mqttMessage = publish.MQTTMessage()
+    mqttMessage.payload = message + str(timestamp_int).encode('utf-8')
+    publish.single("mokura/user_response", payload=mqttMessage.payload, hostname=broker_address)
+    
 
 # Create the MQTT client for the user topic and subscribe to the topic
 client = mqtt.Client()
