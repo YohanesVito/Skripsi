@@ -97,7 +97,14 @@ def register_mokura():
 def datalist():
     if request.method == 'POST':
         datas = request.get_json()
-        packet_size = sys.getsizeof(datas)
+        # Convert data to JSON string
+        json_data = json.dumps(data)
+
+        # Convert JSON string to byte array
+        byte_array = json_data.encode('utf-8')
+
+        # Calculate packet size
+        packet_size = len(byte_array)
 
         # parsing data list
         for data in datas:
