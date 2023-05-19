@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, request
 from flask_mysqldb import MySQL
 import datetime, time
+import sys
 
 app = Flask(__name__)
 
@@ -96,6 +97,8 @@ def register_mokura():
 def datalist():
     if request.method == 'POST':
         datas = request.get_json()
+        packet_size = sys.getsizeof(datas)
+
         # parsing data list
         for data in datas:
             cur = mysql.connection.cursor()
@@ -118,6 +121,7 @@ def datalist():
         # create response dictionary
         response = {
             'message': 'data inserted!',
+            'packet_size': packet_size,
             'server_time_str': timestamp.strftime('%Y-%m-%d %H:%M:%S'),
             'server_time_int': timestamp_unix
         }
