@@ -99,7 +99,7 @@ def datalist():
     if request.method == 'POST':
         datas = request.get_json()
         # Convert data to JSON string
-        json_data = json.dumps(data)
+        json_data = json.dumps(datas)
 
         # Convert JSON string to byte array
         byte_array = json_data.encode('utf-8')
