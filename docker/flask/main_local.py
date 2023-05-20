@@ -98,7 +98,7 @@ def register_mokura():
 def datalist():
     if request.method == 'POST':
         datas = request.get_json()
-        
+        # print(datas)
         # Convert data to JSON string
         json_data = json.dumps(datas)
 
@@ -110,7 +110,7 @@ def datalist():
 
         # parsing data list
         for data in datas:
-            id_logging = data['id_logging']
+            # print(data)
             id_user = data['id_user']
             id_hardware = data['id_hardware']
             time_stamp = data['time_stamp']
@@ -123,7 +123,7 @@ def datalist():
             duty_cycle = data['duty_cycle']
 
             cur = mysql.connection.cursor()
-            cur.execute("INSERT INTO logging (id_logging, id_user, id_hardware, time_stamp, lat, lon, compass, speed, rpm, battery, duty_cycle) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", (id_logging, id_user, id_hardware, time_stamp, lat, lon, compass, speed, rpm, battery, duty_cycle))
+            cur.execute("INSERT INTO logging (id_user, id_hardware, time_stamp, lat, lon, compass, speed, rpm, battery, duty_cycle) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", (id_user, id_hardware, time_stamp, lat, lon, compass, speed, rpm, battery, duty_cycle))
             mysql.connection.commit()
             cur.close()
         
