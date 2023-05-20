@@ -110,7 +110,7 @@ def datalist():
         # parsing data list
         for data in datas:
             cur = mysql.connection.cursor()
-            cur.execute("INSERT INTO logging (id_logging, id_user, id_hardware, time_stamp, lat, lon, compass, speed, rpm, battery, duty_cycle) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", tuple(data.values()))
+            cur.execute("INSERT INTO logging (id_logging, id_user, id_hardware, time_stamp, lat, lon, compass, speed, rpm, battery, duty_cycle) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", (tuple(data.values())))
             mysql.connection.commit()
             cur.close()
         
