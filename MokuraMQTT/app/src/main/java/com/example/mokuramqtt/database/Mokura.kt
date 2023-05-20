@@ -10,17 +10,17 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class Mokura(
     @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "idLogging")
-    val idLogging: Int? = null,
+    @ColumnInfo(name = "id_logging")
+    val id_logging: Int? = null,
 
-    @ColumnInfo(name = "idHardware")
-    var idHardware: Int? = null,
+    @ColumnInfo(name = "id_hardware")
+    val id_hardware: String,
 
-    @ColumnInfo(name = "idUser")
-    var idUser: Int? = null,
+    @ColumnInfo(name = "id_user")
+    val id_user: String,
 
-    @ColumnInfo(name = "timeStamp")
-    val timeStamp: String,
+    @ColumnInfo(name = "time_stamp")
+    val time_stamp: String,
 
     @ColumnInfo(name = "speed")
     val speed: String,
@@ -40,7 +40,7 @@ data class Mokura(
     @ColumnInfo(name = "compass")
     val compass: String,
 
-    @ColumnInfo(name = "dutyCycle")
-    val dutyCycle: String,
+    @ColumnInfo(name = "duty_cycle")
+    val duty_cycle: String,
 
-) : Parcelable
+    ) : Parcelable

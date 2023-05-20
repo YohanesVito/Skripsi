@@ -30,15 +30,26 @@
         app:layout_constraintTop_toBottomOf="@+id/tv_user" />
 
     <Button
-        android:id="@+id/bt_logout"
+        android:id="@+id/bt_logging"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:backgroundTint="@color/accent"
-        android:text="Logout"
+        android:text="Lihat Logging"
         app:layout_constraintEnd_toEndOf="@+id/bt_start"
         app:layout_constraintStart_toStartOf="@+id/bt_start"
         app:layout_constraintTop_toBottomOf="@+id/bt_start" />
+
+    <Button
+        android:id="@+id/bt_logout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/accent"
+        android:layout_marginTop="20dp"
+        android:text="Logout"
+        app:layout_constraintEnd_toEndOf="@+id/bt_logging"
+        app:layout_constraintHorizontal_bias="0.494"
+        app:layout_constraintStart_toStartOf="@+id/bt_logging"
+        app:layout_constraintTop_toBottomOf="@+id/bt_logging" />
 
     <ProgressBar
         android:id="@+id/progressBar"

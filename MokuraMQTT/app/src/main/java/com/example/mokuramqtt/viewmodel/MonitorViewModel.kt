@@ -1,5 +1,6 @@
 package com.example.mokuramqtt.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.mokuramqtt.database.Mokura
@@ -30,7 +31,8 @@ class MonitorViewModel(private val mokuraRepository: MokuraRepository): ViewMode
         MutableLiveData<Int>()
     }
 
-    fun uploadData()= mokuraRepository.postLogging(valArrayLogging)
+    fun uploadData(data: ArrayList<Mokura>) = mokuraRepository.postLogging(data)
+
 
     fun getUser()= mokuraRepository.getUser()
 
@@ -41,13 +43,13 @@ class MonitorViewModel(private val mokuraRepository: MokuraRepository): ViewMode
         val idUser = mUser.id_user
         val idHardware = mUser.id_hardware
         val newMokura = Mokura(
-            idUser = idUser.toInt(),
-            idHardware = idHardware.toInt(),
-            timeStamp = mMokura.timeStamp,
+            id_user = idUser,
+            id_hardware = idHardware,
+            time_stamp = mMokura.time_stamp,
             speed = mMokura.speed,
             rpm = mMokura.rpm,
             battery = mMokura.battery,
-            dutyCycle = mMokura.dutyCycle,
+            duty_cycle = mMokura.duty_cycle,
             compass = mMokura.compass,
             lat = mMokura.lat,
             lon = mMokura.lon,

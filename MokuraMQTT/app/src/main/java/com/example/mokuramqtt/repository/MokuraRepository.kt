@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.asLiveData
 import com.example.mokuramqtt.database.*
+import com.example.mokuramqtt.helper.DateHelper
 import com.example.mokuramqtt.model.Result
 import com.example.mokuramqtt.model.UserModel
 import com.example.mokuramqtt.model.UserPreference
@@ -21,6 +22,9 @@ class MokuraRepository(
     private val apiService: ApiService,
     private val userPreference: UserPreference
 ) {
+    fun insertHTTP(mHTTP: HTTP) {
+        mokuraDatabase.httpDao().insertHTTP(mHTTP)
+    }
 
     fun insertUser(mUser: User) {
         mokuraDatabase.userDao().insertUser(mUser)
@@ -63,7 +67,6 @@ class MokuraRepository(
                         if (!responseBody.error!!) {
                             result.value = Result.Success(true)
                             val loginResult = responseBody.loginResult
-
 
                             //insert to Room
                             val mUser = User(
@@ -143,6 +146,9 @@ class MokuraRepository(
 
     //http
     fun postLogging(arrayLogging: ArrayList<Mokura>): LiveData<Result<Boolean>> {
+
+        val timeStart = DateHelper.getCurrentDate()
+        Log.d("ArrayLoggingRepo",arrayLogging.toString())
         val result = MutableLiveData<Result<Boolean>>()
         result.value = Result.Loading
         apiService.sendDataList(arrayLogging).enqueue(object : Callback<InsertLoggingResponse> {
@@ -151,9 +157,27 @@ class MokuraRepository(
                 response: Response<InsertLoggingResponse>
             ) {
                 if (response.isSuccessful) {
+
+                    val timeEnd = DateHelper.getCurrentDate()
+
+                    val timeDiff = DateHelper.calculateTimeDifference(timeStart, timeEnd)
+                    Log.d("timeDiff",timeDiff.toString())
+                    Log.d("Repo",response.message())
                     val responseBody = response.body()
                     if (responseBody != null){
                         result.value = Result.Success(true)
+
+                       //insert to http dao
+                        val mHTTP = HTTP(
+                            packetSize = responseBody.packetSize.toString(),
+                            sentTimeStamp = timeStart,
+                            receivedTimeStamp = timeEnd,
+                            timeDifference = timeDiff.toString()
+
+                        )
+
+                        insertHTTP(mHTTP)
+
                     }
                 }else {
                     result.value = Result.Error(response.message())

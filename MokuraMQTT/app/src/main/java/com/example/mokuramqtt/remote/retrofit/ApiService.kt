@@ -44,8 +44,8 @@ interface ApiService {
         @Field("password") password: String
     ): Call<RegisterResponse>
 
-    @Headers("Content-Type: application/json")
-    @POST("datalist")
+
+    @POST("logging/datalist")
     fun sendDataList(@Body body: ArrayList<Mokura>): Call<InsertLoggingResponse>
 
     @FormUrlEncoded

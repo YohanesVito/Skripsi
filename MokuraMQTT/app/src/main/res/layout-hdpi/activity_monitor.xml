@@ -35,12 +35,12 @@
         app:layout_constraintTop_toBottomOf="@+id/tv_timer2" />
 
     <TextView
-        android:id="@+id/tv_timer4"
+        android:id="@+id/tv_hardware_id_val"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="092122"
         android:textColor="@color/v2"
-        android:textSize="45sp"
+        android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@+id/tv_timer3"
         app:layout_constraintTop_toBottomOf="@+id/tv_timer3" />
@@ -72,16 +72,13 @@
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginStart="25dp"
+        android:layout_marginStart="55dp"
         app:borderColor="@color/v4"
         app:borderSize="10dp"
         app:fillColor="@color/blue2"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.108"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.374"
         app:maxSpeed="50"
         app:metricText="km/h"
         app:textColor="@color/text_icon"
@@ -261,6 +258,7 @@
         android:textColor="@color/v1"
         android:textSize="20sp"
         android:textStyle="bold"
+        app:layout_constraintHorizontal_bias="0.533"
         app:layout_constraintBottom_toTopOf="@+id/iv_battery"
         app:layout_constraintEnd_toEndOf="@+id/iv_battery"
         app:layout_constraintStart_toStartOf="@+id/iv_battery" />
@@ -299,26 +297,27 @@
         android:id="@+id/bt_disconnect"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="40dp"
-        android:layout_marginBottom="40dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
         android:backgroundTint="@color/blue3"
         android:text="Disconnect"
         android:textColor="@color/primary_text"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
+
     <Button
-        android:id="@+id/bt_test"
+        android:id="@+id/bt_details"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="40dp"
-        android:layout_marginBottom="100dp"
+        android:layout_marginEnd="12dp"
         android:backgroundTint="@color/blue3"
-        android:visibility="gone"
-        android:text="test"
+        android:text="Details"
         android:textColor="@color/primary_text"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintBottom_toBottomOf="@+id/bt_disconnect"
+        app:layout_constraintEnd_toStartOf="@+id/bt_disconnect"
+        app:layout_constraintTop_toTopOf="@+id/bt_disconnect"
+        app:layout_constraintVertical_bias="0.0" />
 
     <ProgressBar
         android:id="@+id/progressBar"

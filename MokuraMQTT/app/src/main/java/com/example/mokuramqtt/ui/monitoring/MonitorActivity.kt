@@ -20,6 +20,7 @@ import com.example.mokuramqtt.database.Mokura
 import com.example.mokuramqtt.databinding.ActivityMonitorBinding
 import com.example.mokuramqtt.helper.DateHelper
 import com.example.mokuramqtt.model.UserModel
+import com.example.mokuramqtt.ui.DetailsHttpActivity
 import com.example.mokuramqtt.utils.Accelerometer
 import com.example.mokuramqtt.utils.BluetoothService
 import com.example.mokuramqtt.utils.Location
@@ -57,7 +58,7 @@ class MonitorActivity : AppCompatActivity() {
         //get bluetooth address and name
         mAddress = intent.getStringExtra(EXTRA_ADDRESS).toString()
         mName = intent.getStringExtra(EXTRA_NAME).toString()
-        Log.d("Blutut","$mName - $mAddress")
+        binding.tvHardwareIdVal?.text = mAddress
 
         setupView()
         setupViewModel()
@@ -87,6 +88,7 @@ class MonitorActivity : AppCompatActivity() {
         //insert hardware to SP and post to cloud
         monitorViewModel.saveHardware(mAddress,mName)
 
+
         //observe bluetooth message
         monitorViewModel.dataBluetooth.observe(this) { bluetoothMessage ->
 
@@ -110,11 +112,13 @@ class MonitorActivity : AppCompatActivity() {
                 val timeStamp = DateHelper.getCurrentDate()
 
                 val newData = Mokura(
-                    timeStamp = timeStamp,
+                    id_hardware = mUser.id_hardware,
+                    id_user = mUser.id_user,
+                    time_stamp = timeStamp,
                     speed = speed.toString(),
                     rpm = rpm.toString(),
                     battery = battery.toString(),
-                    dutyCycle = dutyCycle,
+                    duty_cycle = dutyCycle,
                     compass = compass,
                     lat = lat,
                     lon = lon,
@@ -131,7 +135,7 @@ class MonitorActivity : AppCompatActivity() {
                 if(mArrayMokura.size >= MAX_CAPACITY){
                     monitorViewModel.arrayLogging.value = mArrayMokura
                     Log.d("LOGGING",monitorViewModel.arrayLogging.value.toString())
-                    mArrayMokura.clear()
+
                 }
 
             }
@@ -139,10 +143,10 @@ class MonitorActivity : AppCompatActivity() {
 
         //logging data to cloud using http
         monitorViewModel.arrayLogging.observe(this){
-            //csv writer
-            Log.d("arraylogging",it.toString())
-            monitorViewModel.uploadData()
 
+            Log.d("arraylogging",it.toString())
+            monitorViewModel.uploadData(it)
+            mArrayMokura.clear()
         }
 
         //update UI
@@ -163,12 +167,17 @@ class MonitorActivity : AppCompatActivity() {
             else binding.progressBar.visibility = View.GONE
         }
 
+        binding.btDetails?.setOnClickListener {
+            val intent = Intent(this,DetailsHttpActivity::class.java)
+            startActivity(intent)
+        }
+
     }
     private fun updateUI(newData: Mokura) {
         val rpm = newData.rpm.toDouble().toInt()
         val speed = newData.speed.toDouble().toInt()
         val battery = newData.battery.toDouble().toInt()
-        val dutyCycle = newData.dutyCycle.toFloat().toInt()
+        val dutyCycle = newData.duty_cycle.toFloat().toInt()
 
         updateSpeed(speed)
         updateRPM(dutyCycle)

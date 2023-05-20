@@ -11,7 +11,6 @@ import com.example.mokuramqtt.repository.MokuraRepository
 class TestingViewModel(private val mqttRepository: MQTTRepository): ViewModel(){
 
     fun connect(context: Context) = mqttRepository.connect(context)
-
     fun subscribe(topic: String) = mqttRepository.subscribe(topic)
     fun publishUser(user: UserModel) = mqttRepository.publishUser(user)
 

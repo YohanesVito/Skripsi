@@ -6,14 +6,16 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 
 @Database(
-    entities = [Mokura::class, Hardware::class, User::class],
-    version = 3,
+    entities = [Mokura::class, Hardware::class, User::class, HTTP::class, MQTT::class],
+    version = 8,
     exportSchema = false
 )
 abstract class MokuraDatabase : RoomDatabase() {
     abstract fun mokuraDao(): MokuraDao
     abstract fun hardwareDao(): HardwareDao
     abstract fun userDao(): UserDao
+    abstract fun mqttDao(): MQTTDao
+    abstract fun httpDao(): HTTPDao
 
     companion object {
         @Volatile

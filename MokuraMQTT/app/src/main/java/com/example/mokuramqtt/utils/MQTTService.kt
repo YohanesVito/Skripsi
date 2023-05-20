@@ -1,9 +1,12 @@
 package com.example.mokuramqtt.utils
 
 import android.content.Context
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import com.example.mokuramqtt.database.Hardware
 import com.example.mokuramqtt.database.Mokura
+import com.example.mokuramqtt.helper.DateHelper
 import com.example.mokuramqtt.model.UserModel
 import com.example.mokuramqtt.model.UserPublishModel
 import com.google.gson.Gson
@@ -81,10 +84,13 @@ class MQTTService {
             })
 
             mqttClient.setCallback(object : MqttCallback {
+                @RequiresApi(Build.VERSION_CODES.O)
                 override fun messageArrived(topic: String?, message: MqttMessage?) {
                     // Handle the received message here
                     val payload = message?.payload?.toString(Charsets.UTF_8)
                     Log.d(TAG, "Received message: $payload from topic: $topic")
+                    val timestamp = DateHelper.getCurrentDate()
+                    Log.d(TAG, "timestamp: $timestamp")
                     // Add your logic to handle the incoming message
                 }
 
@@ -150,6 +156,7 @@ class MQTTService {
         val mqttMessage = MqttMessage()
         mqttMessage.payload = userJson.toByteArray()
         mqttClient.publish(userTopic, mqttMessage)
+
     }
 
     fun publishHardware(hardware: Hardware) {
