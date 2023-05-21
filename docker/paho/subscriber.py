@@ -73,19 +73,21 @@ def on_message(client,userdata,msg):
             db.commit()
 
         elif msg.topic == "mokura/logging":
-            # Deserialize the message payload into a Logging object
+            timeStamp = getTimeStamp()
+            server_time_int = timeStamp[0]
+            server_time_str = timeStamp[1]
+
+            # Deserialize the message payload into a dictionary
             logging_data = json.loads(msg.payload.decode())
-            logging = Logging.Logging(**logging_data)
 
             # Insert the Logging object into the database
             sql = "INSERT INTO logging (id_hardware, id_user, time_stamp, speed, rpm, battery, lat, lon, compass, duty_cycle) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
-            publish_response("logging inserted! ")
-            val = (logging.id_hardware, logging.id_user, logging.time_stamp, logging.speed, logging.rpm, logging.battery, logging.lat, logging.lon, logging.compass, logging.duty_cycle)
+            val = (logging_data['id_hardware'], logging_data['id_user'], logging_data['time_stamp'], logging_data['speed'], logging_data['rpm'], logging_data['battery'], logging_data['lat'], logging_data['lon'], logging_data['compass'], logging_data['duty_cycle'])
             cursor.execute(sql, val)
             db.commit()
-            print("Inserted data into database")
 
-
+            publish_response("logging inserted!", len(msg.payload), server_time_int, server_time_str)
+            
         else:
             print("Invalid topic")
 
@@ -97,21 +99,39 @@ def on_message(client,userdata,msg):
         cursor.close()
         db.close()
 
-def publish_response(message):
-    # Get the current Jakarta timestamp in int format
-    jakarta_timezone = pytz.timezone('Asia/Jakarta')
-    jakarta_timestamp = datetime.datetime.now(jakarta_timezone)
-    timestamp_int = int(jakarta_timestamp.timestamp())
+def getTimeStamp():
+    # get current timestamp in UTC timezone
+    utc_timestamp = datetime.datetime.utcnow()
+    
+    # create UTC+7 timezone object
+    timezone_offset = datetime.timedelta(hours=7)
+    
+    # convert to UTC+7 timezone
+    timestamp = utc_timestamp + timezone_offset
 
-    # Convert the timestamp to string format
-    timestamp_str = jakarta_timestamp.strftime("%Y/%m/%d %H:%M:%S:%f")
+    server_time_int = int(timestamp.timestamp())
+
+    server_time_str = timestamp.strftime("%Y/%m/%d %H:%M:%S:%f")
+
+    return (server_time_int,server_time_str)
+
+def publish_response(message, packet_size, server_time_int, server_time_str):
+
+    response = {
+        'message': message,
+        'packet_size': packet_size,
+        'server_time_int':server_time_int,
+        'server_time_str':server_time_str
+    }
+
+    # Convert the response object to JSON format
+    payload = json.dumps(response)
 
     # Create MQTT client and connect to the broker
     mqtt_client = mqtt.Client()
     mqtt_client.connect(broker_address, broker_port)
 
-    # Publish the message with the timestamp to "mokura/user_response" topic
-    payload = message + str(timestamp_str)
+    # Publish the JSON payload to "mokura/user_response" topic
     mqtt_client.publish("mokura/user_response", payload=payload, qos=1)
 
     # Disconnect from the MQTT broker
