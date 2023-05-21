@@ -144,7 +144,7 @@ def datalist():
         response = {
             'message': 'data inserted!',
             'packet_size': packet_size,
-            'server_time_str': timestamp.strftime('%Y-%m-%d %H:%M:%S'),
+            'server_time_str': timestamp.strftime("%Y/%m/%d %H:%M:%S:%f"),
             'server_time_int': timestamp_unix
         }
         
