@@ -106,9 +106,10 @@ def on_message(client,userdata,msg):
                 compass = logging_data[8]
                 duty_cycle = logging_data[9]
 
+            print("idhardware: "+ str(id_hardware))
             # Insert the Logging object into the database
             sql = "INSERT INTO logging (id_hardware, id_user, time_stamp, speed, rpm, battery, lat, lon, compass, duty_cycle) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
-            val = (int(id_hardware), int(id_user), time_stamp, speed, rpm, battery, lat, lon, compass, duty_cycle)
+            val = (id_hardware, id_user, time_stamp, speed, rpm, battery, lat, lon, compass, duty_cycle)
             cursor.execute(sql, val)
             db.commit()
 
