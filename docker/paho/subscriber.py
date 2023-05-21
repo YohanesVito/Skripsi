@@ -82,8 +82,8 @@ def on_message(client,userdata,msg):
 
             if isinstance(logging_data, dict):
                 # Dictionary case: Access elements using keys
-                id_hardware = logging_data.get('id_hardware')
-                id_user = logging_data.get('id_user')
+                id_hardware = int(logging_data.get('id_hardware'))
+                id_user = int(logging_data.get('id_user'))
                 time_stamp = logging_data.get('time_stamp')
                 speed = logging_data.get('speed')
                 rpm = logging_data.get('rpm')
@@ -95,8 +95,8 @@ def on_message(client,userdata,msg):
 
             elif isinstance(logging_data, list):
                 # List case: Access elements using integer indices
-                id_hardware = logging_data[0]
-                id_user = logging_data[1]
+                id_hardware = int(logging_data[0])
+                id_user = int(logging_data[1])
                 time_stamp = logging_data[2]
                 speed = logging_data[3]
                 rpm = logging_data[4]
