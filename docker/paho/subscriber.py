@@ -73,46 +73,31 @@ def on_message(client,userdata,msg):
             db.commit()
 
         elif msg.topic == "mokura/logging":
-            timeStamp = getTimeStamp()
-            server_time_int = timeStamp[0]
-            server_time_str = timeStamp[1]
-
             # Deserialize the message payload
             logging_data = json.loads(msg.payload.decode())
 
-            if isinstance(logging_data, dict):
-                # Dictionary case: Access elements using keys
-                id_hardware = logging_data.get('id_hardware')
-                id_user = logging_data.get('id_user')
-                time_stamp = logging_data.get('time_stamp')
-                speed = logging_data.get('speed')
-                rpm = logging_data.get('rpm')
-                battery = logging_data.get('battery')
-                lat = logging_data.get('lat')
-                lon = logging_data.get('lon')
-                compass = logging_data.get('compass')
-                duty_cycle = logging_data.get('duty_cycle')
+            for data in logging_data:
+                id_user = data['id_user']
+                id_hardware = data['id_hardware']
+                time_stamp = data['time_stamp']
+                lat = data['lat']
+                compass = data['compass']
+                speed = data['speed']
+                lon = data['lon']
+                rpm = data['rpm']
+                battery = data['battery']
+                duty_cycle = data['duty_cycle']
 
-            elif isinstance(logging_data, list):
-                # List case: Access elements using integer indices
-                id_hardware = logging_data[0]
-                id_user = logging_data[1]
-                time_stamp = logging_data[2]
-                speed = logging_data[3]
-                rpm = logging_data[4]
-                battery = logging_data[5]
-                lat = logging_data[6]
-                lon = logging_data[7]
-                compass = logging_data[8]
-                duty_cycle = logging_data[9]
+                # Insert the Logging object into the database
+                sql = "INSERT INTO logging (id_hardware, id_user, time_stamp, speed, rpm, battery, lat, lon, compass, duty_cycle) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+                val = (id_hardware, id_user, time_stamp, speed, rpm, battery, lat, lon, compass, duty_cycle)
+                cursor.execute(sql, val)
+                db.commit()
 
-            print("idhardware: "+ str(id_hardware))
-            # Insert the Logging object into the database
-            sql = "INSERT INTO logging (id_hardware, id_user, time_stamp, speed, rpm, battery, lat, lon, compass, duty_cycle) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
-            val = (id_hardware, id_user, time_stamp, speed, rpm, battery, lat, lon, compass, duty_cycle)
-            cursor.execute(sql, val)
-            db.commit()
-
+            timeStamp = getTimeStamp()
+            server_time_int = timeStamp[0]
+            server_time_str = timeStamp[1]
+            
             publish_response("logging inserted!", len(msg.payload), server_time_int, server_time_str)
 
         else:
