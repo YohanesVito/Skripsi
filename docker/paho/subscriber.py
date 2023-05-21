@@ -77,17 +77,43 @@ def on_message(client,userdata,msg):
             server_time_int = timeStamp[0]
             server_time_str = timeStamp[1]
 
-            # Deserialize the message payload into a dictionary
+            # Deserialize the message payload
             logging_data = json.loads(msg.payload.decode())
+
+            if isinstance(logging_data, dict):
+                # Dictionary case: Access elements using keys
+                id_hardware = logging_data.get('id_hardware')
+                id_user = logging_data.get('id_user')
+                time_stamp = logging_data.get('time_stamp')
+                speed = logging_data.get('speed')
+                rpm = logging_data.get('rpm')
+                battery = logging_data.get('battery')
+                lat = logging_data.get('lat')
+                lon = logging_data.get('lon')
+                compass = logging_data.get('compass')
+                duty_cycle = logging_data.get('duty_cycle')
+
+            elif isinstance(logging_data, list):
+                # List case: Access elements using integer indices
+                id_hardware = logging_data[0]
+                id_user = logging_data[1]
+                time_stamp = logging_data[2]
+                speed = logging_data[3]
+                rpm = logging_data[4]
+                battery = logging_data[5]
+                lat = logging_data[6]
+                lon = logging_data[7]
+                compass = logging_data[8]
+                duty_cycle = logging_data[9]
 
             # Insert the Logging object into the database
             sql = "INSERT INTO logging (id_hardware, id_user, time_stamp, speed, rpm, battery, lat, lon, compass, duty_cycle) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
-            val = (logging_data['id_hardware'], logging_data['id_user'], logging_data['time_stamp'], logging_data['speed'], logging_data['rpm'], logging_data['battery'], logging_data['lat'], logging_data['lon'], logging_data['compass'], logging_data['duty_cycle'])
+            val = (id_hardware, id_user, time_stamp, speed, rpm, battery, lat, lon, compass, duty_cycle)
             cursor.execute(sql, val)
             db.commit()
 
             publish_response("logging inserted!", len(msg.payload), server_time_int, server_time_str)
-            
+
         else:
             print("Invalid topic")
 
