@@ -96,7 +96,20 @@ def register_mokura():
 
 @app.route('/logging/datalist', methods=['GET', 'POST'])
 def datalist():
+    
     if request.method == 'POST':
+        # get current timestamp in UTC timezone
+        utc_timestamp = datetime.datetime.utcnow()
+        
+        # create UTC+7 timezone object
+        timezone_offset = datetime.timedelta(hours=7)
+        
+        # convert to UTC+7 timezone
+        timestamp = utc_timestamp + timezone_offset
+        
+        # convert to timestamp format
+        timestamp_unix = int(timestamp.timestamp())
+
         datas = request.get_json()
         # print(datas)
         # Convert data to JSON string
@@ -126,18 +139,6 @@ def datalist():
             cur.execute("INSERT INTO logging (id_user, id_hardware, time_stamp, lat, lon, compass, speed, rpm, battery, duty_cycle) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", (id_user, id_hardware, time_stamp, lat, lon, compass, speed, rpm, battery, duty_cycle))
             mysql.connection.commit()
             cur.close()
-        
-        # get current timestamp in UTC timezone
-        utc_timestamp = datetime.datetime.utcnow()
-        
-        # create UTC+7 timezone object
-        timezone_offset = datetime.timedelta(hours=7)
-        
-        # convert to UTC+7 timezone
-        timestamp = utc_timestamp + timezone_offset
-        
-        # convert to timestamp format
-        timestamp_unix = int(timestamp.timestamp())
         
         # create response dictionary
         response = {

@@ -38,8 +38,11 @@ def on_connect(client, userdata, flags, rc):
     client.subscribe(user_topic)
 
 def on_message(client,userdata,msg):
+    timeStamp = getTimeStamp()
+    server_time_int = timeStamp[0]
+    server_time_str = timeStamp[1]
 
-    print("Received message on topic "+msg.topic+": "+msg.payload.decode())
+    # print("Received message on topic "+msg.topic+": "+msg.payload.decode())
 
     try:
         # Connect to MySQL database
@@ -94,10 +97,7 @@ def on_message(client,userdata,msg):
                 cursor.execute(sql, val)
                 db.commit()
 
-            timeStamp = getTimeStamp()
-            server_time_int = timeStamp[0]
-            server_time_str = timeStamp[1]
-            
+            print("Data inserted!")
             publish_response("logging inserted!", len(msg.payload), server_time_int, server_time_str)
 
         else:
