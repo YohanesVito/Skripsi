@@ -13,10 +13,10 @@ import com.example.mokuramqtt.ViewModelFactory
 import com.example.mokuramqtt.databinding.ActivityHomeBinding
 import com.example.mokuramqtt.model.UserModel
 import com.example.mokuramqtt.model.Result
-import com.example.mokuramqtt.ui.DetailsHttpActivity
+import com.example.mokuramqtt.ui.testing.DetailsHTTPActivity
 import com.example.mokuramqtt.ui.authentication.LoginActivity
 import com.example.mokuramqtt.ui.monitoring.PairActivity
-import com.example.mokuramqtt.viewmodel.DetailsHttpViewModel
+import com.example.mokuramqtt.ui.testing.DetailsMQTTActivity
 import com.example.mokuramqtt.viewmodel.HomeViewModel
 
 class HomeActivity : AppCompatActivity() {
@@ -68,8 +68,12 @@ class HomeActivity : AppCompatActivity() {
             startActivity(Intent(this,PairActivity::class.java))
         }
 
-        binding.btLogging.setOnClickListener {
-            startActivity(Intent(this,DetailsHttpActivity::class.java))
+        binding.btLoggingHttp.setOnClickListener {
+            startActivity(Intent(this, DetailsHTTPActivity::class.java))
+        }
+
+        binding.btLoggingMqtt.setOnClickListener {
+            startActivity(Intent(this, DetailsMQTTActivity::class.java))
         }
     }
 

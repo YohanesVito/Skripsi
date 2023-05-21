@@ -1,13 +1,13 @@
 package com.example.mokuramqtt.repository
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.asLiveData
-import com.example.mokuramqtt.database.Hardware
-import com.example.mokuramqtt.database.Mokura
-import com.example.mokuramqtt.database.MokuraDatabase
+import com.example.mokuramqtt.database.*
 import com.example.mokuramqtt.model.*
 import com.example.mokuramqtt.utils.MQTTService
+import com.example.mokuramqtt.viewmodel.MQTTViewModel
 
 class MQTTRepository(
     private val mokuraDatabase: MokuraDatabase,
@@ -19,9 +19,18 @@ class MQTTRepository(
         mqttService.connect(context)
     }
 
-    fun subscribe(topic: String){
-        mqttService.subscribe(topic)
+    fun disconnect(){
+        mqttService.disconnect()
     }
+
+    fun subscribe(topic: String,mqttViewModel: MQTTViewModel){
+        mqttService.subscribe(topic,mqttViewModel = mqttViewModel)
+    }
+
+    fun unsubscribe(topic: String){
+        mqttService.unsubscribe(topic)
+    }
+
 
     fun publishUser(user: UserModel) {
         mqttService.publishUser(user)
@@ -35,8 +44,21 @@ class MQTTRepository(
         mqttService.publishLogging(mokura)
     }
 
+    fun publishArrayLogging(mArrayList: ArrayList<Mokura>){
+        mqttService.publishArrayLogging(mArrayList)
+    }
+
     fun getUser(): LiveData<UserModel> {
         return userPreference.getUser().asLiveData()
+    }
+
+    //DB
+    fun getRow(): LiveData<List<MQTT>> {
+        return mokuraDatabase.mqttDao().getAllData()
+    }
+
+    fun insertMQTT(mMQTT: MQTT) {
+        mokuraDatabase.mqttDao().insertMQTT(mMQTT)
     }
 }
 

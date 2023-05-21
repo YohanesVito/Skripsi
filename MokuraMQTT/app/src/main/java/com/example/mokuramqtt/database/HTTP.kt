@@ -22,8 +22,13 @@ data class HTTP(
     @ColumnInfo(name = "receivedTimeStamp")
     val receivedTimeStamp: String,
 
+    //receivedTimeStamp - sentTimeStamp
     @ColumnInfo(name = "timeDifference")
     val timeDifference: String,
+
+    //serverTimeStamp - sentTimeStamp
+    @ColumnInfo(name = "timeTransmission")
+    val timeTransmission: String,
 
 ) : Parcelable
 

@@ -6,15 +6,12 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import kotlinx.parcelize.Parcelize
 
-@Entity(tableName = "MQTT")
+@Entity(tableName = "mqtt")
 @Parcelize
 data class MQTT(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "idMQTT")
     val idHTTP: Int? = null,
-
-    @ColumnInfo(name = "idLogging")
-    val idLogging: String,
 
     @ColumnInfo(name = "packetSize")
     val packetSize: String,
@@ -25,8 +22,13 @@ data class MQTT(
     @ColumnInfo(name = "receivedTimeStamp")
     val receivedTimeStamp: String,
 
+    //receivedTimeStamp - sentTimeStamp
     @ColumnInfo(name = "timeDifference")
     val timeDifference: String,
+
+    //serverTimeStamp - sentTimeStamp
+    @ColumnInfo(name = "timeTransmission")
+    val timeTransmission: String,
 
 ) : Parcelable
 

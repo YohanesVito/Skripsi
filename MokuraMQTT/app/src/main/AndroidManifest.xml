@@ -39,7 +39,7 @@
             android:name=".ui.TestingActivity"
             android:exported="true" />
         <activity
-            android:name=".ui.SplashScreenActivity"
+            android:name=".ui.splashscreen.SplashScreenActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -52,7 +52,11 @@
             android:exported="true"
             android:screenOrientation="landscape" />
         <activity
-            android:name=".ui.DetailsHttpActivity"
+            android:name=".ui.testing.DetailsHTTPActivity"
+            android:exported="true"
+            android:screenOrientation="landscape"/>
+        <activity
+            android:name=".ui.testing.DetailsMQTTActivity"
             android:exported="true"
             android:screenOrientation="landscape"/>
         <activity

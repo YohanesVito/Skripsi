@@ -25,11 +25,11 @@ class ViewModelFactory(private val context: Context) : ViewModelProvider.NewInst
             modelClass.isAssignableFrom(MonitorViewModel::class.java) -> {
                 MonitorViewModel(Injection.provideRepository(context)) as T
             }
-            modelClass.isAssignableFrom(TestingViewModel::class.java) -> {
-                TestingViewModel(Injection.provideRepository2(context)) as T
+            modelClass.isAssignableFrom(MQTTViewModel::class.java) -> {
+                MQTTViewModel(Injection.provideRepository2(context)) as T
             }
-            modelClass.isAssignableFrom(DetailsHttpViewModel::class.java) -> {
-                DetailsHttpViewModel(Injection.provideRepository3(context)) as T
+            modelClass.isAssignableFrom(HTTPViewModel::class.java) -> {
+                HTTPViewModel(Injection.provideRepository3(context)) as T
             }
             else -> throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
         }

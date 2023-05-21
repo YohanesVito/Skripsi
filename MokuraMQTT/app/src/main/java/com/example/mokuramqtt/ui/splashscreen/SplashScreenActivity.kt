@@ -1,4 +1,4 @@
-package com.example.mokuramqtt.ui
+package com.example.mokuramqtt.ui.splashscreen
 
 import android.annotation.SuppressLint
 import android.content.Intent

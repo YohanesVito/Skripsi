@@ -1,6 +1,5 @@
 package com.example.mokuramqtt.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.mokuramqtt.database.Mokura
@@ -8,8 +7,6 @@ import com.example.mokuramqtt.model.UserModel
 import com.example.mokuramqtt.repository.MokuraRepository
 
 class MonitorViewModel(private val mokuraRepository: MokuraRepository): ViewModel() {
-
-    private val valArrayLogging = ArrayList<Mokura>()
 
     val arrayLogging: MutableLiveData<ArrayList<Mokura>> by lazy {
         MutableLiveData<ArrayList<Mokura>>()

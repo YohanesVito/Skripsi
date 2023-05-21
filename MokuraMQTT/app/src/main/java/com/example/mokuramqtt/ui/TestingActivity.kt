@@ -9,10 +9,11 @@ import com.example.mokuramqtt.ViewModelFactory
 import com.example.mokuramqtt.databinding.ActivityTestingBinding
 import com.example.mokuramqtt.helper.DateHelper
 import com.example.mokuramqtt.model.UserModel
-import com.example.mokuramqtt.viewmodel.TestingViewModel
+import com.example.mokuramqtt.viewmodel.MQTTViewModel
+import org.eclipse.paho.client.mqttv3.internal.ExceptionHelper
 
 class TestingActivity : AppCompatActivity() {
-    private lateinit var testingViewModel: TestingViewModel
+    private lateinit var mqttViewModel: MQTTViewModel
     private lateinit var binding: ActivityTestingBinding
     private lateinit var mUser: UserModel
 
@@ -30,28 +31,28 @@ class TestingActivity : AppCompatActivity() {
 
         //connect
         binding.btConnect.setOnClickListener{
-            testingViewModel.connect(this)
+            mqttViewModel.connect(this)
         }
 
         binding.btSubscribe.setOnClickListener {
-            testingViewModel.subscribe("mokura/user_response")
+            mqttViewModel.subscribe("mokura/user_response", mqttViewModel = mqttViewModel)
         }
 
         //publish user
         binding.btPublish.setOnClickListener {
             val timestamp = DateHelper.getCurrentDate()
             Log.d("TimeStamp android",timestamp)
-            testingViewModel.publishUser(mUser)
+            mqttViewModel.publishUser(mUser)
         }
     }
 
     private fun setupViewModel(){
-        testingViewModel = ViewModelProvider(
+        mqttViewModel = ViewModelProvider(
             this,
             ViewModelFactory(this)
-        )[TestingViewModel::class.java]
+        )[MQTTViewModel::class.java]
 
-        testingViewModel.getUser().observe(this){
+        mqttViewModel.getUser().observe(this){
             mUser = it
         }
     }

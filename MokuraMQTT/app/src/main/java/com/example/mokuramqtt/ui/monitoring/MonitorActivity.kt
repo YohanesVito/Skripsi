@@ -20,16 +20,18 @@ import com.example.mokuramqtt.database.Mokura
 import com.example.mokuramqtt.databinding.ActivityMonitorBinding
 import com.example.mokuramqtt.helper.DateHelper
 import com.example.mokuramqtt.model.UserModel
-import com.example.mokuramqtt.ui.DetailsHttpActivity
+import com.example.mokuramqtt.ui.testing.DetailsHTTPActivity
 import com.example.mokuramqtt.utils.Accelerometer
 import com.example.mokuramqtt.utils.BluetoothService
 import com.example.mokuramqtt.utils.Location
+import com.example.mokuramqtt.viewmodel.MQTTViewModel
 import com.example.mokuramqtt.viewmodel.MonitorViewModel
 
 
 class MonitorActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMonitorBinding
     private lateinit var monitorViewModel: MonitorViewModel
+    private lateinit var mqttViewModel: MQTTViewModel
     private lateinit var mBluetoothService: BluetoothService
     private lateinit var mAccelerometer: Accelerometer
     private lateinit var mLocation: Location
@@ -45,7 +47,7 @@ class MonitorActivity : AppCompatActivity() {
         private var currentDegree= 0f
         const val EXTRA_ADDRESS: String = "Device Address"
         const val EXTRA_NAME: String = "Device Name"
-        const val MAX_CAPACITY: Int = 20
+        const val MAX_CAPACITY: Int = 100
     }
 
 
@@ -62,14 +64,21 @@ class MonitorActivity : AppCompatActivity() {
 
         setupView()
         setupViewModel()
+        setupMQTT()
         setUpCompass()
         setUpLocation()
         setupAction()
         connectBluetooth2()
 
-        binding.btDisconnect.setOnClickListener {
-            disconnectBluetooth()
-        }
+    }
+
+    private fun setupMQTT() {
+        mqttViewModel.connect(this)
+
+        val handler = Handler(Looper.getMainLooper())
+        handler.postDelayed({
+            mqttViewModel.subscribe("mokura/user_response", mqttViewModel = mqttViewModel)
+        }, 3000)
     }
 
     private fun setUpCompass() {
@@ -82,7 +91,7 @@ class MonitorActivity : AppCompatActivity() {
         mLocation.setUpLocation()
     }
 
-    @RequiresApi(Build.VERSION_CODES.R)
+
     private fun setupAction() {
         val mArrayMokura = ArrayList<Mokura>()
         //insert hardware to SP and post to cloud
@@ -127,26 +136,23 @@ class MonitorActivity : AppCompatActivity() {
                 //save data to db
                 monitorViewModel.saveData(mUser,newData)
 
+                //update ui
                 updateUI(newData)
 
-                //logging data to csv
                 mArrayMokura.add(newData)
-                Log.d("maray size",mArrayMokura.size.toString())
                 if(mArrayMokura.size >= MAX_CAPACITY){
-                    monitorViewModel.arrayLogging.value = mArrayMokura
-                    Log.d("LOGGING",monitorViewModel.arrayLogging.value.toString())
 
+                    //sent packet over HTTP -- TOGGLE THIS TO ENABLE/DISABLE
+                    monitorViewModel.uploadData(mArrayMokura)
+
+                    //sent packet over MQTT -- TOGGLE THIS TO ENABLE/DISABLE
+//                    mqttViewModel.publishArrayLogging(mArrayMokura)
+
+                    //reset Array
+                    mArrayMokura.clear()
                 }
 
             }
-        }
-
-        //logging data to cloud using http
-        monitorViewModel.arrayLogging.observe(this){
-
-            Log.d("arraylogging",it.toString())
-            monitorViewModel.uploadData(it)
-            mArrayMokura.clear()
         }
 
         //update UI
@@ -168,11 +174,18 @@ class MonitorActivity : AppCompatActivity() {
         }
 
         binding.btDetails?.setOnClickListener {
-            val intent = Intent(this,DetailsHttpActivity::class.java)
+            val intent = Intent(this, DetailsHTTPActivity::class.java)
             startActivity(intent)
         }
 
+        binding.btDisconnect.setOnClickListener {
+            disconnectBluetooth()
+            mqttViewModel.unsubscribe("mokura/user_response")
+            mqttViewModel.disconnect()
+        }
     }
+
+
     private fun updateUI(newData: Mokura) {
         val rpm = newData.rpm.toDouble().toInt()
         val speed = newData.speed.toDouble().toInt()
@@ -297,6 +310,11 @@ class MonitorActivity : AppCompatActivity() {
             this,
             ViewModelFactory(this)
         )[MonitorViewModel::class.java]
+
+        mqttViewModel = ViewModelProvider(
+            this,
+            ViewModelFactory(this)
+        )[MQTTViewModel::class.java]
 
         monitorViewModel.getUser().observe(this){
             mUser = it

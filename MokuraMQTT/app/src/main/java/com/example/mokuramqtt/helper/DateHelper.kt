@@ -9,11 +9,7 @@ object DateHelper {
         val date = Date()
         return dateFormat.format(date)
     }
-    fun getCurrentDate2(): String {
-        val dateFormat = SimpleDateFormat("yyyy-MM-dd-HH:mm:ss:SS", Locale.getDefault())
-        val date = Date()
-        return dateFormat.format(date)
-    }
+
     fun calculateTimeDifference(timeStart: String, timeEnd: String): Double {
         val dateFormat = SimpleDateFormat("yyyy/MM/dd HH:mm:ss:SSSSSS", Locale.getDefault())
 

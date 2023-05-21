@@ -5,17 +5,23 @@ import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
 import com.example.mokuramqtt.database.Hardware
+import com.example.mokuramqtt.database.MQTT
 import com.example.mokuramqtt.database.Mokura
 import com.example.mokuramqtt.helper.DateHelper
 import com.example.mokuramqtt.model.UserModel
 import com.example.mokuramqtt.model.UserPublishModel
+import com.example.mokuramqtt.remote.response.InsertLoggingResponse
+import com.example.mokuramqtt.viewmodel.MQTTViewModel
 import com.google.gson.Gson
 import info.mqtt.android.service.Ack
 import info.mqtt.android.service.MqttAndroidClient
 import org.eclipse.paho.client.mqttv3.*
+import java.util.Date
 
 class MQTTService {
     private lateinit var mqttClient: MqttAndroidClient
+    private var sentTimeStamp: String = ""
+    private var receivedTimeStamp: String = ""
     companion object{
         const val TAG = "AndroidMqttClient"
         private const val serverURI = "tcp://35.171.206.57:1883"
@@ -71,7 +77,7 @@ class MQTTService {
         }
     }
 
-    fun subscribe(topic: String, qos: Int = 1) {
+    fun subscribe(topic: String, qos: Int = 1, mqttViewModel: MQTTViewModel) {
         try {
             mqttClient.subscribe(topic, qos, null, object : IMqttActionListener {
                 override fun onSuccess(asyncActionToken: IMqttToken?) {
@@ -87,11 +93,27 @@ class MQTTService {
                 @RequiresApi(Build.VERSION_CODES.O)
                 override fun messageArrived(topic: String?, message: MqttMessage?) {
                     // Handle the received message here
+                    receivedTimeStamp = DateHelper.getCurrentDate()
                     val payload = message?.payload?.toString(Charsets.UTF_8)
+                    val gson = Gson()
+                    val response: InsertLoggingResponse = gson.fromJson(payload, InsertLoggingResponse::class.java)
                     Log.d(TAG, "Received message: $payload from topic: $topic")
-                    val timestamp = DateHelper.getCurrentDate()
-                    Log.d(TAG, "timestamp: $timestamp")
+                    Log.d(TAG, "Received JSON: $response from topic: $topic")
+
                     // Add your logic to handle the incoming message
+                    val timeDifference = DateHelper.calculateTimeDifference(sentTimeStamp,receivedTimeStamp)
+                    val timeTransmission = DateHelper.calculateTimeDifference(sentTimeStamp,response.serverTimeStr!!)
+
+                    val mMQTT = MQTT(
+                        receivedTimeStamp = receivedTimeStamp,
+                        sentTimeStamp = receivedTimeStamp,
+                        packetSize = response.packetSize.toString(),
+                        timeDifference = timeDifference.toString(),
+                        timeTransmission = timeTransmission.toString()
+                    )
+                    Log.d("MQTTRESPON", mMQTT.toString())
+
+                    mqttViewModel.insertMQTT(mMQTT)
                 }
 
                 override fun connectionLost(cause: Throwable?) {
@@ -106,7 +128,6 @@ class MQTTService {
             e.printStackTrace()
         }
     }
-
 
     fun unsubscribe(topic: String) {
         try {
@@ -168,6 +189,19 @@ class MQTTService {
     fun publishLogging(mokura: Mokura) {
         val mqttMessage = MqttMessage()
         mqttMessage.payload = mokura.toString().toByteArray()
+        mqttClient.publish(loggingTopic, mqttMessage)
+
+    }
+
+    fun publishArrayLogging(mArray: ArrayList<Mokura>) {
+        val gson = Gson()
+        val arrayJson = gson.toJson(mArray)
+        val mqttMessage = MqttMessage()
+        mqttMessage.qos = 0
+        mqttMessage.payload = arrayJson.toString().toByteArray()
+
+        //get timestamp before publish
+        sentTimeStamp = DateHelper.getCurrentDate()
         mqttClient.publish(loggingTopic, mqttMessage)
     }
 }

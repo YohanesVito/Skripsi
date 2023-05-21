@@ -147,33 +147,38 @@ class MokuraRepository(
     //http
     fun postLogging(arrayLogging: ArrayList<Mokura>): LiveData<Result<Boolean>> {
 
-        val timeStart = DateHelper.getCurrentDate()
-        Log.d("ArrayLoggingRepo",arrayLogging.toString())
         val result = MutableLiveData<Result<Boolean>>()
         result.value = Result.Loading
+
+        //get startTimeStamp
+        val timeStart = DateHelper.getCurrentDate()
+
         apiService.sendDataList(arrayLogging).enqueue(object : Callback<InsertLoggingResponse> {
             override fun onResponse(
                 call: Call<InsertLoggingResponse>,
                 response: Response<InsertLoggingResponse>
             ) {
                 if (response.isSuccessful) {
-
+                    //get endTimeStamp
                     val timeEnd = DateHelper.getCurrentDate()
 
-                    val timeDiff = DateHelper.calculateTimeDifference(timeStart, timeEnd)
-                    Log.d("timeDiff",timeDiff.toString())
-                    Log.d("Repo",response.message())
                     val responseBody = response.body()
                     if (responseBody != null){
+
                         result.value = Result.Success(true)
+                        val timeDiff = DateHelper.calculateTimeDifference(timeStart, timeEnd)
+                        Log.d("timeDiff",timeDiff.toString())
+
+                        val timeTrans = DateHelper.calculateTimeDifference(timeStart,responseBody.serverTimeStr!!)
+                        Log.d("timeTrans",timeTrans.toString())
 
                        //insert to http dao
                         val mHTTP = HTTP(
                             packetSize = responseBody.packetSize.toString(),
                             sentTimeStamp = timeStart,
                             receivedTimeStamp = timeEnd,
-                            timeDifference = timeDiff.toString()
-
+                            timeDifference = timeDiff.toString(),
+                            timeTransmission = timeTrans.toString()
                         )
 
                         insertHTTP(mHTTP)

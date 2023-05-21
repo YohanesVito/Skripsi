@@ -1,6 +1,5 @@
-package com.example.mokuramqtt.ui
+package com.example.mokuramqtt.ui.testing
 
-import android.R
 import android.content.res.Resources
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -8,20 +7,20 @@ import android.util.Log
 import android.widget.TableRow
 import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
+import com.example.mokuramqtt.R
 import com.example.mokuramqtt.ViewModelFactory
 import com.example.mokuramqtt.databinding.ActivityDetailsHttpBinding
-import com.example.mokuramqtt.viewmodel.DetailsHttpViewModel
-import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.launch
+import com.example.mokuramqtt.databinding.ActivityDetailsMqttBinding
+import com.example.mokuramqtt.viewmodel.MQTTViewModel
 
 
-class DetailsHttpActivity : AppCompatActivity() {
-    private lateinit var detailsHttpViewModel: DetailsHttpViewModel
-    private lateinit var binding: ActivityDetailsHttpBinding
+class DetailsMQTTActivity : AppCompatActivity() {
+    private lateinit var mqttViewModel: MQTTViewModel
+    private lateinit var binding: ActivityDetailsMqttBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityDetailsHttpBinding.inflate(layoutInflater)
+        binding = ActivityDetailsMqttBinding.inflate(layoutInflater)
         setContentView(binding.root)
         supportActionBar?.hide()
         setupViewModel()
@@ -33,8 +32,8 @@ class DetailsHttpActivity : AppCompatActivity() {
         val tableLayout = binding.tlData
         // Retrieve your data, assuming you have a list of objects with ID, timestamp sent, timestamp received
 
-        detailsHttpViewModel.allData.observe(this) { data ->
-            Log.d("HTTP_DB", data.toString())
+        mqttViewModel.allData.observe(this) { data ->
+            Log.d("MQTT_DB", data.toString())
             for (dataItem in data) {
                 val row = TableRow(this)
 
@@ -69,6 +68,12 @@ class DetailsHttpActivity : AppCompatActivity() {
                 differenceTextView.setPadding(20.dpToPx(), 0, 20.dpToPx(), 0) // Add left and right padding
                 row.addView(differenceTextView)
 
+                val transmissionTextView = TextView(this)
+                transmissionTextView.setTextColor(resources.getColor(R.color.white))
+                transmissionTextView.text = dataItem.timeTransmission
+                transmissionTextView.setPadding(20.dpToPx(), 0, 20.dpToPx(), 0) // Add left and right padding
+                row.addView(transmissionTextView)
+
                 tableLayout.addView(row)
             }
         }
@@ -81,10 +86,10 @@ class DetailsHttpActivity : AppCompatActivity() {
 
 
     private fun setupViewModel() {
-        detailsHttpViewModel = ViewModelProvider(
+        mqttViewModel = ViewModelProvider(
             this,
             ViewModelFactory(this)
-        )[DetailsHttpViewModel::class.java]
+        )[MQTTViewModel::class.java]
 
     }
 }

@@ -12,6 +12,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
+        android:textColor="@color/black"
+        android:textStyle="bold|italic"
+        android:gravity="center"
         android:text="@string/welcome"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -30,14 +33,24 @@
         app:layout_constraintTop_toBottomOf="@+id/tv_user" />
 
     <Button
-        android:id="@+id/bt_logging"
+        android:id="@+id/bt_logging_http"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:text="Lihat Logging"
+        android:text="Mokura HTTP Latency Test"
         app:layout_constraintEnd_toEndOf="@+id/bt_start"
         app:layout_constraintStart_toStartOf="@+id/bt_start"
         app:layout_constraintTop_toBottomOf="@+id/bt_start" />
+
+    <Button
+        android:id="@+id/bt_logging_mqtt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Mokura MQTT Latency Test"
+        app:layout_constraintEnd_toEndOf="@+id/bt_logging_http"
+        app:layout_constraintStart_toStartOf="@+id/bt_logging_http"
+        app:layout_constraintTop_toBottomOf="@+id/bt_logging_http" />
 
     <Button
         android:id="@+id/bt_logout"
@@ -46,10 +59,9 @@
         android:backgroundTint="@color/accent"
         android:layout_marginTop="20dp"
         android:text="Logout"
-        app:layout_constraintEnd_toEndOf="@+id/bt_logging"
-        app:layout_constraintHorizontal_bias="0.494"
-        app:layout_constraintStart_toStartOf="@+id/bt_logging"
-        app:layout_constraintTop_toBottomOf="@+id/bt_logging" />
+        app:layout_constraintEnd_toEndOf="@+id/bt_logging_mqtt"
+        app:layout_constraintStart_toStartOf="@+id/bt_logging_mqtt"
+        app:layout_constraintTop_toBottomOf="@+id/bt_logging_mqtt" />
 
     <ProgressBar
         android:id="@+id/progressBar"
