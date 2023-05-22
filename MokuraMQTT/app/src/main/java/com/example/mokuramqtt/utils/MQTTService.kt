@@ -16,7 +16,6 @@ import com.google.gson.Gson
 import info.mqtt.android.service.Ack
 import info.mqtt.android.service.MqttAndroidClient
 import org.eclipse.paho.client.mqttv3.*
-import java.util.Date
 
 class MQTTService {
     private lateinit var mqttClient: MqttAndroidClient

@@ -1,7 +1,6 @@
 package com.example.mokuramqtt.repository
 
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.asLiveData
 import com.example.mokuramqtt.database.*
@@ -30,7 +29,6 @@ class MQTTRepository(
     fun unsubscribe(topic: String){
         mqttService.unsubscribe(topic)
     }
-
 
     fun publishUser(user: UserModel) {
         mqttService.publishUser(user)

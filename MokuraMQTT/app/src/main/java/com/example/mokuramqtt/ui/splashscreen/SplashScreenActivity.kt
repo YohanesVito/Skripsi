@@ -10,8 +10,6 @@ import com.example.mokuramqtt.ui.authentication.LoginActivity
 
 @SuppressLint("CustomSplashScreen")
 class SplashScreenActivity : AppCompatActivity() {
-//    private lateinit var monitorViewModel: MonitorViewModel
-//    private lateinit var binding: ActivityMonitorBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

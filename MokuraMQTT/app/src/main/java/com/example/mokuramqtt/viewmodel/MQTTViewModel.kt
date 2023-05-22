@@ -2,7 +2,6 @@ package com.example.mokuramqtt.viewmodel
 
 import android.content.Context
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.mokuramqtt.database.Hardware
 import com.example.mokuramqtt.database.MQTT
@@ -11,10 +10,6 @@ import com.example.mokuramqtt.model.UserModel
 import com.example.mokuramqtt.repository.MQTTRepository
 
 class MQTTViewModel(private val mqttRepository: MQTTRepository): ViewModel(){
-
-    val arrayLogging: MutableLiveData<ArrayList<Mokura>> by lazy {
-        MutableLiveData<ArrayList<Mokura>>()
-    }
 
     val allData: LiveData<List<MQTT>> = mqttRepository.getRow()
 

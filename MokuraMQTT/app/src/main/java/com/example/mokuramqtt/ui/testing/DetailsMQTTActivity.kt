@@ -9,7 +9,6 @@ import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
 import com.example.mokuramqtt.R
 import com.example.mokuramqtt.ViewModelFactory
-import com.example.mokuramqtt.databinding.ActivityDetailsHttpBinding
 import com.example.mokuramqtt.databinding.ActivityDetailsMqttBinding
 import com.example.mokuramqtt.viewmodel.MQTTViewModel
 

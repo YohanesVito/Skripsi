@@ -49,8 +49,6 @@ class PairActivity : AppCompatActivity() {
         }
     }
 
-
-
     @RequiresApi(Build.VERSION_CODES.M)
     private fun setupBluetooth() {
         bluetoothManager= getSystemService(BluetoothManager::class.java)
@@ -68,7 +66,6 @@ class PairActivity : AppCompatActivity() {
         }
     }
 
-
     private fun pairedDeviceList(){
 
         val list: ArrayList<BluetoothDevice> = ArrayList()
@@ -84,7 +81,6 @@ class PairActivity : AppCompatActivity() {
             list.add(device)
         }
         showRecylerList(list)
-
     }
 
     private fun showMonitoring(data: BluetoothDevice) {
@@ -106,7 +102,6 @@ class PairActivity : AppCompatActivity() {
     }
 
 
-
     private fun showRecylerList(list: ArrayList<BluetoothDevice>) {
         binding.rvBt.layoutManager = LinearLayoutManager(this)
 
@@ -120,7 +115,6 @@ class PairActivity : AppCompatActivity() {
             }
         })
     }
-
 
     private fun loadingUI(){
         binding.progressBar.visibility = View.VISIBLE

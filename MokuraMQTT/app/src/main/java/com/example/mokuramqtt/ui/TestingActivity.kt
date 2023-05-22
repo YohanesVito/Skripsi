@@ -10,7 +10,6 @@ import com.example.mokuramqtt.databinding.ActivityTestingBinding
 import com.example.mokuramqtt.helper.DateHelper
 import com.example.mokuramqtt.model.UserModel
 import com.example.mokuramqtt.viewmodel.MQTTViewModel
-import org.eclipse.paho.client.mqttv3.internal.ExceptionHelper
 
 class TestingActivity : AppCompatActivity() {
     private lateinit var mqttViewModel: MQTTViewModel
