@@ -47,7 +47,7 @@ class MonitorActivity : AppCompatActivity() {
         private var currentDegree= 0f
         const val EXTRA_ADDRESS: String = "Device Address"
         const val EXTRA_NAME: String = "Device Name"
-        const val MAX_CAPACITY: Int = 100
+        const val MAX_CAPACITY: Int = 10
     }
 
 
@@ -193,9 +193,14 @@ class MonitorActivity : AppCompatActivity() {
         val dutyCycle = newData.duty_cycle.toFloat().toInt()
 
         updateSpeed(speed)
-        updateRPM(dutyCycle)
+        updateDutyCycle(dutyCycle)
         updateBattery(battery)
         updateRPM(rpm)
+    }
+
+    private fun updateDutyCycle(value: Int) {
+        val dutyCycle = binding.dutyCycle
+        dutyCycle?.setSpeed(value, DURATION)
     }
 
     private fun updateCompass(degree: Int) {

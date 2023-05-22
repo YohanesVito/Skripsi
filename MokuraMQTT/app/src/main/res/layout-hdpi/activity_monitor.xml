@@ -27,9 +27,10 @@
         android:id="@+id/tv_timer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+
         android:text="00:00:00"
         android:textColor="@color/v2"
-        android:textSize="45sp"
+        android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@+id/tv_timer2"
         app:layout_constraintTop_toBottomOf="@+id/tv_timer2" />
@@ -53,8 +54,12 @@
         android:textColor="@color/v1"
         android:textSize="20sp"
         android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_timer3"
+        app:layout_constraintEnd_toEndOf="@+id/rpm"
+        app:layout_constraintHorizontal_bias="0.506"
         app:layout_constraintStart_toStartOf="@+id/rpm"
-        app:layout_constraintTop_toBottomOf="@+id/rpm" />
+        app:layout_constraintTop_toBottomOf="@+id/rpm"
+        app:layout_constraintVertical_bias="1.0" />
 
     <TextView
         android:id="@+id/tv_timer3"
@@ -69,16 +74,17 @@
 
     <me.ibrahimsn.lib.Speedometer
         android:id="@+id/speedometer"
-        android:layout_width="200dp"
+        android:layout_width="170dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginStart="55dp"
+        android:layout_marginStart="40dp"
         app:borderColor="@color/v4"
-        app:borderSize="10dp"
+        app:borderSize="6dp"
         app:fillColor="@color/blue2"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.609"
         app:maxSpeed="50"
         app:metricText="km/h"
         app:textColor="@color/text_icon"
@@ -89,9 +95,10 @@
         android:layout_width="200dp"
         android:layout_height="0dp"
         android:layout_gravity="center"
-        android:layout_marginStart="40dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginBottom="44dp"
         app:borderColor="@color/v4"
-        app:borderSize="10dp"
+        app:borderSize="6dp"
         app:fillColor="@color/blue2"
         app:layout_constraintBottom_toBottomOf="@+id/speedometer"
         app:layout_constraintStart_toEndOf="@+id/speedometer"
@@ -100,29 +107,22 @@
         app:textColor="@color/text_icon"
         app:textGap="10dp" />
 
-    <!--    <TextView-->
-    <!--        android:id="@+id/tv_speed"-->
-    <!--        android:layout_width="0dp"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:textColor="@color/p2"-->
-    <!--        android:textSize="20sp"-->
-    <!--        android:textStyle="bold"-->
-    <!--        app:layout_constraintEnd_toEndOf="@+id/speedometer"-->
-    <!--        app:layout_constraintStart_toStartOf="@+id/speedometer"-->
-    <!--        app:layout_constraintTop_toBottomOf="@+id/speedometer"-->
-    <!--        tools:text="50km/h" />-->
-
-    <!--    <TextView-->
-    <!--        android:id="@+id/tv_speed3"-->
-    <!--        android:layout_width="0dp"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:textColor="@color/p2"-->
-    <!--        android:textSize="20sp"-->
-    <!--        android:textStyle="bold"-->
-    <!--        app:layout_constraintEnd_toEndOf="@+id/rpm"-->
-    <!--        app:layout_constraintStart_toStartOf="@+id/rpm"-->
-    <!--        app:layout_constraintTop_toBottomOf="@+id/rpm"-->
-    <!--        tools:text="190" />-->
+    <me.ibrahimsn.lib.Speedometer
+        android:id="@+id/duty_cycle"
+        android:layout_width="170dp"
+        android:layout_height="0dp"
+        android:layout_gravity="center"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="72dp"
+        app:borderColor="@color/v4"
+        app:borderSize="6dp"
+        app:fillColor="@color/blue2"
+        app:layout_constraintStart_toEndOf="@+id/rpm"
+        app:layout_constraintTop_toTopOf="@+id/rpm"
+        app:maxSpeed="50"
+        app:metricText=""
+        app:textColor="@color/text_icon"
+        app:textGap="10dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -136,6 +136,21 @@
         app:layout_constraintBottom_toTopOf="@+id/rpm"
         app:layout_constraintEnd_toEndOf="@+id/rpm"
         app:layout_constraintStart_toStartOf="@+id/rpm" />
+
+    <TextView
+        android:id="@+id/tv_duty_cycle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="20dp"
+        android:text="Duty Cycle"
+        android:textColor="@color/v1"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/duty_cycle"
+        app:layout_constraintEnd_toEndOf="@+id/duty_cycle"
+
+        app:layout_constraintStart_toStartOf="@+id/duty_cycle" />
 
     <TextView
         android:id="@+id/tv_lat"
@@ -197,33 +212,34 @@
 
     <ImageView
         android:id="@+id/iv_compass"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_gravity="center"
-        android:layout_marginStart="44dp"
+        android:layout_marginStart="30dp"
         android:rotation="-90"
         android:src="@drawable/compass"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/rpm"
+        app:layout_constraintStart_toEndOf="@+id/duty_cycle"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.211" />
+        app:layout_constraintVertical_bias="0.244" />
+
 
     <ImageView
         android:id="@+id/iv_battery"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_gravity="center"
-        android:layout_marginStart="28dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginStart="36dp"
         android:src="@drawable/batt3"
         app:layout_constraintBottom_toBottomOf="@+id/iv_compass"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/iv_compass"
-        app:layout_constraintTop_toTopOf="@+id/iv_compass"
-        app:layout_constraintVertical_bias="0.0" />
-
+        app:layout_constraintTop_toTopOf="@+id/iv_compass" />
 
     <TextView
         android:id="@+id/textView"
-        android:layout_width="229dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:text="Location"
@@ -258,10 +274,11 @@
         android:textColor="@color/v1"
         android:textSize="20sp"
         android:textStyle="bold"
-        app:layout_constraintHorizontal_bias="0.533"
         app:layout_constraintBottom_toTopOf="@+id/iv_battery"
         app:layout_constraintEnd_toEndOf="@+id/iv_battery"
-        app:layout_constraintStart_toStartOf="@+id/iv_battery" />
+        app:layout_constraintHorizontal_bias="0.533"
+        app:layout_constraintStart_toStartOf="@+id/iv_battery"
+        app:layout_constraintTop_toTopOf="@+id/textView5" />
 
     <TextView
         android:id="@+id/tv_batteryVal"
@@ -280,7 +297,7 @@
 
     <TextView
         android:id="@+id/tv_compassVal"
-        android:layout_width="100dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="10dp"
@@ -298,7 +315,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="20dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="10dp"
         android:backgroundTint="@color/blue3"
         android:text="Disconnect"
         android:textColor="@color/primary_text"
