@@ -13,9 +13,9 @@ services:
     image: mariadb:10.6
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: toor
+      MYSQL_ROOT_PASSWORD: rendyjerk123
       MYSQL_USER: vito
-      MYSQL_PASSWORD: 123
+      MYSQL_PASSWORD: rendyjerk123
     expose:
         - "3306"
     ports:
