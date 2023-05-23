@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 
 @Database(
     entities = [Mokura::class, Hardware::class, User::class, HTTP::class, MQTT::class],
-    version = 10,
+    version = 12,
     exportSchema = false
 )
 abstract class MokuraDatabase : RoomDatabase() {

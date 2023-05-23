@@ -47,7 +47,7 @@ class MonitorActivity : AppCompatActivity() {
         private var currentDegree= 0f
         const val EXTRA_ADDRESS: String = "Device Address"
         const val EXTRA_NAME: String = "Device Name"
-        const val MAX_CAPACITY: Int = 10
+        const val MAX_CAPACITY: Int = 100
     }
 
 
@@ -143,10 +143,10 @@ class MonitorActivity : AppCompatActivity() {
                 if(mArrayMokura.size >= MAX_CAPACITY){
 
                     //sent packet over HTTP -- TOGGLE THIS TO ENABLE/DISABLE
-                    monitorViewModel.uploadData(mArrayMokura)
+                    //monitorViewModel.uploadData(mArrayMokura)
 
                     //sent packet over MQTT -- TOGGLE THIS TO ENABLE/DISABLE
-//                    mqttViewModel.publishArrayLogging(mArrayMokura)
+                    mqttViewModel.publishArrayLogging(mArrayMokura)
 
                     //reset Array
                     mArrayMokura.clear()
@@ -190,17 +190,17 @@ class MonitorActivity : AppCompatActivity() {
         val rpm = newData.rpm.toDouble().toInt()
         val speed = newData.speed.toDouble().toInt()
         val battery = newData.battery.toDouble().toInt()
-        val dutyCycle = newData.duty_cycle.toFloat().toInt()
+        val dutyCycle = newData.duty_cycle.toFloat()*10
 
         updateSpeed(speed)
-        updateDutyCycle(dutyCycle)
+        updateThrottle(dutyCycle.toInt())
         updateBattery(battery)
         updateRPM(rpm)
     }
 
-    private fun updateDutyCycle(value: Int) {
-        val dutyCycle = binding.dutyCycle
-        dutyCycle?.setSpeed(value, DURATION)
+    private fun updateThrottle(value: Int) {
+        val throttle = binding.throttle
+        throttle?.setSpeed(value, DURATION)
     }
 
     private fun updateCompass(degree: Int) {
@@ -236,7 +236,7 @@ class MonitorActivity : AppCompatActivity() {
 
     private fun updateRPM(i: Int) {
         val rpm = binding.rpm
-        rpm.setSpeed(i, DURATION)
+        rpm.setSpeed(i/100, DURATION)
     }
 
     private fun updateBattery(percentage: Int) {

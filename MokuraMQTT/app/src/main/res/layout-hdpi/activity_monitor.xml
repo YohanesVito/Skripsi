@@ -102,13 +102,13 @@
         app:fillColor="@color/blue2"
         app:layout_constraintBottom_toBottomOf="@+id/speedometer"
         app:layout_constraintStart_toEndOf="@+id/speedometer"
-        app:maxSpeed="100"
-        app:metricText=""
+        app:maxSpeed="10"
+        app:metricText="x100"
         app:textColor="@color/text_icon"
         app:textGap="10dp" />
 
     <me.ibrahimsn.lib.Speedometer
-        android:id="@+id/duty_cycle"
+        android:id="@+id/throttle"
         android:layout_width="170dp"
         android:layout_height="0dp"
         android:layout_gravity="center"
@@ -119,10 +119,23 @@
         app:fillColor="@color/blue2"
         app:layout_constraintStart_toEndOf="@+id/rpm"
         app:layout_constraintTop_toTopOf="@+id/rpm"
-        app:maxSpeed="50"
-        app:metricText=""
+        app:maxSpeed="10"
+        app:metricText="x0.1"
         app:textColor="@color/text_icon"
         app:textGap="10dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="20dp"
+        android:text="RPM"
+        android:textColor="@color/v1"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/rpm"
+        app:layout_constraintEnd_toEndOf="@+id/rpm"
+        app:layout_constraintStart_toStartOf="@+id/rpm" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -133,24 +146,10 @@
         android:textColor="@color/v1"
         android:textSize="20sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/rpm"
-        app:layout_constraintEnd_toEndOf="@+id/rpm"
-        app:layout_constraintStart_toStartOf="@+id/rpm" />
+        app:layout_constraintBottom_toTopOf="@+id/throttle"
+        app:layout_constraintEnd_toEndOf="@+id/throttle"
 
-    <TextView
-        android:id="@+id/tv_duty_cycle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginBottom="20dp"
-        android:text="Duty Cycle"
-        android:textColor="@color/v1"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/duty_cycle"
-        app:layout_constraintEnd_toEndOf="@+id/duty_cycle"
-
-        app:layout_constraintStart_toStartOf="@+id/duty_cycle" />
+        app:layout_constraintStart_toStartOf="@+id/throttle" />
 
     <TextView
         android:id="@+id/tv_lat"
@@ -219,7 +218,7 @@
         android:rotation="-90"
         android:src="@drawable/compass"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/duty_cycle"
+        app:layout_constraintStart_toEndOf="@+id/throttle"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.244" />
 
