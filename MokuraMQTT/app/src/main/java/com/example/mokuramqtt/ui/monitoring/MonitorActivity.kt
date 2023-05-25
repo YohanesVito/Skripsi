@@ -17,6 +17,7 @@ import com.example.mokuramqtt.Constants.Companion.DURATION
 import com.example.mokuramqtt.R
 import com.example.mokuramqtt.ViewModelFactory
 import com.example.mokuramqtt.database.Mokura
+import com.example.mokuramqtt.database.MokuraMQTT
 import com.example.mokuramqtt.databinding.ActivityMonitorBinding
 import com.example.mokuramqtt.helper.DateHelper
 import com.example.mokuramqtt.model.UserModel
@@ -133,8 +134,23 @@ class MonitorActivity : AppCompatActivity() {
                     lon = lon,
                     )
 
-                //save data to db
-                monitorViewModel.saveData(mUser,newData)
+                val mqttData = MokuraMQTT(
+                    id_hardware = newData.id_hardware,
+                    id_user = newData.id_user,
+                    time_stamp = newData.time_stamp,
+                    speed = newData.speed,
+                    rpm = newData.rpm,
+                    battery = newData.battery,
+                    duty_cycle = newData.duty_cycle,
+                    compass = newData.compass,
+                    lat = newData.lat,
+                    lon = newData.lon,
+                )
+                //save data to HTTP DB -- TOGGLE THIS TO ENABLE/DISABLE
+//                monitorViewModel.saveDataHTTP(mUser,newData)
+
+                //save data to MQTT DB -- TOGGLE THIS TO ENABLE/DISABLE
+                mqttViewModel.saveDataMQTT(mUser, mqttData)
 
                 //update ui
                 updateUI(newData)
@@ -143,7 +159,7 @@ class MonitorActivity : AppCompatActivity() {
                 if(mArrayMokura.size >= MAX_CAPACITY){
 
                     //sent packet over HTTP -- TOGGLE THIS TO ENABLE/DISABLE
-                    //monitorViewModel.uploadData(mArrayMokura)
+//                    monitorViewModel.uploadData(mArrayMokura)
 
                     //sent packet over MQTT -- TOGGLE THIS TO ENABLE/DISABLE
                     mqttViewModel.publishArrayLogging(mArrayMokura)

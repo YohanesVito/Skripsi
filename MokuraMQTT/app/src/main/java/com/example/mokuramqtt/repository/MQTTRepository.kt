@@ -3,6 +3,7 @@ package com.example.mokuramqtt.repository
 import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.asLiveData
+import androidx.room.withTransaction
 import com.example.mokuramqtt.database.*
 import com.example.mokuramqtt.model.*
 import com.example.mokuramqtt.utils.MQTTService
@@ -40,6 +41,7 @@ class MQTTRepository(
 
     fun publishLogging(mokura: Mokura){
         mqttService.publishLogging(mokura)
+
     }
 
     fun publishArrayLogging(mArrayList: ArrayList<Mokura>){
@@ -57,6 +59,12 @@ class MQTTRepository(
 
     fun insertMQTT(mMQTT: MQTT) {
         mokuraDatabase.mqttDao().insertMQTT(mMQTT)
+    }
+    suspend fun insertMokura(mMokura: MokuraMQTT) {
+        mokuraDatabase.withTransaction {
+            mokuraDatabase.mokuraMQTTDao().insertMokura(mMokura)
+        }
+
     }
 }
 

@@ -5,7 +5,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 
 @Dao
-interface MokuraDao {
+interface MokuraMQTTDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertMokura(mokura: Mokura)
+    suspend fun insertMokura(mokura: MokuraMQTT)
 }

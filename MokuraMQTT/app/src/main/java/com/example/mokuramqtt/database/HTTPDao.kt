@@ -10,7 +10,7 @@ import androidx.room.Query
 interface HTTPDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insertHTTP(mHTTP: HTTP)
+    suspend fun insertHTTP(mHTTP: HTTP)
 
     @Query("SELECT * FROM http")
     fun getAllData(): LiveData<List<HTTP>>

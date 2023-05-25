@@ -2,9 +2,11 @@ package com.example.mokuramqtt.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.mokuramqtt.database.Mokura
 import com.example.mokuramqtt.model.UserModel
 import com.example.mokuramqtt.repository.MokuraRepository
+import kotlinx.coroutines.launch
 
 class MonitorViewModel(private val mokuraRepository: MokuraRepository): ViewModel() {
 
@@ -36,7 +38,7 @@ class MonitorViewModel(private val mokuraRepository: MokuraRepository): ViewMode
 
     fun saveHardware(hardwareSerial: String, hardwareName: String) = mokuraRepository.postHardware(hardwareSerial,hardwareName)
 
-    fun saveData(mUser: UserModel, mMokura: Mokura) {
+    fun saveDataHTTP(mUser: UserModel, mMokura: Mokura) {
         val idUser = mUser.id_user
         val idHardware = mUser.id_hardware
         val newMokura = Mokura(
@@ -51,7 +53,10 @@ class MonitorViewModel(private val mokuraRepository: MokuraRepository): ViewMode
             lat = mMokura.lat,
             lon = mMokura.lon,
         )
-        mokuraRepository.insertMokura(newMokura)
+        viewModelScope.launch {
+            mokuraRepository.insertMokura(newMokura)
+        }
+
     }
 
 }

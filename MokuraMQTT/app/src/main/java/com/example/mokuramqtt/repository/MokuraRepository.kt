@@ -1,9 +1,11 @@
 package com.example.mokuramqtt.repository
 
+import android.os.Looper
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.asLiveData
+import androidx.room.withTransaction
 import com.example.mokuramqtt.database.*
 import com.example.mokuramqtt.helper.DateHelper
 import com.example.mokuramqtt.model.Result
@@ -22,8 +24,10 @@ class MokuraRepository(
     private val apiService: ApiService,
     private val userPreference: UserPreference
 ) {
-    fun insertHTTP(mHTTP: HTTP) {
-        mokuraDatabase.httpDao().insertHTTP(mHTTP)
+    suspend fun insertHTTP(mHTTP: HTTP) {
+        mokuraDatabase.withTransaction {
+            mokuraDatabase.httpDao().insertHTTP(mHTTP)
+        }
     }
 
     fun insertUser(mUser: User) {
@@ -34,8 +38,10 @@ class MokuraRepository(
         mokuraDatabase.hardwareDao().insertHardware(mHardware)
     }
 
-    fun insertMokura(mMokura: Mokura) {
-        mokuraDatabase.mokuraDao().insertMokura(mMokura)
+    suspend fun insertMokura(mMokura: Mokura) {
+        mokuraDatabase.withTransaction {
+            mokuraDatabase.mokuraDao().insertMokura(mMokura)
+        }
     }
 
 
@@ -181,7 +187,9 @@ class MokuraRepository(
                             timeTransmission = timeTrans.toString()
                         )
 
-                        insertHTTP(mHTTP)
+                        MainScope().launch {
+                            insertHTTP(mHTTP)
+                        }
 
                     }
                 }else {
