@@ -1,13 +1,14 @@
 openapi: 3.0.0
 info:
-  title: MOKURA
+  title: MOKURA REST API
   version: 1.0.0
 servers:
-  - url: http://3.89.63.60:6969
+  - url: http://54.172.210.78:6969/
 tags:
   - name: logging
   - name: user
   - name: mokura
+  - name: testing
 paths:
   /logging/datalist:
     post:
@@ -20,20 +21,58 @@ paths:
             schema:
               type: object
               example:
-                time_stamp: test_time_stamp
-                lat: test_lat
-                lon: test_lon
-                compass: test_compass
-                speed: test_speed
-                rpm: test_rpm
-                battery: test_battery
-                duty_cycle: test_duty_cycle
+                - id_logging: null
+                  id_user: 1
+                  id_hardware: 21
+                  time_stamp: 2023/05/20 02:39:02:435000
+                  lat: '-7.753'
+                  lon: '110.224'
+                  compass: '-183.0'
+                  speed: '32.77'
+                  rpm: '78.0'
+                  battery: '82.2'
+                  duty_cycle: '25.33'
+                - id_logging: null
+                  id_user: 1
+                  id_hardware: 21
+                  time_stamp: 2023/05/20 02:39:02:435000
+                  lat: '-7.753'
+                  lon: '110.224'
+                  compass: '-183.0'
+                  speed: '32.77'
+                  rpm: '78.0'
+                  battery: '82.2'
+                  duty_cycle: '25.33'
       responses:
         '200':
-          description: Successful response
+          description: OK
+          headers:
+            Server:
+              schema:
+                type: string
+                example: Werkzeug/2.2.2 Python/3.10.1
+            Date:
+              schema:
+                type: string
+                example: Thu, 02 Mar 2023 02:21:08 GMT
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            Content-Length:
+              schema:
+                type: integer
+                example: '34'
+            Connection:
+              schema:
+                type: string
+                example: close
           content:
-            application/json: {}
-  /logging:
+            application/json:
+              schema:
+                type: object
+              example:
+                message: data inserted!
     get:
       tags:
         - logging
@@ -50,9 +89,81 @@ paths:
       summary: Get one user by email
       responses:
         '200':
-          description: Successful response
+          description: OK
+          headers:
+            Server:
+              schema:
+                type: string
+                example: Werkzeug/2.2.2 Python/3.10.1
+            Date:
+              schema:
+                type: string
+                example: Thu, 02 Mar 2023 02:20:34 GMT
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            Content-Length:
+              schema:
+                type: integer
+                example: '175'
+            Connection:
+              schema:
+                type: string
+                example: close
           content:
-            application/json: {}
+            application/json:
+              schema:
+                type: object
+              example:
+                data:
+                  email: vitorizki37@gmail.com
+                  id_user: 1
+                  password: vitor
+                  username: YohanesVito
+                error: 'false'
+                message: success
+  /users/:
+    get:
+      tags:
+        - user
+      summary: Get one user by username
+      responses:
+        '200':
+          description: OK
+          headers:
+            Server:
+              schema:
+                type: string
+                example: Werkzeug/2.2.2 Python/3.10.1
+            Date:
+              schema:
+                type: string
+                example: Thu, 02 Mar 2023 02:20:40 GMT
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            Content-Length:
+              schema:
+                type: integer
+                example: '175'
+            Connection:
+              schema:
+                type: string
+                example: close
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                data:
+                  email: vitorizki37@gmail.com
+                  id_user: 1
+                  password: vitor
+                  username: YohanesVito
+                error: 'false'
+                message: success
   /users/register:
     post:
       tags:
@@ -65,18 +176,49 @@ paths:
               properties:
                 email:
                   type: string
-                  example: vitorizki37@gmail.com
+                  example: vitorizki313@gmail.com
                 username:
                   type: string
-                  example: vito
+                  example: YohanesVitolocal
                 password:
                   type: string
                   example: '{{password}}'
       responses:
         '200':
-          description: Successful response
+          description: OK
+          headers:
+            Server:
+              schema:
+                type: string
+                example: Werkzeug/2.2.2 Python/3.10.1
+            Date:
+              schema:
+                type: string
+                example: Thu, 02 Mar 2023 02:12:22 GMT
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            Content-Length:
+              schema:
+                type: integer
+                example: '187'
+            Connection:
+              schema:
+                type: string
+                example: close
           content:
-            application/json: {}
+            application/json:
+              schema:
+                type: object
+              example:
+                data:
+                  email: vitorizki313@gmail.com
+                  id_user: 12
+                  password: vitor
+                  username: YohanesVito8
+                error: 'false'
+                message: user registered!
   /users/login:
     post:
       tags:
@@ -95,9 +237,40 @@ paths:
                   example: '{{password}}'
       responses:
         '200':
-          description: Successful response
+          description: OK
+          headers:
+            Server:
+              schema:
+                type: string
+                example: Werkzeug/2.2.2 Python/3.10.1
+            Date:
+              schema:
+                type: string
+                example: Thu, 02 Mar 2023 02:20:28 GMT
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            Content-Length:
+              schema:
+                type: integer
+                example: '186'
+            Connection:
+              schema:
+                type: string
+                example: close
           content:
-            application/json: {}
+            application/json:
+              schema:
+                type: object
+              example:
+                error: false
+                loginResult:
+                  email: vitorizki37@gmail.com
+                  idUser: 1
+                  password: vitor
+                  username: YohanesVito
+                message: login success!
   /mokura:
     get:
       tags:
@@ -105,9 +278,39 @@ paths:
       summary: Get a hardware by hardware name
       responses:
         '200':
-          description: Successful response
+          description: OK
+          headers:
+            Server:
+              schema:
+                type: string
+                example: Werkzeug/2.2.2 Python/3.10.1
+            Date:
+              schema:
+                type: string
+                example: Thu, 02 Mar 2023 02:20:57 GMT
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            Content-Length:
+              schema:
+                type: integer
+                example: '166'
+            Connection:
+              schema:
+                type: string
+                example: close
           content:
-            application/json: {}
+            application/json:
+              schema:
+                type: object
+              example:
+                data:
+                  hardware_name: raspberrypi
+                  hardware_serial: B8:27:EB:BB:61:82
+                  id_hardware: 21
+                error: 'false'
+                message: success
   /mokura/register:
     post:
       tags:
@@ -125,7 +328,61 @@ paths:
                 hardware_name:
                   type: string
                   description: Hardware name
-                  example: raspberrypi
+                  example: raspberrypi2
+      responses:
+        '200':
+          description: OK
+          headers:
+            Server:
+              schema:
+                type: string
+                example: Werkzeug/2.2.2 Python/3.10.1
+            Date:
+              schema:
+                type: string
+                example: Thu, 02 Mar 2023 02:21:01 GMT
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            Content-Length:
+              schema:
+                type: integer
+                example: '123'
+            Connection:
+              schema:
+                type: string
+                example: close
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                error: 'false'
+                hardware_serial: B8:27:EB:BB:61:82
+                id_hardware: 21
+                message: hardware registered!
+  /server/time:
+    get:
+      tags:
+        - testing
+      summary: GET server time
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /server/time_difference:
+    get:
+      tags:
+        - testing
+      summary: GET time difference
+      parameters:
+        - name: local_time_int
+          in: query
+          schema:
+            type: integer
+          example: '1683576712902'
       responses:
         '200':
           description: Successful response
