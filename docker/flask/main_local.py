@@ -8,8 +8,8 @@ app = Flask(__name__)
 
 # enable this when run on cloud 
 app.config['MYSQL_HOST'] = 'mariadb'
-app.config['MYSQL_USER'] = 'vito'
-app.config['MYSQL_PASSWORD'] = 'rendyjerk123'
+app.config['MYSQL_USER'] = ''
+app.config['MYSQL_PASSWORD'] = ''
 app.config['MYSQL_DB'] = 'mokura'
 
 #enable this when run in local
