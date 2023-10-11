@@ -36,4 +36,6 @@ interface ApiService {
         @Field("hardware_name") hardware_name: String,
     ): Call<InsertHardwareResponse>
 
+    @POST("data")
+    fun sendDataListNew(@Body body: ArrayList<Mokura>): Call<InsertLoggingResponse>
 }

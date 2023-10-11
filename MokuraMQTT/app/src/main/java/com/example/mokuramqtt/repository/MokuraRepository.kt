@@ -203,6 +203,58 @@ class MokuraRepository(
         return result
     }
 
+    fun postLoggingNew(arrayLogging: ArrayList<Mokura>): LiveData<Result<Boolean>> {
+
+        val result = MutableLiveData<Result<Boolean>>()
+        result.value = Result.Loading
+
+        //get startTimeStamp
+        val timeStart = DateHelper.getCurrentDate()
+
+        apiService.sendDataListNew(arrayLogging).enqueue(object : Callback<InsertLoggingResponse> {
+            override fun onResponse(
+                call: Call<InsertLoggingResponse>,
+                response: Response<InsertLoggingResponse>
+            ) {
+                if (response.isSuccessful) {
+                    //get endTimeStamp
+                    val timeEnd = DateHelper.getCurrentDate()
+
+                    val responseBody = response.body()
+                    if (responseBody != null){
+
+                        result.value = Result.Success(true)
+                        val timeDiff = DateHelper.calculateTimeDifference(timeStart, timeEnd)
+                        Log.d("timeDiff",timeDiff.toString())
+
+                        val timeTrans = DateHelper.calculateTimeDifference(timeStart,responseBody.serverTimeStr!!)
+                        Log.d("timeTrans",timeTrans.toString())
+
+                        //insert to http dao
+                        val mHTTP = HTTP(
+                            packetSize = responseBody.packetSize.toString(),
+                            sentTimeStamp = timeStart,
+                            receivedTimeStamp = timeEnd,
+                            timeDifference = timeDiff.toString(),
+                            timeTransmission = timeTrans.toString()
+                        )
+
+                        MainScope().launch {
+                            insertHTTP(mHTTP)
+                        }
+
+                    }
+                }else {
+                    result.value = Result.Error(response.message())
+                }
+            }
+            override fun onFailure(call: Call<InsertLoggingResponse>, t: Throwable) {
+                result.value = Result.Error("Can't Connect Retrofit")
+            }
+        })
+        return result
+    }
+
     //SP
     fun saveUser(email: String, name: String, password: String): LiveData<Result<Boolean>> {
         val result = MutableLiveData<Result<Boolean>>()

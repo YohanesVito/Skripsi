@@ -48,7 +48,7 @@ class MonitorActivity : AppCompatActivity() {
         private var currentDegree= 0f
         const val EXTRA_ADDRESS: String = "Device Address"
         const val EXTRA_NAME: String = "Device Name"
-        const val MAX_CAPACITY: Int = 100
+        const val MAX_CAPACITY: Int = 10
     }
 
 
@@ -147,10 +147,10 @@ class MonitorActivity : AppCompatActivity() {
                     lon = newData.lon,
                 )
                 //save data to HTTP DB -- TOGGLE THIS TO ENABLE/DISABLE
-//                monitorViewModel.saveDataHTTP(mUser,newData)
+                monitorViewModel.saveDataHTTP(mUser,newData)
 
                 //save data to MQTT DB -- TOGGLE THIS TO ENABLE/DISABLE
-                mqttViewModel.saveDataMQTT(mUser, mqttData)
+//                mqttViewModel.saveDataMQTT(mUser, mqttData)
 
                 //update ui
                 updateUI(newData)
@@ -158,11 +158,13 @@ class MonitorActivity : AppCompatActivity() {
                 mArrayMokura.add(newData)
                 if(mArrayMokura.size >= MAX_CAPACITY){
 
-                    //sent packet over HTTP -- TOGGLE THIS TO ENABLE/DISABLE
-//                    monitorViewModel.uploadData(mArrayMokura)
+//                    //sent packet over HTTP -- TOGGLE THIS TO ENABLE/DISABLE
+                    monitorViewModel.uploadData(mArrayMokura)
+                    monitorViewModel.uploadDataNew(mArrayMokura)
 
-                    //sent packet over MQTT -- TOGGLE THIS TO ENABLE/DISABLE
-                    mqttViewModel.publishArrayLogging(mArrayMokura)
+
+//                    sent packet over MQTT -- TOGGLE THIS TO ENABLE/DISABLE
+//                    mqttViewModel.publishArrayLogging(mArrayMokura)
 
                     //reset Array
                     mArrayMokura.clear()

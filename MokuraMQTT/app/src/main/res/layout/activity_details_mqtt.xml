@@ -96,7 +96,7 @@
                     android:textColor="@color/black"
                     android:layout_gravity="center"
                     android:textStyle="bold"
-                    android:text="Difference (s)" />
+                    android:text="Latency (s)" />
 
                 <TextView
                     android:layout_width="0dp"
@@ -107,7 +107,7 @@
                     android:textColor="@color/black"
                     android:layout_gravity="center"
                     android:textStyle="bold"
-                    android:text="Transmission (s)" />
+                    android:text="Transfer Time (s)" />
             </TableRow>
         </TableLayout>
 

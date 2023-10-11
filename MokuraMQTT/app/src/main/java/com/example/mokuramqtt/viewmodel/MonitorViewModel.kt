@@ -32,6 +32,7 @@ class MonitorViewModel(private val mokuraRepository: MokuraRepository): ViewMode
 
     fun uploadData(data: ArrayList<Mokura>) = mokuraRepository.postLogging(data)
 
+    fun uploadDataNew(data: ArrayList<Mokura>) = mokuraRepository.postLoggingNew(data)
 
     fun getUser()= mokuraRepository.getUser()
 
