@@ -12,6 +12,7 @@ import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import com.example.mokuramqtt.ViewModelFactory
 import com.example.mokuramqtt.databinding.ActivityLoginBinding
+import com.example.mokuramqtt.model.LoginModel
 import com.example.mokuramqtt.model.UserModel
 import com.example.mokuramqtt.model.Result
 import com.example.mokuramqtt.ui.home.HomeActivity
@@ -42,8 +43,26 @@ class LoginActivity : AppCompatActivity() {
     private fun login(){
         val email = binding.etEmail.text.toString()
         val password = binding.etPassword.text.toString()
+        val loginModel = LoginModel(
+            email = email,
+            password = password
+        )
 
-        loginViewModel.login(email, password).observe(this) {
+//        loginViewModel.login(email, password).observe(this) {
+//            when(it) {
+//                is Result.Loading -> binding.progressBar.visibility = View.VISIBLE
+//                is Result.Success -> {
+//                    binding.progressBar.visibility = View.GONE
+//                    Toast.makeText(this@LoginActivity, "Berhasil Masuk", Toast.LENGTH_SHORT).show()
+//                    val intentToHome = Intent(this, HomeActivity::class.java)
+//                    startActivity(intentToHome)
+//                    finish()
+//                }
+//                is Result.Error -> Toast.makeText(this@LoginActivity, "Gagal Masuk", Toast.LENGTH_SHORT).show()
+//            }
+//        }
+
+        loginViewModel.loginNew(loginModel).observe(this) {
             when(it) {
                 is Result.Loading -> binding.progressBar.visibility = View.VISIBLE
                 is Result.Success -> {

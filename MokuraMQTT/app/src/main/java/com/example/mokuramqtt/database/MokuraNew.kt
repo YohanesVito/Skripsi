@@ -17,13 +17,13 @@ data class MokuraNew(
     val name: String,
 
     @ColumnInfo(name = "speed")
-    val speed: String,
+    val speed: Int,
 
     @ColumnInfo(name = "throtle")
-    val throtle: String,
+    val throtle: Int,
 
     @ColumnInfo(name = "battery")
-    val battery: String,
+    val battery: Int,
 
     @ColumnInfo(name = "lat")
     val lat: String,

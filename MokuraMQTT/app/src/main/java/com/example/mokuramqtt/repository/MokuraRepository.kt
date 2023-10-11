@@ -1,6 +1,5 @@
 package com.example.mokuramqtt.repository
 
-import android.os.Looper
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -8,10 +7,9 @@ import androidx.lifecycle.asLiveData
 import androidx.room.withTransaction
 import com.example.mokuramqtt.database.*
 import com.example.mokuramqtt.helper.DateHelper
-import com.example.mokuramqtt.model.Result
-import com.example.mokuramqtt.model.UserModel
-import com.example.mokuramqtt.model.UserPreference
+import com.example.mokuramqtt.model.*
 import com.example.mokuramqtt.remote.response.*
+import com.example.mokuramqtt.remote.retrofit.ApiAuthService
 import com.example.mokuramqtt.remote.retrofit.ApiService
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
@@ -22,6 +20,7 @@ import retrofit2.Response
 class MokuraRepository(
     private val mokuraDatabase: MokuraDatabase,
     private val apiService: ApiService,
+    private val apiAuth: ApiAuthService,
     private val userPreference: UserPreference
 ) {
     suspend fun insertHTTP(mHTTP: HTTP) {
@@ -56,6 +55,35 @@ class MokuraRepository(
             userPreference.logout()
         }
         result.value = Result.Success(true)
+        return result
+    }
+
+    fun sendDummy(dummyData: MokuraNew): LiveData<Result<Boolean>> {
+        val result = MutableLiveData<Result<Boolean>>()
+        result.value = Result.Loading
+        apiService.sendData(dummyData).enqueue(object : Callback<InsertLoggingNewResponse>{
+            override fun onResponse(
+                call: Call<InsertLoggingNewResponse>,
+                response: Response<InsertLoggingNewResponse>
+            ) {
+                if (response.isSuccessful) {
+                    val responseBody = response.body()
+                    if (responseBody != null){
+                        Log.d("SendDummy","Sent: $responseBody")
+                        result.value = Result.Success(true)
+                    }
+                }else {
+                    Log.d("SendDummy","Failed: ${response.message()}")
+                    result.value = Result.Error(response.message())
+                }
+            }
+            override fun onFailure(call: Call<InsertLoggingNewResponse>, t: Throwable) {
+                Log.d("SendDummy","Failed: ${t.message}")
+
+                result.value = Result.Error("Can't Connect Retrofit")
+
+            }
+        })
         return result
     }
 
@@ -104,6 +132,94 @@ class MokuraRepository(
                 }
             }
             override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
+                result.value = Result.Error("Can't Connect Retrofit")
+            }
+        })
+        return result
+    }
+
+    fun loginNew(loginModel: LoginModel): LiveData<Result<Boolean>> {
+        val result = MutableLiveData<Result<Boolean>>()
+        result.value = Result.Loading
+        apiAuth.loginNew(loginModel).enqueue(object : Callback<AuthResponse>{
+            override fun onResponse(
+                call: Call<AuthResponse>,
+                response: Response<AuthResponse>
+            ) {
+                if (response.isSuccessful) {
+                    val responseBody = response.body()
+                    if (responseBody != null){
+                        val statusCode = responseBody.statusCode
+                        if (statusCode != null) {
+                            if(statusCode == 200){
+                                //insert to SP
+                                MainScope().launch {
+                                    userPreference.saveUser(
+                                        idUser = "Random ID",
+                                        name = loginModel.email.toString(),
+                                        email = loginModel.email.toString(),
+                                        password = loginModel.password.toString()
+                                    )
+                                    userPreference.login()
+                                }
+                                result.value = Result.Success(true)
+                            }
+                            else if(statusCode == 203){
+                                Log.d("LoginMessage",responseBody.body.toString())
+                                result.value = Result.Error(responseBody.body.toString())
+
+                            }
+                        }
+                    }
+                }else {
+                    result.value = Result.Error(response.message())
+                }
+            }
+            override fun onFailure(call: Call<AuthResponse>, t: Throwable) {
+                result.value = Result.Error("Can't Connect Retrofit")
+            }
+        })
+        return result
+    }
+
+    fun registerNew(registerModel: RegisterModel): LiveData<Result<Boolean>> {
+        val result = MutableLiveData<Result<Boolean>>()
+        result.value = Result.Loading
+        apiAuth.registerNew(registerModel).enqueue(object : Callback<AuthResponse> {
+            override fun onResponse(
+                call: Call<AuthResponse>,
+                response: Response<AuthResponse>
+            ) {
+                if (response.isSuccessful) {
+                    val responseBody = response.body()
+                    if (responseBody != null){
+                        val statusCode = responseBody.statusCode
+                        if (statusCode != null) {
+                            if(statusCode == 200){
+                                //insert to SP
+                                MainScope().launch {
+                                    userPreference.saveUser(
+                                        idUser = "Random ID",
+                                        name = registerModel.email.toString(),
+                                        email = registerModel.email.toString(),
+                                        password = registerModel.password.toString()
+                                    )
+                                    userPreference.login()
+                                }
+                                result.value = Result.Success(true)
+                            }
+                            else if(statusCode == 202){
+                                Log.d("RegisterMessage",responseBody.body.toString())
+                                result.value = Result.Error(responseBody.body.toString())
+
+                            }
+                        }
+                    }
+                }else {
+                    result.value = Result.Error(response.message())
+                }
+            }
+            override fun onFailure(call: Call<AuthResponse>, t: Throwable) {
                 result.value = Result.Error("Can't Connect Retrofit")
             }
         })
@@ -205,21 +321,24 @@ class MokuraRepository(
     fun postLogging2(logging: MokuraNew): LiveData<Result<Boolean>> {
         val result = MutableLiveData<Result<Boolean>>()
         result.value = Result.Loading
-        apiService.sendData(logging).enqueue(object : Callback<InsertLoggingResponse> {
+        apiService.sendData(logging).enqueue(object : Callback<InsertLoggingNewResponse> {
             override fun onResponse(
-                call: Call<InsertLoggingResponse>,
-                response: Response<InsertLoggingResponse>
+                call: Call<InsertLoggingNewResponse>,
+                response: Response<InsertLoggingNewResponse>
             ) {
                 if (response.isSuccessful) {
                     val responseBody = response.body()
                     if (responseBody != null){
+                        Log.d("postLogging2","berhasil: $responseBody")
+
                         result.value = Result.Success(true)
                     }
                 }else {
+                    Log.d("postLogging2","gagal")
                     result.value = Result.Error(response.message())
                 }
             }
-            override fun onFailure(call: Call<InsertLoggingResponse>, t: Throwable) {
+            override fun onFailure(call: Call<InsertLoggingNewResponse>, t: Throwable) {
                 result.value = Result.Error("Can't Connect Retrofit")
             }
         })

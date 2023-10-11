@@ -2,10 +2,9 @@ package com.example.mokuramqtt.remote.retrofit
 
 import com.example.mokuramqtt.database.Mokura
 import com.example.mokuramqtt.database.MokuraNew
-import com.example.mokuramqtt.remote.response.InsertHardwareResponse
-import com.example.mokuramqtt.remote.response.InsertLoggingResponse
-import com.example.mokuramqtt.remote.response.LoginResponse
-import com.example.mokuramqtt.remote.response.RegisterResponse
+import com.example.mokuramqtt.model.LoginModel
+import com.example.mokuramqtt.model.RegisterModel
+import com.example.mokuramqtt.remote.response.*
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -17,6 +16,12 @@ interface ApiService {
         @Field("email") email: String,
         @Field("password") password: String,
     ): Call<LoginResponse>
+
+    @POST("login")
+    fun loginNew(@Body body: LoginModel): Call<AuthResponse>
+
+    @POST("register")
+    fun registerNew(@Body body: RegisterModel): Call<AuthResponse>
 
     @FormUrlEncoded
     @POST("register")
@@ -41,5 +46,5 @@ interface ApiService {
     fun sendDataListNew(@Body body: ArrayList<Mokura>): Call<InsertLoggingResponse>
 
     @POST("data")
-    fun sendData(@Body body: MokuraNew): Call<InsertLoggingResponse>
+    fun sendData(@Body body: MokuraNew): Call<InsertLoggingNewResponse>
 }

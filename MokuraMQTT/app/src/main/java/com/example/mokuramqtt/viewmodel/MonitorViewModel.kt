@@ -11,13 +11,10 @@ import kotlinx.coroutines.launch
 
 class MonitorViewModel(private val mokuraRepository: MokuraRepository): ViewModel() {
 
-    val arrayLogging: MutableLiveData<ArrayList<Mokura>> by lazy {
-        MutableLiveData<ArrayList<Mokura>>()
-    }
-
     val dataLocation: MutableLiveData<Array<Double>> by lazy {
         MutableLiveData<Array<Double>>()
     }
+
 
     val isLoading: MutableLiveData<Boolean> by lazy {
         MutableLiveData<Boolean>()
@@ -31,11 +28,8 @@ class MonitorViewModel(private val mokuraRepository: MokuraRepository): ViewMode
         MutableLiveData<Int>()
     }
 
-    fun uploadData(data: ArrayList<Mokura>) = mokuraRepository.postLogging(data)
 
     fun uploadData2(data: MokuraNew) = mokuraRepository.postLogging2(data)
-
-    fun uploadDataNew(data: ArrayList<Mokura>) = mokuraRepository.postLoggingNew(data)
 
     fun getUser()= mokuraRepository.getUser()
 

@@ -14,7 +14,7 @@ import com.example.mokuramqtt.viewmodel.MonitorViewModel
 
 class Location(private val context: Context, private val monitorViewModel: MonitorViewModel): LocationListener {
 
-     fun setUpLocation() {
+    fun setUpLocation() {
         val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
         if ((ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)) {
             ActivityCompat.requestPermissions(context as Activity, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), locationPermissionCode)

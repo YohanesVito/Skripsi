@@ -32,6 +32,17 @@
         app:layout_constraintStart_toStartOf="@+id/tv_user"
         app:layout_constraintTop_toBottomOf="@+id/tv_user" />
 
+
+    <Button
+        android:id="@+id/bt_send_dummy"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Kirim Dummy"
+        app:layout_constraintEnd_toEndOf="@+id/bt_logging_mqtt"
+        app:layout_constraintStart_toStartOf="@+id/bt_logging_mqtt"
+        app:layout_constraintTop_toBottomOf="@+id/bt_logging_mqtt" />
+
     <Button
         android:id="@+id/bt_logging_http"
         android:layout_width="wrap_content"
@@ -58,10 +69,11 @@
         android:layout_height="wrap_content"
         android:backgroundTint="@color/accent"
         android:layout_marginTop="20dp"
+
         android:text="Logout"
-        app:layout_constraintEnd_toEndOf="@+id/bt_logging_mqtt"
-        app:layout_constraintStart_toStartOf="@+id/bt_logging_mqtt"
-        app:layout_constraintTop_toBottomOf="@+id/bt_logging_mqtt" />
+        app:layout_constraintEnd_toEndOf="@+id/bt_send_dummy"
+        app:layout_constraintStart_toStartOf="@+id/bt_send_dummy"
+        app:layout_constraintTop_toBottomOf="@+id/bt_send_dummy" />
 
     <ProgressBar
         android:id="@+id/progressBar"

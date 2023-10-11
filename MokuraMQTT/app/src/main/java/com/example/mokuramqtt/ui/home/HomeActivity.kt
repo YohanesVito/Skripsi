@@ -16,6 +16,7 @@ import com.example.mokuramqtt.model.Result
 import com.example.mokuramqtt.ui.testing.DetailsHTTPActivity
 import com.example.mokuramqtt.ui.authentication.LoginActivity
 import com.example.mokuramqtt.ui.monitoring.PairActivity
+import com.example.mokuramqtt.ui.test.SendDummyActivity
 import com.example.mokuramqtt.ui.testing.DetailsMQTTActivity
 import com.example.mokuramqtt.viewmodel.HomeViewModel
 
@@ -74,6 +75,10 @@ class HomeActivity : AppCompatActivity() {
 
         binding.btLoggingMqtt.setOnClickListener {
             startActivity(Intent(this, DetailsMQTTActivity::class.java))
+        }
+
+        binding.btSendDummy.setOnClickListener {
+            startActivity(Intent(this, SendDummyActivity::class.java))
         }
     }
 

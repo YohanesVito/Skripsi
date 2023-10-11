@@ -17,7 +17,6 @@ import com.example.mokuramqtt.Constants.Companion.DURATION
 import com.example.mokuramqtt.R
 import com.example.mokuramqtt.ViewModelFactory
 import com.example.mokuramqtt.database.Mokura
-import com.example.mokuramqtt.database.MokuraMQTT
 import com.example.mokuramqtt.database.MokuraNew
 import com.example.mokuramqtt.databinding.ActivityMonitorBinding
 import com.example.mokuramqtt.helper.DateHelper
@@ -50,7 +49,7 @@ class MonitorActivity : AppCompatActivity() {
         const val EXTRA_ADDRESS: String = "Device Address"
         const val EXTRA_NAME: String = "Device Name"
         // 1 detik 5 data -> 4 detik 20 data -> 10 detik 50 data
-        const val MAX_CAPACITY: Int = 50
+        const val MAX_CAPACITY: Int = 3
     }
 
 
@@ -124,11 +123,11 @@ class MonitorActivity : AppCompatActivity() {
                 val timeStamp = DateHelper.getCurrentDate()
 
                 val newMokura = MokuraNew(
-                    id = mUser.id_hardware,
-                    name = mUser.name,
-                    speed = speed.toString(),
-                    battery = battery.toString(),
-                    throtle  = rpm.toString(),
+                    id = "bf49543d-d4d9-4fd9-bb24-2179fca3f713",
+                    name = "Mokura 2",
+                    speed = speed.toInt(),
+                    battery = battery.toInt(),
+                    throtle = dutyCycle.toInt(),
                     lat = lat,
                     long = lon,
                     status = 1,
@@ -147,23 +146,8 @@ class MonitorActivity : AppCompatActivity() {
                     lon = lon,
                     )
 
-                val mqttData = MokuraMQTT(
-                    id_hardware = newData.id_hardware,
-                    id_user = newData.id_user,
-                    time_stamp = newData.time_stamp,
-                    speed = newData.speed,
-                    rpm = newData.rpm,
-                    battery = newData.battery,
-                    duty_cycle = newData.duty_cycle,
-                    compass = newData.compass,
-                    lat = newData.lat,
-                    lon = newData.lon,
-                )
                 //save data to HTTP DB -- TOGGLE THIS TO ENABLE/DISABLE
                 monitorViewModel.saveDataHTTP(mUser,newData)
-
-                //save data to MQTT DB -- TOGGLE THIS TO ENABLE/DISABLE
-//                mqttViewModel.saveDataMQTT(mUser, mqttData)
 
                 //update ui
                 updateUI(newData)
@@ -171,15 +155,7 @@ class MonitorActivity : AppCompatActivity() {
                 mArrayMokura.add(newData)
                 if(mArrayMokura.size >= MAX_CAPACITY){
 
-//                    //sent packet over HTTP -- TOGGLE THIS TO ENABLE/DISABLE
-                    monitorViewModel.uploadData(mArrayMokura)
-                    monitorViewModel.uploadDataNew(mArrayMokura)
-
                     monitorViewModel.uploadData2(newMokura)
-
-
-//                    sent packet over MQTT -- TOGGLE THIS TO ENABLE/DISABLE
-//                    mqttViewModel.publishArrayLogging(mArrayMokura)
 
                     //reset Array
                     mArrayMokura.clear()
@@ -223,7 +199,7 @@ class MonitorActivity : AppCompatActivity() {
         val rpm = newData.rpm.toDouble().toInt()
         val speed = newData.speed.toDouble().toInt()
         val battery = newData.battery.toDouble().toInt()
-        val dutyCycle = newData.duty_cycle.toFloat()*10
+        val dutyCycle = newData.duty_cycle.toFloat()
 
         updateSpeed(speed)
         updateThrottle(dutyCycle.toInt())

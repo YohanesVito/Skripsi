@@ -10,6 +10,7 @@
 
 
     <TextView
+        android:id="@+id/textView6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -90,6 +91,7 @@
         app:textColor="@color/text_icon"
         app:textGap="10dp" />
 
+
     <me.ibrahimsn.lib.Speedometer
         android:id="@+id/rpm"
         android:layout_width="200dp"
@@ -109,7 +111,7 @@
 
     <me.ibrahimsn.lib.Speedometer
         android:id="@+id/throttle"
-        android:layout_width="170dp"
+        android:layout_width="190dp"
         android:layout_height="0dp"
         android:layout_gravity="center"
         android:layout_marginStart="20dp"
@@ -119,12 +121,13 @@
         app:fillColor="@color/blue2"
         app:layout_constraintStart_toEndOf="@+id/rpm"
         app:layout_constraintTop_toTopOf="@+id/rpm"
-        app:maxSpeed="10"
-        app:metricText="x0.1"
+        app:maxSpeed="100"
+        app:metricText="x1"
         app:textColor="@color/text_icon"
         app:textGap="10dp" />
 
     <TextView
+        android:id="@+id/textView8"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -138,6 +141,7 @@
         app:layout_constraintStart_toStartOf="@+id/rpm" />
 
     <TextView
+        android:id="@+id/textView9"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -147,8 +151,8 @@
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/throttle"
-        app:layout_constraintEnd_toEndOf="@+id/throttle"
 
+        app:layout_constraintEnd_toEndOf="@+id/throttle"
         app:layout_constraintStart_toStartOf="@+id/throttle" />
 
     <TextView
@@ -228,8 +232,8 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_gravity="center"
-        android:layout_marginEnd="20dp"
         android:layout_marginStart="36dp"
+        android:layout_marginEnd="20dp"
         android:src="@drawable/batt3"
         app:layout_constraintBottom_toBottomOf="@+id/iv_compass"
         app:layout_constraintEnd_toEndOf="parent"
@@ -328,9 +332,9 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="12dp"
         android:backgroundTint="@color/blue3"
-        android:visibility="invisible"
         android:text="Details"
         android:textColor="@color/primary_text"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@+id/bt_disconnect"
         app:layout_constraintEnd_toStartOf="@+id/bt_disconnect"
         app:layout_constraintTop_toTopOf="@+id/bt_disconnect"
@@ -347,4 +351,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:visibility="visible" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

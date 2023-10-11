@@ -13,8 +13,9 @@ object Injection {
     fun provideRepository(context: Context): MokuraRepository {
         val database = MokuraDatabase.getDatabase(context)
         val apiService = ApiConfig.getApiService()
+        val apiAuth = ApiConfig.getApiAuth()
         val userPreference = UserPreference.getInstance(context.dataStore)
-        return MokuraRepository(database, apiService, userPreference)
+        return MokuraRepository(database, apiService, apiAuth, userPreference)
     }
 
     fun provideRepository2(context: Context): MQTTRepository {

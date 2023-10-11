@@ -31,6 +31,9 @@ class ViewModelFactory(private val context: Context) : ViewModelProvider.NewInst
             modelClass.isAssignableFrom(HTTPViewModel::class.java) -> {
                 HTTPViewModel(Injection.provideRepository3(context)) as T
             }
+            modelClass.isAssignableFrom(DummyViewModel::class.java) -> {
+                DummyViewModel(Injection.provideRepository(context)) as T
+            }
             else -> throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
         }
     }
