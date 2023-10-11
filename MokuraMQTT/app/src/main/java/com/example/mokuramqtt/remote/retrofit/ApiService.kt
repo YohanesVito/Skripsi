@@ -1,6 +1,7 @@
 package com.example.mokuramqtt.remote.retrofit
 
 import com.example.mokuramqtt.database.Mokura
+import com.example.mokuramqtt.database.MokuraNew
 import com.example.mokuramqtt.remote.response.InsertHardwareResponse
 import com.example.mokuramqtt.remote.response.InsertLoggingResponse
 import com.example.mokuramqtt.remote.response.LoginResponse
@@ -38,4 +39,7 @@ interface ApiService {
 
     @POST("data")
     fun sendDataListNew(@Body body: ArrayList<Mokura>): Call<InsertLoggingResponse>
+
+    @POST("data")
+    fun sendData(@Body body: MokuraNew): Call<InsertLoggingResponse>
 }

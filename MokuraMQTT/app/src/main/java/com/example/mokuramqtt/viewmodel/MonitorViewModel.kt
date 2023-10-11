@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.mokuramqtt.database.Mokura
+import com.example.mokuramqtt.database.MokuraNew
 import com.example.mokuramqtt.model.UserModel
 import com.example.mokuramqtt.repository.MokuraRepository
 import kotlinx.coroutines.launch
@@ -31,6 +32,8 @@ class MonitorViewModel(private val mokuraRepository: MokuraRepository): ViewMode
     }
 
     fun uploadData(data: ArrayList<Mokura>) = mokuraRepository.postLogging(data)
+
+    fun uploadData2(data: MokuraNew) = mokuraRepository.postLogging2(data)
 
     fun uploadDataNew(data: ArrayList<Mokura>) = mokuraRepository.postLoggingNew(data)
 

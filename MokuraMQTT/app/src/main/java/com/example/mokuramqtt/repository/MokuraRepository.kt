@@ -202,6 +202,29 @@ class MokuraRepository(
         })
         return result
     }
+    fun postLogging2(logging: MokuraNew): LiveData<Result<Boolean>> {
+        val result = MutableLiveData<Result<Boolean>>()
+        result.value = Result.Loading
+        apiService.sendData(logging).enqueue(object : Callback<InsertLoggingResponse> {
+            override fun onResponse(
+                call: Call<InsertLoggingResponse>,
+                response: Response<InsertLoggingResponse>
+            ) {
+                if (response.isSuccessful) {
+                    val responseBody = response.body()
+                    if (responseBody != null){
+                        result.value = Result.Success(true)
+                    }
+                }else {
+                    result.value = Result.Error(response.message())
+                }
+            }
+            override fun onFailure(call: Call<InsertLoggingResponse>, t: Throwable) {
+                result.value = Result.Error("Can't Connect Retrofit")
+            }
+        })
+        return result
+    }
 
     fun postLoggingNew(arrayLogging: ArrayList<Mokura>): LiveData<Result<Boolean>> {
 

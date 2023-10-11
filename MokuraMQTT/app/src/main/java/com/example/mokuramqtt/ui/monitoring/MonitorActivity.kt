@@ -18,6 +18,7 @@ import com.example.mokuramqtt.R
 import com.example.mokuramqtt.ViewModelFactory
 import com.example.mokuramqtt.database.Mokura
 import com.example.mokuramqtt.database.MokuraMQTT
+import com.example.mokuramqtt.database.MokuraNew
 import com.example.mokuramqtt.databinding.ActivityMonitorBinding
 import com.example.mokuramqtt.helper.DateHelper
 import com.example.mokuramqtt.model.UserModel
@@ -121,6 +122,17 @@ class MonitorActivity : AppCompatActivity() {
 
                 val timeStamp = DateHelper.getCurrentDate()
 
+                val newMokura = MokuraNew(
+                    id = mUser.id_hardware,
+                    name = mUser.name,
+                    speed = speed.toString(),
+                    battery = battery.toString(),
+                    throtle  = rpm.toString(),
+                    lat = lat,
+                    long = lon,
+                    status = 1,
+                )
+
                 val newData = Mokura(
                     id_hardware = mUser.id_hardware,
                     id_user = mUser.id_user,
@@ -161,6 +173,8 @@ class MonitorActivity : AppCompatActivity() {
 //                    //sent packet over HTTP -- TOGGLE THIS TO ENABLE/DISABLE
                     monitorViewModel.uploadData(mArrayMokura)
                     monitorViewModel.uploadDataNew(mArrayMokura)
+
+                    monitorViewModel.uploadData2(newMokura)
 
 
 //                    sent packet over MQTT -- TOGGLE THIS TO ENABLE/DISABLE

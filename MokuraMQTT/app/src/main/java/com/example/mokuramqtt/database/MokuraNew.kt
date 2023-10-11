@@ -11,7 +11,7 @@ import kotlinx.parcelize.Parcelize
 data class MokuraNew(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
-    val id: Int? = null,
+    val id: String? = null,
 
     @ColumnInfo(name = "name")
     val name: String,
@@ -32,6 +32,6 @@ data class MokuraNew(
     val long: String,
 
     @ColumnInfo(name = "status")
-    val status: String,
+    val status: Int,
 
     ) : Parcelable
