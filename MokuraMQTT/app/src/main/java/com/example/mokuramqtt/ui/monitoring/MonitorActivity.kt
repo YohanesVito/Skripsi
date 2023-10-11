@@ -49,7 +49,8 @@ class MonitorActivity : AppCompatActivity() {
         private var currentDegree= 0f
         const val EXTRA_ADDRESS: String = "Device Address"
         const val EXTRA_NAME: String = "Device Name"
-        const val MAX_CAPACITY: Int = 10
+        // 1 detik 5 data -> 4 detik 20 data -> 10 detik 50 data
+        const val MAX_CAPACITY: Int = 50
     }
 
 
